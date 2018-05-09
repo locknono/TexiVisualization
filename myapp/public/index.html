@@ -1097,7 +1097,8 @@
                 })
                 .on("mousedown", function (d, i) {
                     console.log(d)
-                    d3.json("data/LineData2." + d.source.name + "." + d.target.name + ".json", function (error,
+                    d3.json("data/LineData2." + d.source.name + "." + d.target.name + ".json", function (
+                        error,
                         json) {
                         svgHistorgram.selectAll(".MyRect").remove();
                         d3.select(".MyArea" + d.source.name)
@@ -1380,7 +1381,6 @@
                     mark = 0;
                 })
                 .on("mousedown", function (d, i) {
-
                     d3.json("data/taxinum.json", function (error, json) {
                         TextRect = svgtext.append("g")
                             .selectAll(".TextRect")
