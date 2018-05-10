@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <link href="stylesheets/leaflet.css" rel="stylesheet" />
+    <link href="js/bootstrap-3.3.7-dist/css/bootstrap-theme.min.css" rel="stylesheet" />
+    <link href="js/bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="stylesheets/bootstrap-combobox.css" type="text/css" rel="stylesheet">
+    <link href='stylesheets/mapbox-gl.css' rel='stylesheet' />
+    <link href="stylesheets/jquery-ui.min.css" rel="stylesheet">
+    <link href="js/bootstrap-switch-master/dist/css/bootstrap3/bootstrap-switch.min.css" rel="stylesheet">
+    <link href="css/leaflet.pm.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css" type="text/css">
+    <link href="css/bootstrap-switch.min.css" rel="stylesheet">
+
+
+    <title>Document</title>
+
+    <script src="js/d3.v3.min.js"></script>
+    <script src='js/csv.js'></script>
+    <script src="js/d3.v4.min.js"></script>
+    <script src="js/leaflet.js"></script>
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+    <script src="js/pixi.min.js"></script>
+    <script src='https://api.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.js'></script>
+    <script src="js/L.PixiOverlay.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <script src="js/d3-color.v1.min.js"></script>
+    <script src="js/d3-interpolate.v1.min.js"></script>
+    <script src="js/d3-scale-chromatic.v1.min.js"></script>
+    <script src="js/d3-tip.js"></script>
+    <script src="js/bootstrap-switch-master/dist/js/bootstrap-switch.min.js"></script>
+    <script src="js/L.D3SvgOverlay.min.js"></script>
+
+</head>
+
+<body>
+    <div id='main' class="container-fluid">
+        <div class="col-md-2 panel panel-default" id='controlPanel'>
+            <div class="btn-group" id='loadDataButtonGroup'>
+            </div>
+            <div id='ThrPanel'>
+            </div>
+            <div class="panel panel-default" id='radarChart'>
+            </div>
+            <div class="panel panel-default" id='matrixView'>
+                <svg id='matrixSvg'></svg>
+            </div>
+        </div>
+        <div class="col-md-9 panel panel-default" id='map'>
+            <div class="panel panel-default" id='tipDiv'>
+            </div>
+        </div>
+    </div>
+
+    </div>
+    </div>
+
+    <script>
+        var map = L.map("map", {
+            zoomDelta: 0.1,
+            zoomSnap: 0.5
+        }).setView([22.581023, 113.900337], 13);
+        var osmUrl =
+            "https://api.mapbox.com/styles/v1/mrfree/cjey70d4p3zik2so7zlwfws32/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoibXJmcmVlIiwiYSI6ImNqZWR4MDM4ZzB6eHMzM28ycWtxcjRuOXEifQ._9nOwiQoVwA974vWGY2vRg",
+            layer =
+            'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>';
+        L.tileLayer(osmUrl, {
+            minZoom: 1,
+            maxZoom: 17,
+            //用了mapbox的图层
+            attribution: layer,
+            //访问令牌
+            accessToken: "your.mapbox.access.token"
+        }).addTo(map);
+        map.zoomControl.remove();
+        d3.json('data/drawData/hexagon.json', function (error, hexagonData) {
+            console.log(hexagonData);
+            var d3Overlay = L.d3SvgOverlay(function (selection, projection) {
+                /*    selection.append("g")
+                       .selectAll("circle")
+                       .data(hexagonData)
+                       .enter()
+                       .append("circle")
+                       .attr("cx", function (d) {
+                           var coors = projection.latLngToLayerPoint([d.lat, d.lng]);
+                           return coors.x;
+                       })
+                       .attr("cy", function (d) {
+                           var coors = projection.latLngToLayerPoint([d.lat, d.lng]);
+                           return coors.y;
+                       })
+                       .attr("r", 1)
+                       .attr("fill", "black") */
+                selection.selectAll("g").remove();
+                var line = d3.line()
+                    .x(function (d) {
+                        return projection.latLngToLayerPoint(d).x
+                    })
+                    .y(function (d) {
+                        return projection.latLngToLayerPoint(d).y
+                    })
+                selection.append("g")
+                    .selectAll("path")
+                    .data(hexagonData)
+                    .enter()
+                    .append("path")
+                    .attr("d", function (d) {
+                        return line(d.path)
+                    })
+                    .attr("stroke", "black")
+                    .attr("fill", "none")
+            });
+            d3Overlay.addTo(map);
+        })
+    </script>
+</body>
+
+</html>
