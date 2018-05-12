@@ -74,10 +74,10 @@
             accessToken: "your.mapbox.access.token"
         }).addTo(map);
         map.zoomControl.remove();
-        d3.json('data/drawData/valueHexagon2.json', function (error, hexagonData) {
-            hexagonData.map(function (d) {
+        d3.json('data/drawData/valueHexagon3.json', function (error, hexagonData) {
+            /* hexagonData.map(function (d) {
                 d.value = Math.log2(d.value + 1);
-            })
+            }) */
             console.log(hexagonData);
             var range = d3.extent(hexagonData, function (d) {
                 return d.value;
@@ -98,10 +98,10 @@
                         return projection.latLngToLayerPoint(d).y
                     })
 
-                map.on("click", function (e) {
-                    console.log(e.latlng);
-                    selection.selectAll("g").remove();
-                })
+                /*  map.on("click", function (e) {
+                     console.log(e.latlng);
+                     selection.selectAll("g").remove();
+                 }) */
                 selection.append("path")
                     .attr("d", function (d) {
 
@@ -119,6 +119,11 @@
                     .attr("stroke", "red")
                     .attr("fill", "none");
 
+                var classScale = d3.scaleOrdinal()
+                    .domain([])
+                    .range(['#e41a1c', '#377eb8', '#4daf4a', '#984ea3', '#ff7f00', '#ffff33', '#a65628',
+                        '#f781bf', '#999999'
+                    ])
                 selection.selectAll("g").remove();
                 var inter = d3.interpolateRgb('rgb(255,255,255)', 'rgb(0,0,0)');
                 selection.append("g")
@@ -129,11 +134,24 @@
                     .attr("d", function (d) {
                         return line(d.path)
                     })
-                    .attr("stroke", "none")
-                    //.attr("fill-opacity", "0.5")
-                    .attr("fill", function (d) {
-                        return inter(scale(d.value))
+                    .style("stroke", "black")
+                    // .style("stroke-width",0.2)
+                    .style("fill", function (d) {
+                        if (d.category === -1) {
+                            return 'white'
+                        }
+                        return classScale(d.category);
                     })
+                    .style("pointer-events", "auto")
+                    .on("click", function (d) {
+                        console.log(d.category, d.value);
+                        //console.log(d.value);
+                    })
+                //.attr("")
+                //.attr("fill-opacity", "0.5")
+                /* .attr("fill", function (d) {
+                    return inter(scale(d.value))
+                }) */
                 selection.append("g")
                     /*                        .selectAll("circle")
                                            .data(hexagonData)
