@@ -1,0 +1,13 @@
+#container-main {
+  height: 850px;
+  width: 1500px;
+  padding: 0px;
+  margin: 10px 20px;
+}
+#map {
+  border-top: none;
+  border-bottom: none;
+  border-left: none;
+  height: 100%;
+  width: 68%;
+}
