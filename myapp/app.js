@@ -9,12 +9,19 @@ var usersRouter = require('./routes/users');
 
 var handlebars = require('handlebars');
 var exphbs = require('express-handlebars');
-var hbs = exphbs.create({ /* config */ });
+var hbs = exphbs.create({
+  defaultLayout: 'main',
+  helpers: {
+    static: function (name) {
+      return require('./lib/static.js').map(name);
+    }
+  }
+});
 
 var app = express();
 
 // view engine setup
-app.engine('handlebars',hbs.engine);
+app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
 
 app.set('views', path.join(__dirname, 'views'));

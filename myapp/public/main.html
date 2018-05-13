@@ -134,7 +134,7 @@
                     .attr("d", function (d) {
                         return line(d.path)
                     })
-                    .style("stroke", "black")
+                    .style("stroke", "none")
                     // .style("stroke-width",0.2)
                     .style("fill", function (d) {
                         if (d.category === -1) {
@@ -148,10 +148,10 @@
                         //console.log(d.value);
                     })
                 //.attr("")
-                //.attr("fill-opacity", "0.5")
-                /* .attr("fill", function (d) {
+                .attr("fill-opacity", "0.5")
+                .attr("fill", function (d) {
                     return inter(scale(d.value))
-                }) */
+                })
                 selection.append("g")
                     /*                        .selectAll("circle")
                                            .data(hexagonData)
