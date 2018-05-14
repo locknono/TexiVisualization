@@ -45,11 +45,8 @@ d3.json('data/drawData/valueHexagon3.json', (error, hexagonData) => {
         selection.append("path")
             .attr("d", function (d) {
 
-                var top = 22.76550
-                var bottom = 22.454
-                var left = 113.75643
-                var right = 114.35191
-
+                var [top,bottom,left,right]=[22.76550,22.454,113.75643,114.35191];
+                
                 p1 = [top, left];
                 p2 = [top, right];
                 p3 = [bottom, right];
@@ -65,7 +62,7 @@ d3.json('data/drawData/valueHexagon3.json', (error, hexagonData) => {
             .range(['#e41a1c', '#377eb8', '#4daf4a', '#984ea3', '#ff7f00', '#ffff33', '#a65628',
                 '#f781bf', '#999999'
             ]);
-       // selection.selectAll("g").remove();
+        // selection.selectAll("g").remove();
 
         var inter = d3.interpolateRgb('rgb(255,255,255)', 'rgb(0,0,0)');
 
@@ -110,8 +107,8 @@ d3.json('data/drawData/valueHexagon3.json', (error, hexagonData) => {
             })
             .attr("r", 5)
             .attr("fill", "yellow")
-    },{
-        zoomDraw:false, 
+    }, {
+        zoomDraw: false,
     });
     d3Overlay.addTo(map);
 })
