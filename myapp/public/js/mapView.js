@@ -15,8 +15,101 @@ L.tileLayer(osmUrl, {
     accessToken: "your.mapbox.access.token"
 }).addTo(map);
 map.zoomControl.remove();
+d3.json('data/drawData/valueHexagon3.json', function (error, hexagonData) {
+    /* hexagonData.map(function (d) {
+        d.value = Math.log2(d.value + 1);
+    }) */
+    console.log(hexagonData);
+    var range = d3.extent(hexagonData, function (d) {
+        return d.value;
+    });
 
-var d3Overlay = L.d3SvgOverlay(function (selection, projection) {
-    
-});
-d3Overlay.addTo(map);
+    var scale = d3.scaleLinear()
+        .domain(range)
+        .range([0, 1]);
+    console.log('range: ', range);
+
+    var d3Overlay = L.d3SvgOverlay(function (selection, projection) {
+
+        var line = d3.line()
+            .x(function (d) {
+                return projection.latLngToLayerPoint(d).x
+            })
+            .y(function (d) {
+                return projection.latLngToLayerPoint(d).y
+            })
+
+        /*  map.on("click", function (e) {
+             console.log(e.latlng);
+             selection.selectAll("g").remove();
+         }) */
+        selection.append("path")
+            .attr("d", function (d) {
+
+                var top = 22.76550
+                var bottom = 22.454
+                var left = 113.75643
+                var right = 114.35191
+
+                p1 = [top, left];
+                p2 = [top, right];
+                p3 = [bottom, right];
+                p4 = [bottom, left];
+                return line([p1, p2, p3, p4, p1]);
+            })
+            .attr("stroke", "red")
+            .attr("fill", "none");
+
+        var classScale = d3.scaleOrdinal()
+            .domain([])
+            .range(['#e41a1c', '#377eb8', '#4daf4a', '#984ea3', '#ff7f00', '#ffff33', '#a65628',
+                '#f781bf', '#999999'
+            ])
+        selection.selectAll("g").remove();
+        var inter = d3.interpolateRgb('rgb(255,255,255)', 'rgb(0,0,0)');
+        selection.append("g")
+            .selectAll("path")
+            .data(hexagonData)
+            .enter()
+            .append("path")
+            .attr("d", function (d) {
+                return line(d.path)
+            })
+            .style("stroke", "none")
+            // .style("stroke-width",0.2)
+            .style("fill", function (d) {
+                if (d.category === -1) {
+                    return 'white'
+                }
+                return classScale(d.category);
+            })
+            .style("pointer-events", "auto")
+            .on("click", function (d) {
+                console.log(d.category, d.value);
+                //console.log(d.value);
+            })
+        //.attr("")
+        .attr("fill-opacity", "0.5")
+        .attr("fill", function (d) {
+            return inter(scale(d.value))
+        })
+        selection.append("g")
+            /*                        .selectAll("circle")
+                                   .data(hexagonData)
+                                   .enter() */
+            .append("circle")
+            .attr("cx", function (d) {
+                var coors = projection.latLngToLayerPoint([22.523582, 113.814919]);
+                return coors.x;
+            })
+            .attr("cy", function (d) {
+                var coors = projection.latLngToLayerPoint([22.523582, 113.814919]);
+                return coors.y;
+            })
+            .attr("r", 5)
+            .attr("fill", "yellow")
+    });
+
+
+    d3Overlay.addTo(map);
+})
