@@ -46,12 +46,9 @@ d3.json('data/drawData/valueHexagon3.json', (error, hexagonData) => {
             .attr("d", function (d) {
 
                 var [top,bottom,left,right]=[22.76550,22.454,113.75643,114.35191];
-                
-                p1 = [top, left];
-                p2 = [top, right];
-                p3 = [bottom, right];
-                p4 = [bottom, left];
 
+                var [p1,p2,p3,p4]=[[top, left],[top, right],[bottom, right],[bottom, left]];
+                
                 return line([p1, p2, p3, p4, p1]);
             })
             .attr("stroke", "red")
