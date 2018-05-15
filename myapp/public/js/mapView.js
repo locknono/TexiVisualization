@@ -16,7 +16,14 @@ L.tileLayer(osmUrl, {
 }).addTo(map);
 map.zoomControl.remove();
 
-d3.json('data/drawData/valueHexagon2.0_132.json', (error, hexagonData) => {
+var classScale = d3.scaleOrdinal()
+.domain([])
+.range(['#e41a1c', '#377eb8', '#4daf4a', '#984ea3', '#ff7f00', '#ffff33', '#a65628',
+    '#f781bf', '#999999'
+]);
+
+
+d3.json('data/drawData/valueHexagon2.0_215.json', (error, hexagonData) => {
     console.log(hexagonData);
     var range = d3.extent(hexagonData, function (d) {
         return d.value;
@@ -25,42 +32,75 @@ d3.json('data/drawData/valueHexagon2.0_132.json', (error, hexagonData) => {
         .domain(range)
         .range([0, 1]);
     var d3Overlay = L.d3SvgOverlay(function (selection, projection) {
-        var hexLine = d3.line()
-            .x(function (d) {
-                return projection.latLngToLayerPoint(d).x
-            })
-            .y(function (d) {
-                return projection.latLngToLayerPoint(d).y
-            })
-        var classScale = d3.scaleOrdinal()
-            .domain([])
-            .range(['#e41a1c', '#377eb8', '#4daf4a', '#984ea3', '#ff7f00', '#ffff33', '#a65628',
-                '#f781bf', '#999999'
-            ]);
-        selection.append("g")
-            .selectAll("path")
-            .data(hexagonData)
-            .enter()
-            .append("path")
-            .attr("d", function (d) {
-                return hexLine(d.path)
-            })
-            .attr("class", "hex")
-            .style("pointer-events", "auto")
-            .style("fill", function (d) {
-                return classScale(d.category);
-            })
-            .style("opacity", function (d) {
-                if (d.category === -1) {
-                    return '0'
-                }
-                return "0.5"
-            })
-            .on("click", function (d) {
-                console.log(d.category, d.value);
-            })
+        addHexagonBorder();
     }, {
         zoomDraw: false,
     });
     d3Overlay.addTo(map);
 })
+
+
+function addHexagonBorder() {
+    d3.json('data/drawData/bound.json', function (error, boundData) {
+        var borderLine = d3.line()
+            .x(function (d) {
+                return projection.latLngToLayerPoint(d.split('-')).x
+            })
+            .y(function (d) {
+                return projection.latLngToLayerPoint(d.split('-')).y
+            })
+        var bound = []
+        for (var p in boundData) {
+            bound.push(boundData[p])
+        }
+        console.log('bound: ', bound);
+        console.log('boundData: ', boundData);
+        selection.append("g")
+            .selectAll("path")
+            .data(bound)
+            .enter()
+            .append("path")
+            .attr("d", function (d) {
+                return borderLine(d)
+            })
+            .attr("stroke", "black")
+            .style("fill", function (d, i) {
+                return classScale(i);
+            })
+    })
+}
+
+function addHexagon() {
+    var hexLine = d3.line()
+    .x(function (d) {
+        return projection.latLngToLayerPoint(d).x
+    })
+    .y(function (d) {
+        return projection.latLngToLayerPoint(d).y
+    })
+    selection.append("g")
+        .selectAll("path")
+        .data(hexagonData)
+        .enter()
+        .append("path")
+        .attr("d", function (d) {
+            return hexLine(d.path)
+        })
+        .attr("class", "hex")
+        .style("pointer-events", "auto")
+        .style("fill", function (d) {
+            if (parseFloat(d.category) == 21) {
+                return 'black'
+            }
+            return classScale(d.category);
+        })
+        .style("opacity", function (d) {
+            if (d.category === -1) {
+                return '0'
+            }
+            return "0.5"
+        })
+        .on("click", function (d) {
+            console.log(d.category, d.value);
+        })
+}
