@@ -24,8 +24,6 @@ function initMap() {
 function addSvgOverLay() {
     var svg = d3.select(map.getPanes().overlayPane).append("svg"),
         g = svg.append("g").attr("class", "leaflet-zoom-hide");
-
-
         svg.append("circle")
         .attr("class","")
     function projectPoint(x, y) {
