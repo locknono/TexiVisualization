@@ -1,7 +1,10 @@
 @screen-width:1500px;
 @screen-height:850px;
 @screen-margin:10px;
+@mapWidth:68%;
+@fluxNetHeight:50%;
 #container-main{
+    position: relative;
     height:@screen-height;
     width:@screen-width;
     padding:0px;
@@ -12,9 +15,25 @@
     border-bottom:none;
     border-left:none;
     height:100%;
-    width:68%;
+    width:@mapWidth;
 }
 .hex{
     stroke:none;
     pointer-events:auto;
 }
+#fluxNet{
+    position: absolute;
+    top:0px;
+    right:0px;
+    width:100%-68%;
+    height:@fluxNetHeight;
+    border-right:none;
+    border-left:none;
+    border-top:none;
+
+    svg{
+        width:100%;
+        height:100%;
+    }
+}
+

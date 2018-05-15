@@ -1,4 +1,5 @@
 #container-main {
+  position: relative;
   height: 850px;
   width: 1500px;
   padding: 0px;
@@ -14,4 +15,18 @@
 .hex {
   stroke: none;
   pointer-events: auto;
+}
+#fluxNet {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  width: 32%;
+  height: 50%;
+  border-right: none;
+  border-left: none;
+  border-top: none;
+}
+#fluxNet svg {
+  width: 100%;
+  height: 100%;
 }

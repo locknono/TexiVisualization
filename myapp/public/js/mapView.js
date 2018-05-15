@@ -46,22 +46,19 @@ d3.json('data/drawData/valueHexagon2.0_132.json', (error, hexagonData) => {
                 return hexLine(d.path)
             })
             .attr("class", "hex")
+            .style("pointer-events", "auto")
             .style("fill", function (d) {
-                if (d.category === -1) {
-                    return 'white'
-                }
                 return classScale(d.category);
             })
-            .style("pointer-events", "auto")
-            .on("click", function (d) {
-                console.log(d.category, d.value);
-            })
-            .attr("opacity", function (d) {
+            .style("opacity", function (d) {
                 if (d.category === -1) {
                     return '0'
                 }
                 return "0.5"
-            });
+            })
+            .on("click", function (d) {
+                console.log(d.category, d.value);
+            })
     }, {
         zoomDraw: false,
     });
