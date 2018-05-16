@@ -16,6 +16,11 @@ L.tileLayer(osmUrl, {
 }).addTo(map);
 map.zoomControl.remove();
 
+
+getBorderLineData().then(function(data){
+    console.log("getData")
+    console.log('data: ', data);
+})
 var classScale = d3.scaleOrdinal()
     .domain([])
     .range(['#e41a1c', '#377eb8', '#4daf4a', '#984ea3', '#ff7f00', '#ffff33', '#a65628',
@@ -101,4 +106,21 @@ function addHexagon() {
                 console.log(d.category, d.value);
             })
     })
+}
+
+
+function getBorderLineData() {
+    return new Promise(function (resolve, reject) {
+        $.ajax({
+            type: "get",
+            url: "/showBorderLine",
+            success: function (data) {
+                console.log("getBorderLineData")
+                resolve(data);
+            },
+            error: function () {
+
+            }
+        });
+    });
 }

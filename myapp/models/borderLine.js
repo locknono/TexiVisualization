@@ -1,15 +1,15 @@
-const mongoose =require("mongoose")
+const mongoose = require("mongoose")
 const Schema = mongoose.Schema,
     ObjectId = Schema.ObjectId;
 
 const pointSchema = new Schema([Number])
 const borderLineSchema = new Schema({
- class: Number,
- path:{
-     type:[[Number]],
- }
+    _id: ObjectId,
+    class: Number,
+    path: [
+        [Number]
+    ]
 });
 
-var borderLine = mongoose.model('borderLine', borderLineSchema);
-module.exports = borderLine;
-
+var borderLineModel = mongoose.model('borderLine', borderLineSchema);
+module.exports = borderLineModel;
