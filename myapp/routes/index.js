@@ -7,7 +7,7 @@ router.get('/', function (req, res, next) {
 });
 
 router.get('/showBorderLine',function(req,res){
-  var query = borderLineModel.find({},function (err, data) {
+   borderLineModel.find({},function (err, data) {
     if (err) console.log(err);
     else {
       console.log('Router get data: ', data);

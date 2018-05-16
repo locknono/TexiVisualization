@@ -17,10 +17,7 @@ L.tileLayer(osmUrl, {
 map.zoomControl.remove();
 
 
-getBorderLineData().then(function(data){
-    console.log("getData")
-    console.log('data: ', data);
-})
+
 var classScale = d3.scaleOrdinal()
     .domain([])
     .range(['#e41a1c', '#377eb8', '#4daf4a', '#984ea3', '#ff7f00', '#ffff33', '#a65628',
@@ -36,14 +33,14 @@ d3Overlay.addTo(map);
 
 
 function addHexagonBorder(selection, projection) {
-    d3.json('data/drawData/bound.json', function (error, borderData) {
-        var borderLine = d3.line()
-            .x(function (d) {
-                return projection.latLngToLayerPoint(d).x
-            })
-            .y(function (d) {
-                return projection.latLngToLayerPoint(d).y
-            })
+    var borderLine = d3.line()
+        .x(function (d) {
+            return projection.latLngToLayerPoint(d).x
+        })
+        .y(function (d) {
+            return projection.latLngToLayerPoint(d).y
+        })
+    getBorderLineData().then(function (borderData) {
         selection.append("g")
             .selectAll("path")
             .data(borderData)

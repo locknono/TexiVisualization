@@ -4,12 +4,11 @@ const Schema = mongoose.Schema,
 
 const pointSchema = new Schema([Number])
 const borderLineSchema = new Schema({
-    _id: ObjectId,
     class: Number,
     path: [
-        [Number]
+        [Number,Number]
     ]
-});
+},{ collection: 'borderLine'});
 
 var borderLineModel = mongoose.model('borderLine', borderLineSchema);
 module.exports = borderLineModel;
