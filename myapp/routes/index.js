@@ -11,7 +11,6 @@ router.get('/showBorderLine',function(req,res){
     if (err) console.log(err);
     else {
       console.log('Router get data: ', data);
-      res.setHeader('Access-Control-Allow-Origin', '*');
       res.json(data);
     }
   });

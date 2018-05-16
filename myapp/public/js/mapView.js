@@ -46,20 +46,13 @@ function addHexagonBorder(selection, projection) {
             .data(borderData)
             .enter()
             .append("path")
+            .style("pointer-events", "auto")
+            .attr("class","hex-border")
             .attr("d", function (d) {
                 return borderLine(d.path)
             })
-            .style("stroke", "#D4D4D4")
-            .style("opacity", 0.6)
             .style("fill", function (d, i) {
                 return classScale(i);
-            })
-            .style("pointer-events", "auto")
-            .on("mouseover", function (d) {
-                d3.select(this).style("opacity", 1)
-            })
-            .on("mouseout", function (d) {
-                d3.select(this).style("opacity", 0.6)
             })
             .on("click", function (d) {
                 console.log(d.class)
@@ -88,9 +81,6 @@ function addHexagon() {
             .attr("class", "hex")
             .style("pointer-events", "auto")
             .style("fill", function (d) {
-                if (parseFloat(d.category) == 21) {
-                    return 'black'
-                }
                 return classScale(d.category);
             })
             .style("opacity", function (d) {
@@ -99,9 +89,9 @@ function addHexagon() {
                 }
                 return "0.5"
             })
-            .on("click", function (d) {
+            /* .on("click", function (d) {
                 console.log(d.category, d.value);
-            })
+            }) */
     })
 }
 
@@ -112,7 +102,6 @@ function getBorderLineData() {
             type: "get",
             url: "/showBorderLine",
             success: function (data) {
-                console.log("getBorderLineData")
                 resolve(data);
             },
             error: function () {

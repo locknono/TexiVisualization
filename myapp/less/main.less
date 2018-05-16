@@ -3,6 +3,7 @@
 @screen-margin:10px;
 @mapWidth:68%;
 @fluxNetHeight:50%;
+@hexBorderStroke:#D4D4D4;
 #container-main{
     position: relative;
     height:@screen-height;
@@ -17,10 +18,16 @@
     height:100%;
     width:@mapWidth;
 }
-.hex{
-    stroke:none;
-    pointer-events:auto;
+
+
+.hex-border{
+    stroke:@hexBorderStroke;
+    opacity: 0.6;
+    &:hover{
+        opacity: 1;
+    }
 }
+
 #fluxNet{
     position: absolute;
     top:0px;

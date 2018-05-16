@@ -12,9 +12,12 @@
   height: 100%;
   width: 68%;
 }
-.hex {
-  stroke: none;
-  pointer-events: auto;
+.hex-border {
+  stroke: #D4D4D4;
+  opacity: 0.6;
+}
+.hex-border:hover {
+  opacity: 1;
 }
 #fluxNet {
   position: absolute;
