@@ -1,15 +1,17 @@
-var svg =d3.select("#netSvg");
-var width=parseFloat(svg.style("width").split('px')[0]),
-height=parseFloat(svg.style("height").split('px')[0]);
+var svg = d3.select("#netSvg");
+var width = parseFloat(svg.style("width").split('px')[0]),
+    height = parseFloat(svg.style("height").split('px')[0]);
 console.log('width: ', width);
 console.log('height: ', height);
 
-var force = d3.forceSimulation() 
-.force("charge", d3.forceManyBody().strength(-700).distanceMin(50).distanceMax(150)) 
-.force("link", d3.forceLink().id(function(d) { return d.index })) 
-.force("center", d3.forceCenter(width / 2, height / 2))
-.force("y", d3.forceY(0.001))
-.force("x", d3.forceX(0.001))
+var force = d3.forceSimulation()
+    .force("charge", d3.forceManyBody().strength(-700).distanceMin(50).distanceMax(150))
+    .force("link", d3.forceLink().id(function (d) {
+        return d.index
+    }))
+    .force("center", d3.forceCenter(width / 2, height / 2))
+    .force("y", d3.forceY(0.001))
+    .force("x", d3.forceX(0.001))
 
 function dragstarted(d) {
     if (!d3.event.active) force.alphaTarget(0.5).restart();
@@ -26,29 +28,29 @@ function dragended(d) {
     if (!d3.event.active) force.alphaTarget(0.5);
     d.fx = null;
     d.fy = null;
-} 
+}
 
 d3.json("./data/drawData/netFlux.json", function (json) {
     console.log('json: ', json);
-    
-    var valueRange=d3.extent(json.links,function(d){
+
+    var valueRange = d3.extent(json.links, function (d) {
         return d.value
     })
     console.log('valueRange: ', valueRange);
-    var strokeScale=d3.scaleLinear()
-    .domain(valueRange)
-    .range([0,5])
+    var strokeScale = d3.scaleLinear()
+        .domain(valueRange)
+        .range([0, 5])
 
     force
-        .nodes(json.nodes) 
+        .nodes(json.nodes)
         .force("link").links(json.links)
 
     var link = svg.selectAll(".link")
         .data(json.links)
         .enter()
         .append("line")
-        .attr("stroke","black")
-        .attr("stroke-width",function(d){
+        .attr("stroke", "black")
+        .attr("stroke-width", function (d) {
             return strokeScale(d.value)
         })
         .attr("class", "link");
@@ -58,33 +60,33 @@ d3.json("./data/drawData/netFlux.json", function (json) {
         .enter().append("g")
         .attr("class", "node")
         .call(d3.drag()
-        .on("start", dragstarted)
-        .on("drag", dragged)
-        .on("end", dragended));  
+            .on("start", dragstarted)
+            .on("drag", dragged)
+            .on("end", dragended));
 
-        var nodeNumberRange=d3.extent(json.nodes,function(d){
-            return d.number
-        })
-        console.log('nodeNumberRange: ', nodeNumberRange);
-        var rScale=d3.scaleLinear()
+    var nodeNumberRange = d3.extent(json.nodes, function (d) {
+        return d.number
+    })
+    console.log('nodeNumberRange: ', nodeNumberRange);
+    var rScale = d3.scaleLinear()
         .domain(nodeNumberRange)
-        .range([0.5,15])
+        .range([0.5, 15])
 
     node.append('circle')
-        .attr('r', function(d){
+        .attr('r', function (d) {
             return rScale(d.number)
         })
         .attr('fill', function (d) {
-            return classScale(d.class);
+            return mapView.classScale(d.class);
         })
-        .attr("id",function(d){
+        .attr("id", function (d) {
             return d.class
         })
-        .on("mouseover",function(d){
-            d3.select("[id='"+d.class+"']").style("opacity",1)
+        .on("mouseover", function (d) {
+            d3.select("[id='" + d.class + "']").style("opacity", 1)
         })
-        .on("mouseout",function(d){
-            d3.select("[id='"+d.class+"']").style("opacity",0.6)
+        .on("mouseout", function (d) {
+            d3.select("[id='" + d.class + "']").style("opacity", 0.6)
         })
 
     node.append("text")
@@ -96,6 +98,12 @@ d3.json("./data/drawData/netFlux.json", function (json) {
             return d.name
         });
 
+    function do_something() {
+        console.log(asd); // ReferenceError: foo is not defined
+       // let foo=2;
+       var asd;
+    }
+    do_something();
     force.on("tick", function () {
         link.attr("x1", function (d) {
                 return d.source.x;
