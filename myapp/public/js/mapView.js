@@ -16,13 +16,9 @@ L.tileLayer(osmUrl, {
 }).addTo(map);
 map.zoomControl.remove();
 
-
-
 var classScale = d3.scaleOrdinal()
-    .domain([])
     .range(['#e41a1c', '#377eb8', '#4daf4a', '#984ea3', '#ff7f00', '#ffff33', '#a65628',
-        '#f781bf', '#999999'
-    ]);
+        '#f781bf', '#999999']);
 
 var d3Overlay = L.d3SvgOverlay(function (selection, projection) {
     addHexagonBorder(selection, projection);
@@ -40,7 +36,18 @@ function addHexagonBorder(selection, projection) {
         .y(function (d) {
             return projection.latLngToLayerPoint(d).y
         })
+
     getBorderLineData().then(function (borderData) {
+        
+        let classNumber=d3.max(borderData,function(d){
+            return d.class
+        })
+        classDomain=[]
+        for(var i =0;i<=classNumber;i++){
+            classDomain.push(i)
+        }
+        classScale.domain(classDomain);
+
         console.log('borderData: ', borderData);
         selection.append("g")
             .selectAll("path")
