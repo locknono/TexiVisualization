@@ -1,7 +1,7 @@
 var map = L.map("map", {
-    zoomDelta: 0.1,
+    zoomDelta: 0.5,
     zoomSnap: 0.5
-}).setView([22.581023, 114.080337], 11.5);
+}).setView([22.631023, 114.080337], 11.5);
 var osmUrl =
     "https://api.mapbox.com/styles/v1/locknono/cjh7jj0mo0yu32rlnk52glz3f/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoibG9ja25vbm8iLCJhIjoiY2poN2ppZHptMDM2bDMzbnhiYW9icjN4MiJ9.GalwMO67A3HawYH_Tg0-Qg",
     layer =
@@ -41,6 +41,7 @@ function addHexagonBorder(selection, projection) {
             return projection.latLngToLayerPoint(d).y
         })
     getBorderLineData().then(function (borderData) {
+        console.log('borderData: ', borderData);
         selection.append("g")
             .selectAll("path")
             .data(borderData)
@@ -48,12 +49,27 @@ function addHexagonBorder(selection, projection) {
             .append("path")
             .style("pointer-events", "auto")
             .attr("class","hex-border")
+            .attr("id",function(d){
+                return d.class
+            })
             .attr("d", function (d) {
                 return borderLine(d.path)
             })
-            .style("fill", function (d, i) {
-                return classScale(i);
+            .style("fill", function (d) {
+                return classScale(d.class);
             })
+            .on("mouseover",function(d){
+                d3.select(this).style("opacity",1);
+                d3.select("#netSvg").select("[id='"+d.class+"']")
+                .style("stroke","black")
+                .style("stroke-width",2)
+            })
+            .on("mouseout",function(d){
+                d3.select(this).style("opacity",0.6);
+                d3.select("#netSvg").select("[id='"+d.class+"']")
+                .style("stroke","none")
+            })
+
             .on("click", function (d) {
                 console.log(d.class)
             })

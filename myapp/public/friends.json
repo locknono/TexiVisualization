@@ -1,0 +1,132 @@
+{
+    "nodes": [
+        {
+            "id": 5,
+            "name": "asd",
+            "group": 1
+        },
+        {
+            "id": 6,
+            "name": "qwe",
+            "group": 1
+        },
+        {
+            "name": "연제호",
+            "group": 1
+        },
+        {
+            "name": "최재영",
+            "group": 1
+        },
+        {
+            "name": "최주원",
+            "group": 1
+        },
+        {
+            "name": "양영주",
+            "group": 2
+        },
+        {
+            "name": "초지",
+            "group": 2
+        },
+        {
+            "name": "설효정",
+            "group": 2
+        },
+        {
+            "name": "최이백",
+            "group": 3
+        },
+        {
+            "name": "오규영",
+            "group": 3
+        },
+        {
+            "name": "조용덕",
+            "group": 3
+        }
+    ],
+    "links": [
+        {
+            "source": 0,
+            "target": 1,
+            "value": 1
+        },
+        {
+            "source": 0,
+            "target": 2,
+            "value": 1
+        },
+        {
+            "source": 0,
+            "target": 3,
+            "value": 11
+        },
+        {
+            "source": 0,
+            "target": 4,
+            "value": 123
+        },
+        {
+            "source": 1,
+            "target": 2,
+            "value": 1234
+        },
+        {
+            "source": 1,
+            "target": 3,
+            "value": 1234
+        },
+        {
+            "source": 1,
+            "target": 4,
+            "value": 1234
+        },
+        {
+            "source": 2,
+            "target": 3,
+            "value": 1234
+        },
+        {
+            "source": 2,
+            "target": 4,
+            "value": 1234
+        },
+        {
+            "source": 0,
+            "target": 5,
+            "value": 1234
+        },
+        {
+            "source": 5,
+            "target": 6,
+            "value": 123456
+        },
+        {
+            "source": 5,
+            "target": 7,
+            "value": 1234
+        },
+        {
+            "source": 0,
+            "target": 8,
+            "value": 1234
+        },
+        {
+            "source": 0,
+            "target": 9,
+            "value": 1234
+        },
+        {
+            "source": 0,
+            "target": 10,
+            "value": 1234
+        },
+        {
+            "source": 8,
+            "target": 7,
+            "value": 1234
+        }
+    ]
+}
