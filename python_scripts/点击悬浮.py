@@ -1,17 +1,15 @@
 # -*- coding: utf-8 -*-
 """
-Created on Thu May 17 11:39:32 2018
+Created on Sun May 20 18:08:54 2018
 
 @author: 44219
 """
 
-import json
 import os
 import csv
 from itertools import islice  
+import json
 import math
-import pandas as pd
-
 
 top = 22.80550
 bottom = 22.454
@@ -26,11 +24,13 @@ rowCount=int(((top-bottom)/(3*sideLength))*2)
 fp = 'D:/Texi/myapp/public/data/originalData/processedData'
 os.chdir(fp)
 
+pathdir=os.listdir(fp)
+
+fileCount=0
 
 with open('D:/Texi/myapp/public/data/drawData/valueHexagon2.0_215.json','r',encoding='utf-8') as f:
     classList=json.loads(f.read())
-
-#matrix for all hexagon
+    
 matrix=[]
 maxRow=classList[len(classList)-1]['row']
 for j in range(maxRow+1):
@@ -39,8 +39,10 @@ for j in range(maxRow+1):
         if(i['row'] == j):
             rowList.append(i)
     matrix.append(rowList)
-
-nodes=[]
+    
+#numberList:the number of hexagon each sorted class has
+    
+    
 numberList=[]
 with open('D:/Texi/myapp/public/data/drawData/valueHexagon2.0_215.json','r',encoding='utf-8') as f:
     hexagonList=json.loads(f.read())
@@ -55,19 +57,23 @@ with open('D:/Texi/myapp/public/data/drawData/valueHexagon2.0_215.json','r',enco
         if hexagonList[i]['category']==-1:
             continue
         numberList[hexagonList[i]['category']]+=1
-    
-    for i in categoryList:
-        node={}
-        node['class']=i
-        node['number']=numberList[i]
-        nodes.append(node)
+        
 
-pathdir=os.listdir(fp)
-
-fileCount=0
-links=[]
-
-statusDict={}
+clickData=[]
+for i in range(len(categoryList)):
+    thisClass={}
+    thisClass['class']=categoryList[i]
+    thisClass['on']=[]
+    thisClass['off']=[]
+    for j in range(24):
+        thisClass['on'].append(0)
+    for j in range(24):
+        thisClass['off'].append(0)
+    clickData.append(thisClass)
+        
+        
+        
+        
 for path in pathdir:
     newdir = os.path.join(fp,path) # 将文件名加入到当前文件路径后面
     if os.path.isfile(newdir):     #如果是文件
@@ -76,11 +82,19 @@ for path in pathdir:
             print(fileCount)
             reader=csv.reader(f)
             tmp=0
-            for line in islice(reader, 1, None): 
+            for line in islice(reader, 1, None):
+                
                 status=float(line[4])
-                #statusDict[status]=0
                 if(status!=0 and status!=1):
                     continue
+                
+                time=line[1]
+                #day:from 18 to 24
+                day = int(time.split(' ')[0].split('/')[2])
+                if(day<18 or day>24):
+                    continue
+                hour=int(time.split(' ')[1].split(':')[0])
+                    
                 #从空载到打表，上车了 
                 if ((tmp==0) and (status==1)):
                     sourceLat=float(line[3])
@@ -96,7 +110,9 @@ for path in pathdir:
                         continue
                     if(row>rowCount or col>colCount):
                         continue
-                    sourceClass=matrix[row][col]['category']
+                    
+                    thisClass=matrix[row][col]['category']
+                    clickData[thisClass]['on'][hour]+=1
                     tmp=1
                     continue
                 #下车
@@ -114,33 +130,8 @@ for path in pathdir:
                         continue
                     if(row>rowCount or col>colCount):
                         continue
-                    targetClass=matrix[row][col]['category']
+                    thisClass=matrix[row][col]['category']
+                    clickData[thisClass]['off'][hour]+=1
                     tmp=0
-                    
-                    
-                    #如果links之中没有这条轨迹，就把这条轨迹加入links中，赋值value为0
-                    #如果links之中已经有了这条轨迹，那么links中这条轨迹的value+=1
-                    
-                    exist=False
-                    for each in links:
-                        if each['source']==sourceClass and each['target']==targetClass:
-                            exist=True
-                            each['value']+=1
-                            break
-                    if(exist ==False):
-                        track={}
-                        track['source']=sourceClass
-                        track['target']=targetClass
-                        track['value']=1
-                        links.append(track)
-                    
-        
-
-
-                
-                
-                    
-            
-                    
-                
-                
+                    continue
+    
