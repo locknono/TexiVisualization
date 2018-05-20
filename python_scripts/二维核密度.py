@@ -206,7 +206,7 @@ for c in [1.5,1.75,1.8,2]:
                     break
                 print(fileCount)
                 reader=csv.reader(f)
-                tmp=0;
+                tmp=0
                 for line in islice(reader, 1, None): 
                     status=float(line[4])
                     if(status!=0 and status!=1):
