@@ -46,37 +46,16 @@ var mapView = (function () {
 
             var thisClassClickData = clickData[thisClass];
 
-            var maxOn = d3.max(clickData, function (d) {
-                return d3.max(d.on)
-            })
-            var maxOff = d3.max(clickData, function (d) {
-                return d3.max(d.off)
-            })
-
             var thisClassMaxOn = d3.max(thisClassClickData.on);
             var thisClassMaxOff = d3.max(thisClassClickData.off);
 
-            //on for radius:55-80
-            //off for radius:55-30
             var circleRadius = 50;
-
             var onScale = d3.scaleLinear()
                 .domain([0, thisClassMaxOn])
                 .range([0, 30]);
-
             var offScale = d3.scaleLinear()
                 .domain([0, thisClassMaxOff])
                 .range([0, -30]);
-
-            /*
-               圆心坐标：(x0,y0)
-               半径：r
-               角度：a0
-
-               则圆上任一点为：（x1,y1）
-               x1   =   x0   +   r   *   cos(ao   *   3.14   /180   )
-               y1   =   y0   +   r   *   sin(ao   *   3.14   /180   )
-                        */
 
             var line = d3.line()
                 .x(function (d) {
@@ -87,10 +66,11 @@ var mapView = (function () {
                 })
                 .curve(d3.curveCardinal);
 
+
             svg.selectAll("path").remove();
             svg.selectAll("circle").remove();
             addCircle();
-            addLine(0);
+            addLine();
 
             function addCircle() {
                 svg.append("circle")
@@ -101,55 +81,45 @@ var mapView = (function () {
                     .attr("fill", "none")
             }
 
+            function addLine() {
+                var data = thisClassClickData.on;
 
-            function addLine(status) {
-                if (status === 0) {
-                    var scale = onScale;
-                    var data = thisClassClickData.on;
-                } else {
-                    var scale = offScale;
-                    var data = thisClassClickData.off;
-                }
-                let a0 = 360 / 24;
+                let a0 = 360 / data.length;
                 var lineEndPoint = [];
-                for (var i = 0; i < 24; i++) {
-                    let lineEndPointX =
-                        (width / 2) + (circleRadius + scale(data[i])) * Math.cos(a0 * (i + 1) * Math.PI / 180);
-                    let lineEndPointY =
-                        (height / 2) + (circleRadius + scale(data[i])) * Math.sin(a0 * (i + 1) * Math.PI / 180);
-                    lineEndPoint.push([lineEndPointX, lineEndPointY]);
-                }
-                addCurveCircle();
-                lineEndPoint.push(lineEndPoint[0]);
+
+                getCurveData(onScale);
                 svg.append("path")
                     .attr("d", line(lineEndPoint))
-                    .attr("stroke", "black")
-                    .attr("fill", "#7972FF")
+                    .style("stroke", "black")
+                    .style("fill", "#7972FF")
+
                 svg.append("circle")
                     .attr("cx", (width / 2))
                     .attr("cy", (height / 2))
                     .attr("r", circleRadius)
-                    .attr("stroke", "black")
-                    .attr("fill", "#D6BD3E")
-
+                    .style("stroke", "black")
+                    .style("fill", "#D6BD3E")
 
 
                 var data = thisClassClickData.off;
-
-                var lineEndPoint = [];
-                for (var i = 0; i < 24; i++) {
-                    let lineEndPointX =
-                        (width / 2) + (circleRadius + offScale(data[i])) * Math.cos(a0 * (i + 1) * Math.PI / 180);
-                    let lineEndPointY =
-                        (height / 2) + (circleRadius + offScale(data[i])) * Math.sin(a0 * (i + 1) * Math.PI / 180);
-                    lineEndPoint.push([lineEndPointX, lineEndPointY]);
-                }
-                lineEndPoint.push(lineEndPoint[0]);
-                addCurveCircle();
+                lineEndPoint = [];
+                getCurveData(offScale);
                 svg.append("path")
-                    .attr("d", line(lineEndPoint))
-                    .attr("stroke", "black")
-                    .attr("fill", "white")
+                .attr("d", line(lineEndPoint))
+                .style("fill", "white")
+                .style("stroke","black")
+               // addCurveCircle();
+                
+                function getCurveData(scale) {
+                    data.map((d, i) => {
+                        let lineEndPointX =
+                            (width / 2) + (circleRadius + scale(d)) * Math.cos(a0 * (i + 1) * Math.PI / 180);
+                        let lineEndPointY =
+                            (height / 2) + (circleRadius + scale(d)) * Math.sin(a0 * (i + 1) * Math.PI / 180);
+                        lineEndPoint.push([lineEndPointX, lineEndPointY]);
+                    })
+                    lineEndPoint.push(lineEndPoint[0]);
+                }
 
                 function addCurveCircle() {
                     lineEndPoint.map(d => {
@@ -162,16 +132,7 @@ var mapView = (function () {
                     })
                 }
             }
-
-
-
-
-
         })
-
-
-
-
     }
 
     function addHexagonBorder(selection, projection) {
