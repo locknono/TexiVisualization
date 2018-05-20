@@ -1,8 +1,8 @@
 var mapView=(function(){
     var map = L.map("map", {
-        zoomDelta: 0.5,
-        zoomSnap: 0.5
-    }).setView([22.631023, 114.080337], 11.5);
+        zoomDelta: 0.1,
+        zoomSnap: 0.1
+    }).setView([22.631023, 114.164337], 10.8);
     var osmUrl =
         "https://api.mapbox.com/styles/v1/locknono/cjh7jj0mo0yu32rlnk52glz3f/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoibG9ja25vbm8iLCJhIjoiY2poN2ppZHptMDM2bDMzbnhiYW9icjN4MiJ9.GalwMO67A3HawYH_Tg0-Qg",
         layer =
