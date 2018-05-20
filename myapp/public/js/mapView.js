@@ -29,38 +29,109 @@ var mapView = (function () {
     });
     d3Overlay.addTo(map);
 
-    function showDiv(){
+    function showDiv() {
         d3.select("#suspendingDiv").transition()
-        .duration(1000)
-        .style("top", "0px");
+            .duration(1000)
+            .style("top", "0px");
     }
-    function hideDiv(){
+
+    function hideDiv() {
         d3.select("#suspendingDiv").transition()
             .duration(1000)
             .style("top", "-200px");
     }
+
     function pieViewForOneClass(thisClass) {
         showDiv();
         var svg = d3.select('#suspendingSvg');
         var width = parseFloat(svg.style("width").split('px')[0]),
             height = parseFloat(svg.style("height").split('px')[0]);
 
-        var minRadius = 30;
+        var tierRadius = 30;
+        var arc = d3
+            .arc()
+            .startAngle(function (d) {
+                return d.startAngle;
+            })
+            .endAngle(function (d) {
+                return d.endAngle;
+            })
+            .innerRadius(function (d) {
+                return d.innerRadius;
+            })
+            .outerRadius(function (d) {
+                return d.outerRadius;
+            });
+
 
         d3.json('data/drawData/clickData.json', function (clickData) {
 
+            svg.selectAll("path").remove();
+            svg.selectAll("circle").remove();
             var thisClassClickData = clickData[thisClass];
 
             var thisClassMaxOn = d3.max(thisClassClickData.on);
             var thisClassMaxOff = d3.max(thisClassClickData.off);
-
             var circleRadius = 50;
             var onScale = d3.scaleLinear()
                 .domain([0, thisClassMaxOn])
-                .range([0, 30]);
+                .range([0, tierRadius]);
             var offScale = d3.scaleLinear()
                 .domain([0, thisClassMaxOff])
-                .range([0, -30]);
+                .range([0, -tierRadius]);
+
+            var arcArray = [];
+            for (var i = 0; i < thisClassClickData.on.length; i++) {
+                var thisArc = new Object();
+                thisArc.value = thisClassClickData.on[i];
+                thisArc.startAngle = 2 * Math.PI / 24 * i;
+                thisArc.endAngle = 2 * Math.PI / 24 * (i + 1);
+                thisArc.innerRadius = circleRadius;
+                thisArc.outerRadius = circleRadius + onScale(thisClassClickData.on[i]);
+                arcArray.push(thisArc);
+            }
+
+            var flArcsG = svg.append("g").attr("class", "arcG")
+                .attr("transform", "translate(" + (width / 2) + ',' + (height / 2) + ')');
+
+            var fl = flArcsG
+                .selectAll(".path")
+                .data(arcArray)
+                .enter()
+                .append("path")
+                .attr("d", arc)
+                .style("stroke", "black")
+                .style("stroke-width", "0.2px")
+                .style("fill", function (d) {
+                    return options.suspending_outer_color;
+                })
+
+            var arcArray = [];
+            for (var i = 0; i < thisClassClickData.off.length; i++) {
+                var thisArc = new Object();
+                thisArc.value = thisClassClickData.off[i];
+                thisArc.startAngle = 2 * Math.PI / 24 * i;
+                thisArc.endAngle = 2 * Math.PI / 24 * (i + 1);
+                thisArc.innerRadius = circleRadius;
+                thisArc.outerRadius = circleRadius + offScale(thisClassClickData.off[i]);
+                arcArray.push(thisArc);
+            }
+
+            var flArcsG = svg.append("g").attr("class", "arcG")
+                .attr("transform", "translate(" + (width / 2) + ',' + (height / 2) + ')');
+
+            var fl = flArcsG
+                .selectAll(".path")
+                .data(arcArray)
+                .enter()
+                .append("path")
+                .attr("d", arc)
+                .style("stroke", "black")
+                .style("stroke-width", "0.2px")
+                .style("fill", function (d) {
+                    return options.suspending_inner_color;
+                })
+
 
             var line = d3.line()
                 .x(function (d) {
@@ -72,10 +143,8 @@ var mapView = (function () {
                 .curve(d3.curveCardinal);
 
 
-            svg.selectAll("path").remove();
-            svg.selectAll("circle").remove();
             addCircle();
-            addLine();
+            // addLine();
 
             function addCircle() {
                 svg.append("circle")
@@ -253,8 +322,8 @@ var mapView = (function () {
     }
     return {
         classScale: classScale,
-        pieView:pieViewForOneClass,
-        showDiv:showDiv,
-        hideDiv:hideDiv
+        pieView: pieViewForOneClass,
+        showDiv: showDiv,
+        hideDiv: hideDiv
     };
 })()

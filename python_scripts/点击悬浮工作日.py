@@ -91,7 +91,7 @@ for path in pathdir:
                 time=line[1]
                 #day:from 18 to 24
                 day = int(time.split(' ')[0].split('/')[2])
-                if(day<18 or day>24):
+                if(day<18 or day>22):
                     continue
                 hour=int(time.split(' ')[1].split(':')[0])
                     
@@ -134,4 +134,19 @@ for path in pathdir:
                     clickData[thisClass]['off'][hour]+=1
                     tmp=0
                     continue
+    
+with open('D:/Texi/myapp/public/data/drawData/clickDataWorkDay.json','w',encoding='utf-8') as f:
+    writeStr=json.dumps(clickData)
+    f.write(writeStr)
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     

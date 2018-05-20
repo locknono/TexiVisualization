@@ -1,39 +1,40 @@
-(function(){
+(function () {
     var svg = d3.select("#netSvg");
     var width = parseFloat(svg.style("width").split('px')[0]),
         height = parseFloat(svg.style("height").split('px')[0]);
     console.log('width: ', width);
     console.log('height: ', height);
-    
+
     var force = d3.forceSimulation()
         .force("charge", d3.forceManyBody().strength(-700).distanceMin(50).distanceMax(150))
         .force("link", d3.forceLink().id(function (d) {
             return d.index
         }))
+        .alphaTarget(0.05)
         .force("center", d3.forceCenter(width / 2, height / 2))
         .force("y", d3.forceY(0.001))
         .force("x", d3.forceX(0.001))
-    
+
     function dragstarted(d) {
-        if (!d3.event.active) force.alphaTarget(0.5).restart();
+        if (!d3.event.active) force.alphaTarget(0.05).restart();
         d.fx = d.x;
         d.fy = d.y;
     }
-    
+
     function dragged(d) {
         d.fx = d3.event.x;
         d.fy = d3.event.y;
     }
-    
+
     function dragended(d) {
-        if (!d3.event.active) force.alphaTarget(0.5);
+        if (!d3.event.active) force.alphaTarget(0.05);
         d.fx = null;
         d.fy = null;
     }
-    
+
     d3.json("./data/drawData/netFlux.json", function (json) {
         console.log('json: ', json);
-    
+
         var valueRange = d3.extent(json.links, function (d) {
             return d.value
         })
@@ -41,11 +42,11 @@
         var strokeScale = d3.scaleLinear()
             .domain(valueRange)
             .range([0, 5])
-    
+
         force
             .nodes(json.nodes)
             .force("link").links(json.links)
-    
+
         var link = svg.selectAll(".link")
             .data(json.links)
             .enter()
@@ -55,7 +56,7 @@
                 return strokeScale(d.value)
             })
             .attr("class", "link");
-    
+
         var node = svg.selectAll(".node")
             .data(json.nodes)
             .enter().append("g")
@@ -64,7 +65,7 @@
                 .on("start", dragstarted)
                 .on("drag", dragged)
                 .on("end", dragended));
-    
+
         var nodeNumberRange = d3.extent(json.nodes, function (d) {
             return d.number
         })
@@ -72,7 +73,7 @@
         var rScale = d3.scaleLinear()
             .domain(nodeNumberRange)
             .range([0.5, 15])
-    
+
         node.append('circle')
             .attr('r', function (d) {
                 return rScale(d.number)
@@ -80,7 +81,7 @@
             .style('fill', function (d) {
                 return mapView.classScale(d.class);
             })
-            .style("stroke","none")
+            .style("stroke", "none")
             .attr("id", function (d) {
                 return d.class
             })
@@ -92,7 +93,7 @@
                 d3.select("#map").select("[id='" + d.class + "']").style("opacity", options.normal_opacity);
                 mapView.hideDiv();
             })
-    
+
         node.append("text")
             .attr("dx", -18)
             .attr("dy", 8)
@@ -101,7 +102,7 @@
             .text(function (d) {
                 return d.name
             });
-    
+
         force.on("tick", function () {
             link.attr("x1", function (d) {
                     return d.source.x;
@@ -121,5 +122,3 @@
         });
     });
 })()
-
-
