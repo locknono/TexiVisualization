@@ -77,9 +77,10 @@
             .attr('r', function (d) {
                 return rScale(d.number)
             })
-            .attr('fill', function (d) {
+            .style('fill', function (d) {
                 return mapView.classScale(d.class);
             })
+            .style("stroke","none")
             .attr("id", function (d) {
                 return d.class
             })
