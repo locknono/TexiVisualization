@@ -9,11 +9,6 @@
     var maxRadius = d3.min([width, height]) / 2 * (9 / 10);
     var tierRadius = (maxRadius - minRadius) / 7;
 
-    var arcColor = d3.scaleThreshold();
-    arcColor
-        .domain([0, 2, 4, 8, 16, 32, 64, 128, 256, 512])
-        .range([0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]);
-
 
     var arc = d3
         .arc()
@@ -94,7 +89,7 @@
             .style("stroke", "steelblue")
             .style("stroke-width", "0.2px")
             .style("fill", function (d) {
-                return d3.interpolateYlGnBu(fluxScale(d.value));
+                return options.pieview_colorscale(fluxScale(d.value));
 
             })
             .on("mouseover", function (d, i) {

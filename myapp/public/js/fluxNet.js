@@ -86,7 +86,7 @@
             })
             .on("mouseover", function (d) {
                 d3.select("#map").select("[id='" + d.class + "']").style("opacity", options.mouseover_opacity);
-                mapView.pieView();
+                mapView.pieView(d.class);
             })
             .on("mouseout", function (d) {
                 d3.select("#map").select("[id='" + d.class + "']").style("opacity", options.normal_opacity);
