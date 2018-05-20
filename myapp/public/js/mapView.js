@@ -103,7 +103,7 @@ var mapView = (function () {
                     .attr("cy", (height / 2))
                     .attr("r", circleRadius)
                     .style("stroke", "black")
-                    .style("fill", "#D6BD3E")
+                    .style("fill", options.suspending_outer_color)
 
 
                 var data = thisClassClickData.off;
@@ -132,7 +132,7 @@ var mapView = (function () {
                             .attr("cx", d[0])
                             .attr("cy", d[1])
                             .attr("r", 1.5)
-                            .attr("stroke", "#CEDDE8")
+                            .attr("stroke", options.suspending_inner_color)
                             .attr("fill", "black")
                     })
                 }
@@ -178,7 +178,7 @@ var mapView = (function () {
                     return classScale(d.class);
                 })
                 .on("mouseover", function (d) {
-                    d3.select(this).style("opacity", 1);
+                    d3.select(this).style("opacity", options.mouseover_opacity);
                     d3.select("#netSvg").select("[id='" + d.class + "']")
                         .style("stroke", "black")
                         .style("stroke-width", 2)
@@ -186,7 +186,7 @@ var mapView = (function () {
 
                 })
                 .on("mouseout", function (d) {
-                    d3.select(this).style("opacity", 0.6);
+                    d3.select(this).style("opacity", options.normal_opacity);
                     d3.select("#netSvg").select("[id='" + d.class + "']")
                         .style("stroke", "none")
                     hideDiv();
@@ -227,9 +227,9 @@ var mapView = (function () {
                 })
                 .style("opacity", function (d) {
                     if (d.category === -1) {
-                        return '0'
+                        return 0
                     }
-                    return "0.5"
+                    return options.normal_opacity;
                 })
             /* .on("click", function (d) {
                 console.log(d.category, d.value);
