@@ -30,12 +30,11 @@ var mapView = (function () {
     d3Overlay.addTo(map);
 
 
-
     function pieViewForOneClass(thisClass) {
-        var div = d3.select("#suspendingDiv")
-            .transition()
-            .duration(1500)
-            .style("top", "0px");
+        d3.select("#suspendingDiv").transition()
+            .duration(1000)
+            .style("top", "0px")
+            .style("border-radius","50%")
         var svg = d3.select('#suspendingSvg');
         var width = parseFloat(svg.style("width").split('px')[0]),
             height = parseFloat(svg.style("height").split('px')[0]);
@@ -105,11 +104,11 @@ var mapView = (function () {
                 lineEndPoint = [];
                 getCurveData(offScale);
                 svg.append("path")
-                .attr("d", line(lineEndPoint))
-                .style("fill", "white")
-                .style("stroke","black")
-               // addCurveCircle();
-                
+                    .attr("d", line(lineEndPoint))
+                    .style("fill", "white")
+                    .style("stroke", "black")
+                // addCurveCircle();
+
                 function getCurveData(scale) {
                     data.map((d, i) => {
                         let lineEndPointX =
@@ -177,15 +176,26 @@ var mapView = (function () {
                     d3.select("#netSvg").select("[id='" + d.class + "']")
                         .style("stroke", "black")
                         .style("stroke-width", 2)
+                    pieViewForOneClass(d.class);
+
                 })
                 .on("mouseout", function (d) {
                     d3.select(this).style("opacity", 0.6);
                     d3.select("#netSvg").select("[id='" + d.class + "']")
                         .style("stroke", "none")
+                    var div = d3.select("#suspendingDiv")
+                        .transition()
+                        .duration(1000)
+                        .style("top", "-200px");
                 })
-                .on("click", function (d) {
-                    pieViewForOneClass(d.class);
-                })
+            /* .on("click", function (d) {
+                d3.select(this).style("opacity", 1);
+                d3.select("#netSvg").select("[id='" + d.class + "']")
+                    .style("stroke", "black")
+                    .style("stroke-width", 2)
+
+                pieViewForOneClass(d.class);
+            }) */
         })
     }
 

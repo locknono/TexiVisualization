@@ -22,6 +22,7 @@
   height: 200px;
   width: 200px;
   z-index: 5000;
+  border-radius: 50%;
 }
 #suspendingDiv svg {
   width: 100%;
