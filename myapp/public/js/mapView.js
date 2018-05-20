@@ -31,11 +31,147 @@ var mapView = (function () {
 
 
 
-    function pieViewForOneClass() {
+    function pieViewForOneClass(thisClass) {
         var div = d3.select("#suspendingDiv")
             .transition()
             .duration(1500)
             .style("top", "0px");
+        var svg = d3.select('#suspendingSvg');
+        var width = parseFloat(svg.style("width").split('px')[0]),
+            height = parseFloat(svg.style("height").split('px')[0]);
+
+        var minRadius = 30;
+
+        d3.json('data/drawData/clickData.json', function (clickData) {
+
+            var thisClassClickData = clickData[thisClass];
+
+            var maxOn = d3.max(clickData, function (d) {
+                return d3.max(d.on)
+            })
+            var maxOff = d3.max(clickData, function (d) {
+                return d3.max(d.off)
+            })
+
+            var thisClassMaxOn = d3.max(thisClassClickData.on);
+            var thisClassMaxOff = d3.max(thisClassClickData.off);
+
+            //on for radius:55-80
+            //off for radius:55-30
+            var circleRadius = 50;
+
+            var onScale = d3.scaleLinear()
+                .domain([0, thisClassMaxOn])
+                .range([0, 30]);
+
+            var offScale = d3.scaleLinear()
+                .domain([0, thisClassMaxOff])
+                .range([0, -30]);
+
+            /*
+               圆心坐标：(x0,y0)
+               半径：r
+               角度：a0
+
+               则圆上任一点为：（x1,y1）
+               x1   =   x0   +   r   *   cos(ao   *   3.14   /180   )
+               y1   =   y0   +   r   *   sin(ao   *   3.14   /180   )
+                        */
+
+            var line = d3.line()
+                .x(function (d) {
+                    return d[0];
+                })
+                .y(function (d) {
+                    return d[1];
+                })
+                .curve(d3.curveCardinal);
+
+            svg.selectAll("path").remove();
+            svg.selectAll("circle").remove();
+            addCircle();
+            addLine(0);
+
+            function addCircle() {
+                svg.append("circle")
+                    .attr("cx", (width / 2))
+                    .attr("cy", (height / 2))
+                    .attr("r", circleRadius)
+                    .attr("stroke", "black")
+                    .attr("fill", "none")
+            }
+
+
+            function addLine(status) {
+                if (status === 0) {
+                    var scale = onScale;
+                    var data = thisClassClickData.on;
+                } else {
+                    var scale = offScale;
+                    var data = thisClassClickData.off;
+                }
+                let a0 = 360 / 24;
+                var lineEndPoint = [];
+                for (var i = 0; i < 24; i++) {
+                    let lineEndPointX =
+                        (width / 2) + (circleRadius + scale(data[i])) * Math.cos(a0 * (i + 1) * Math.PI / 180);
+                    let lineEndPointY =
+                        (height / 2) + (circleRadius + scale(data[i])) * Math.sin(a0 * (i + 1) * Math.PI / 180);
+                    lineEndPoint.push([lineEndPointX, lineEndPointY]);
+                }
+                addCurveCircle();
+                lineEndPoint.push(lineEndPoint[0]);
+                svg.append("path")
+                    .attr("d", line(lineEndPoint))
+                    .attr("stroke", "black")
+                    .attr("fill", "#7972FF")
+                svg.append("circle")
+                    .attr("cx", (width / 2))
+                    .attr("cy", (height / 2))
+                    .attr("r", circleRadius)
+                    .attr("stroke", "black")
+                    .attr("fill", "#D6BD3E")
+
+
+
+                var data = thisClassClickData.off;
+
+                var lineEndPoint = [];
+                for (var i = 0; i < 24; i++) {
+                    let lineEndPointX =
+                        (width / 2) + (circleRadius + offScale(data[i])) * Math.cos(a0 * (i + 1) * Math.PI / 180);
+                    let lineEndPointY =
+                        (height / 2) + (circleRadius + offScale(data[i])) * Math.sin(a0 * (i + 1) * Math.PI / 180);
+                    lineEndPoint.push([lineEndPointX, lineEndPointY]);
+                }
+                lineEndPoint.push(lineEndPoint[0]);
+                addCurveCircle();
+                svg.append("path")
+                    .attr("d", line(lineEndPoint))
+                    .attr("stroke", "black")
+                    .attr("fill", "white")
+
+                function addCurveCircle() {
+                    lineEndPoint.map(d => {
+                        svg.append("circle")
+                            .attr("cx", d[0])
+                            .attr("cy", d[1])
+                            .attr("r", 1.5)
+                            .attr("stroke", "#CEDDE8")
+                            .attr("fill", "black")
+                    })
+                }
+            }
+
+
+
+
+
+        })
+
+
+
+
     }
 
     function addHexagonBorder(selection, projection) {
@@ -87,7 +223,7 @@ var mapView = (function () {
                         .style("stroke", "none")
                 })
                 .on("click", function (d) {
-                    pieViewForOneClass();
+                    pieViewForOneClass(d.class);
                 })
         })
     }
