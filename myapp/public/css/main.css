@@ -17,7 +17,7 @@
 }
 #suspendingDiv {
   position: absolute;
-  top: 0px;
+  top: -200px;
   right: 0px;
   height: 200px;
   width: 200px;

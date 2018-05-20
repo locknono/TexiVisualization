@@ -85,10 +85,12 @@
                 return d.class
             })
             .on("mouseover", function (d) {
-                d3.select("#map").select("[id='" + d.class + "']").style("opacity", 1)
+                d3.select("#map").select("[id='" + d.class + "']").style("opacity", 1);
+                mapView.pieView();
             })
             .on("mouseout", function (d) {
-                d3.select("#map").select("[id='" + d.class + "']").style("opacity", 0.6)
+                d3.select("#map").select("[id='" + d.class + "']").style("opacity", 0.6);
+                mapView.hideDiv();
             })
     
         node.append("text")

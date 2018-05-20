@@ -29,12 +29,18 @@ var mapView = (function () {
     });
     d3Overlay.addTo(map);
 
-
-    function pieViewForOneClass(thisClass) {
+    function showDiv(){
+        d3.select("#suspendingDiv").transition()
+        .duration(1000)
+        .style("top", "0px");
+    }
+    function hideDiv(){
         d3.select("#suspendingDiv").transition()
             .duration(1000)
-            .style("top", "0px")
-            .style("border-radius","50%")
+            .style("top", "-200px");
+    }
+    function pieViewForOneClass(thisClass) {
+        showDiv();
         var svg = d3.select('#suspendingSvg');
         var width = parseFloat(svg.style("width").split('px')[0]),
             height = parseFloat(svg.style("height").split('px')[0]);
@@ -183,10 +189,7 @@ var mapView = (function () {
                     d3.select(this).style("opacity", 0.6);
                     d3.select("#netSvg").select("[id='" + d.class + "']")
                         .style("stroke", "none")
-                    var div = d3.select("#suspendingDiv")
-                        .transition()
-                        .duration(1000)
-                        .style("top", "-200px");
+                    hideDiv();
                 })
             /* .on("click", function (d) {
                 d3.select(this).style("opacity", 1);
@@ -249,6 +252,9 @@ var mapView = (function () {
         });
     }
     return {
-        classScale: classScale
+        classScale: classScale,
+        pieView:pieViewForOneClass,
+        showDiv:showDiv,
+        hideDiv:hideDiv
     };
 })()
