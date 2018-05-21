@@ -63,12 +63,15 @@ var mapView = (function () {
                 return d.outerRadius;
             });
 
+            console.time('a');
 
         d3.json('data/drawData/clickData.json', function (clickData) {
+            console.timeEnd('a');
 
             svg.selectAll("path").remove();
             svg.selectAll("circle").remove();
             var thisClassClickData = clickData[thisClass];
+
 
             var thisClassMaxOn = d3.max(thisClassClickData.on);
             var thisClassMaxOff = d3.max(thisClassClickData.off);
@@ -91,6 +94,7 @@ var mapView = (function () {
                 arcArray.push(thisArc);
             }
 
+            
             var flArcsG = svg.append("g").attr("class", "arcG")
                 .attr("transform", "translate(" + (width / 2) + ',' + (height / 2) + ')');
 
@@ -219,7 +223,6 @@ var mapView = (function () {
             })
 
         getBorderLineData().then(function (borderData) {
-
             let classNumber = d3.max(borderData, function (d) {
                 return d.class
             })
@@ -247,12 +250,12 @@ var mapView = (function () {
                     return classScale(d.class);
                 })
                 .on("mouseover", function (d) {
+                    let suspendingData=getSuspendingData(d.class);
                     d3.select(this).style("opacity", options.mouseover_opacity);
                     d3.select("#netSvg").select("[id='" + d.class + "']")
                         .style("stroke", "black")
                         .style("stroke-width", 2)
                     pieViewForOneClass(d.class);
-
                 })
                 .on("mouseout", function (d) {
                     d3.select(this).style("opacity", options.normal_opacity);
@@ -320,6 +323,25 @@ var mapView = (function () {
             });
         });
     }
+
+    function getSuspendingData(classId) {
+        return new Promise(function (resolve, reject) {
+            $.ajax({
+                type: "get",
+                url: "/showSuspending"+classId,
+                //data: "class="+classId,
+                success: function (data) {
+                    console.log('data: ', data);
+                    resolve(data);
+                },
+                error: function () {
+
+                }
+            });
+        });
+    }
+
+
     return {
         classScale: classScale,
         pieView: pieViewForOneClass,

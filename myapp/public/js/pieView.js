@@ -64,7 +64,7 @@
             .attr("x", width / 2 - 20)
             .attr("y", height / 2 + 25)
             .attr("text-anchor", "middle")
-            
+
         var valueText = flInfoG.append("text")
             .attr("x", width / 2 + 18)
             .attr("y", height / 2 + 25)
@@ -80,7 +80,7 @@
             .attr("text-anchor", "middle")
 
         var dayLabel = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-        
+
         var fl = flArcsG
             .selectAll(".path")
             .data(arcArray)

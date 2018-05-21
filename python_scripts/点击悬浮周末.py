@@ -141,7 +141,10 @@ for path in pathdir:
                     clickData[thisClass]['off'][hour]+=1
                     tmp=0
                     continue
-    
+
+for i in range(len(clickData)):
+    for j in range(len(clickData[i]['on'])):
+        clickData[i]['on'][j]/=2
 with open('D:/Texi/myapp/public/data/drawData/clickDataWeekend.json','w',encoding='utf-8') as f:
     writeStr=json.dumps(clickData)
     f.write(writeStr)
