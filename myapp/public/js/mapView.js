@@ -386,6 +386,12 @@ var mapView = (function () {
 
     function getBorderLineData() {
         return new Promise(function (resolve, reject) {
+            d3.json('./data/drawData/bound_432.json', function (d) {
+                resolve(d);
+            })
+        });
+
+        return new Promise(function (resolve, reject) {
             $.ajax({
                 type: "get",
                 url: "/showBorderLine",
@@ -403,8 +409,8 @@ var mapView = (function () {
         return new Promise(function (resolve, reject) {
             $.ajax({
                 type: "get",
-                url: "/showSuspending/" + classId,
-                //data: "class="+classId,
+                url: "/showSuspending",
+                data: "classId="+classId,
                 success: function (data) {
                     resolve(data[0]);
                 },

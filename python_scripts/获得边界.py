@@ -20,7 +20,7 @@ def getDis(p1,p2):
 
 
 AllLine=[]
-with open('D:/Texi/myapp/public/data/drawData/valueHexagon2.0_215.json','r',encoding='utf-8') as f:
+with open('D:/Texi/myapp/public/data/drawData/valueHexagon2_399.json','r',encoding='utf-8') as f:
     hexagonList=json.loads(f.read())
     categoryList=[]
     for i in range(len(hexagonList)):
@@ -53,7 +53,7 @@ with open('D:/Texi/myapp/public/data/drawData/valueHexagon2.0_215.json','r',enco
         lineList.append(boundList[0])
         boundList.pop(0)
         while(len(boundList)>0):
-            print(len(boundList))
+            #print(len(boundList))
             for p in range(len(boundList)):
                 p1str=boundList[p]
                 p2str=lineList[len(lineList)-1]
@@ -71,7 +71,7 @@ with open('D:/Texi/myapp/public/data/drawData/valueHexagon2.0_215.json','r',enco
                     lineList=[]
                     lineList.append(boundList[0])
                     boundList.pop(0)
-                    print('none')
+                    #print('none')
                     break
                     """
                     last=lineList.pop(len(lineList)-1)
@@ -117,7 +117,7 @@ with open('D:/Texi/myapp/public/data/drawData/valueHexagon2.0_215.json','r',enco
         
         AllLine.append(thisClass)
         
-        with open('D:/Texi/myapp/public/data/drawData/bound.json','w',encoding='utf-8') as f:
+        with open('D:/Texi/myapp/public/data/drawData/bound_432.json','w',encoding='utf-8') as f:
             writeStr=json.dumps(AllLine)
             f.write(writeStr)
         

@@ -45,7 +45,6 @@ for j in range(maxRow+1):
     matrix.append(rowList)
 
 for i in range(len(matrix)):
-    print(i)
     for j in range(len(matrix[i])):
         matrix[i][j]['gus']=[]
         for s in range(24):
@@ -178,7 +177,6 @@ def getClassNumber(matrix):
             for s in range(len(value)):
                 if(value[s]==matrix[i][j]['category']):
                     matrix[i][j]['category']=s-1
-    print(value)
     print(len(value))
     return len(value)
 
@@ -200,14 +198,14 @@ pathdir=os.listdir(fp)
 fileCount=0
 
 for c in [2]:
-    cigma=sideLength*c
+    cigma=sideLength*c*1000
     for path in pathdir:
         newdir = os.path.join(fp,path) # 将文件名加入到当前文件路径后面
         if os.path.isfile(newdir):     #如果是文件
             #print(newdir)
             with open (newdir,'r',encoding='utf-8') as f:
                 fileCount+=1
-                if(fileCount>=1000):
+                if(fileCount>=3000):
                     break
                 print(fileCount)
                 reader=csv.reader(f)
@@ -250,13 +248,9 @@ for c in [2]:
                             for t in range(col-8,col+8):
                                 if(t<0 or t>colCount):
                                     continue
-                                if(s==0 and t == 0):
-                                    print(row,col)
                                 hexagonPoint=[matrix[s][t]['lat'],matrix[s][t]['lng']]
                                 #print(position[0]-matrix[s][t]['lat'])
-                                if(getDis(position,hexagonPoint)<(3*cigma)):
-                                    """
-                                    """
+                                if((getDis(position,hexagonPoint)*1000)<(3*cigma)):
                                     exp=-(math.pow(getDis(position,hexagonPoint),2)/(2*math.pow(cigma,2)))
                                     cons=1/(cigma*math.sqrt(2*math.pi))
                                     value=cons*math.pow(math.e,exp)
@@ -265,6 +259,9 @@ for c in [2]:
                         tmp=status
                         #print(tmp)
     
+    
+    
+              
     for i in range(len(matrix)):
         for j in range(len(matrix[i])):
             count=0
@@ -272,11 +269,21 @@ for c in [2]:
                 count+=matrix[i][j]['gus'][s]
             exp=(-count)/(2*math.pow(cigma,2))
             cons=math.pow((cigma*math.sqrt(2*math.pi)),-24)
+            #print(cons)
             value=cons*math.pow(math.e,exp)
+            if(count!=0 and value ==0):
+                print('count:'+str(count))
+                print('cons:'+str(cons))
+                print('exp:'+str(exp))
+                print('math.pow(math.e,exp)'+str(math.pow(math.e,exp)))
+                print('value'+str(value))
             matrix[i][j]['value']=value
                 
     clustering(matrix)
     write(matrix,cigma)
+    
+    
+    """
     hexagonList=[]
     with open('D:/Texi/myapp/public/data/drawData/hexagon.json','r',encoding='utf-8') as f:
         hexagonList=json.loads(f.read())
@@ -290,6 +297,7 @@ for c in [2]:
                 rowList.append(i)
         matrix.append(rowList)
     fileCount=0
+    """
     
 
                     

@@ -17,8 +17,8 @@ router.get('/showBorderLine', function (req, res) {
   });
 });
 
-router.get('/showSuspending/:classId', function (req, res) {
-  let classId=req.params.classId;
+router.get('/showSuspending', function (req, res) {
+  let classId=req.query.classId;
   suspendingDataModel.find({class:classId}, function (err, data) {
     if (err) console.log(err);
     else {
