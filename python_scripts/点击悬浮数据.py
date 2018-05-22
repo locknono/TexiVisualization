@@ -90,8 +90,10 @@ for path in pathdir:
     newdir = os.path.join(fp,path) # 将文件名加入到当前文件路径后面
     if os.path.isfile(newdir):     #如果是文件
         with open (newdir,'r',encoding='utf-8') as f:
+            """
             fileCount+=1
             print(fileCount)
+            """
             reader=csv.reader(f)
             tmp=0
             for line in islice(reader, 1, None):
@@ -197,10 +199,12 @@ for path in pathdir:
 for i in range(len(clickData)):
     for j in range(len(clickData[i]['on'])):
         clickData[i]['on'][j]/=5
+        clickData[i]['off'][j]/=5
         
 for i in range(len(clickData2)):
     for j in range(len(clickData2[i]['on'])):
         clickData2[i]['on'][j]/=2
+        clickData2[i]['off'][j]/=2
         
 
 allClickData=[]
@@ -210,7 +214,7 @@ for i in range(len(clickData)):
     click['workOn']=clickData[i]['on']
     click['workOff']=clickData[i]['off']
     click['endOn']=clickData2[i]['on']
-    click['endOff']=clickData2[i]['on']
+    click['endOff']=clickData2[i]['off']
     allClickData.append(click)
     
 with open('D:/Texi/myapp/public/data/drawData/allClickData.json','w',encoding='utf-8') as f:

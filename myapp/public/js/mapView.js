@@ -403,7 +403,7 @@ var mapView = (function () {
         return new Promise(function (resolve, reject) {
             $.ajax({
                 type: "get",
-                url: "/showSuspending" + classId,
+                url: "/showSuspending/" + classId,
                 //data: "class="+classId,
                 success: function (data) {
                     resolve(data[0]);
