@@ -23,7 +23,8 @@ var mapView = (function () {
         ]);
 
     var d3Overlay = L.d3SvgOverlay(function (selection, projection) {
-        addHexagonBorder(selection, projection);
+        //addHexagonBorder(selection, projection);
+        addHexagon(selection, projection);
     }, {
         zoomDraw: false,
     });
@@ -325,7 +326,7 @@ var mapView = (function () {
                     return classScale(d.class);
                 })
                 .on("mouseover", function (d) {
-                    let suspendingData = getSuspendingData(d.class);
+                    console.log(d.class);
                     d3.select(this).style("opacity", options.mouseover_opacity);
                     d3.select("#netSvg").select("[id='" + d.class + "']")
                         .style("stroke", "black")
@@ -349,8 +350,9 @@ var mapView = (function () {
         })
     }
 
-    function addHexagon() {
-        d3.json('data/drawData/valueHexagon2.0_215.json', (error, hexagonData) => {
+    function addHexagon(selection, projection) {
+        d3.json('data/drawData/524valueHexagon2.0_202.json', (error, hexagonData) => {
+            console.log('hexagonData: ', hexagonData);
 
             var hexLine = d3.line()
                 .x(function (d) {
@@ -359,6 +361,7 @@ var mapView = (function () {
                 .y(function (d) {
                     return projection.latLngToLayerPoint(d).y
                 })
+
             selection.append("g")
                 .selectAll("path")
                 .data(hexagonData)
@@ -378,9 +381,36 @@ var mapView = (function () {
                     }
                     return options.normal_opacity;
                 })
-            /* .on("click", function (d) {
-                console.log(d.category, d.value);
-            }) */
+                .on("mouseover", function (d) {
+                    console.log(d.category);
+                })
+
+            /* for(var i = 0;i<hexagonData.length;i++){
+                selection.append("g")
+                .selectAll("path")
+                .data(hexagonData[i])
+                .enter()
+                .append("path")
+                .attr("d", function (d) {
+                    return hexLine(d.path)
+                })
+                .attr("class", "hex")
+                .style("pointer-events", "auto")
+                .style("fill", function (d) {
+                    return classScale(d.category);
+                })
+                .style("opacity", function (d) {
+                    if (d.category === -1) {
+                        return 0
+                    }
+                    return options.normal_opacity;
+                })
+             .on("mouseover", function (d) {
+                console.log(d.category);
+            }) 
+                }
+                */
+
         })
     }
 
@@ -391,18 +421,18 @@ var mapView = (function () {
             })
         });
 
-        return new Promise(function (resolve, reject) {
-            $.ajax({
-                type: "get",
-                url: "/showBorderLine",
-                success: function (data) {
-                    resolve(data);
-                },
-                error: function () {
+        /*  return new Promise(function (resolve, reject) {
+             $.ajax({
+                 method: "get",
+                 url: "/showBorderLine",
+                 success: function (data) {
+                     resolve(data);
+                 },
+                 error: function () {
 
-                }
-            });
-        });
+                 }
+             });
+         }); */
     }
 
     function getSuspendingData(classId) {
@@ -410,7 +440,9 @@ var mapView = (function () {
             $.ajax({
                 type: "get",
                 url: "/showSuspending",
-                data: "classId="+classId,
+                data: {
+                    classId: classId
+                },
                 success: function (data) {
                     resolve(data[0]);
                 },

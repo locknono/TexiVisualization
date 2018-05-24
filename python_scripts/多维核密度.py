@@ -198,7 +198,7 @@ pathdir=os.listdir(fp)
 fileCount=0
 
 for c in [2]:
-    cigma=sideLength*c*1000
+    cigma=sideLength*c
     for path in pathdir:
         newdir = os.path.join(fp,path) # 将文件名加入到当前文件路径后面
         if os.path.isfile(newdir):     #如果是文件
@@ -250,7 +250,7 @@ for c in [2]:
                                     continue
                                 hexagonPoint=[matrix[s][t]['lat'],matrix[s][t]['lng']]
                                 #print(position[0]-matrix[s][t]['lat'])
-                                if((getDis(position,hexagonPoint)*1000)<(3*cigma)):
+                                if((getDis(position,hexagonPoint))<(3*cigma)):
                                     exp=-(math.pow(getDis(position,hexagonPoint),2)/(2*math.pow(cigma,2)))
                                     cons=1/(cigma*math.sqrt(2*math.pi))
                                     value=cons*math.pow(math.e,exp)
@@ -266,6 +266,7 @@ for c in [2]:
         for j in range(len(matrix[i])):
             count=0
             for s in range(len(matrix[i][j]['gus'])):
+                matrix[i][j]['gus'][s]=matrix[i][j]['gus'][s]/7
                 count+=matrix[i][j]['gus'][s]
             exp=(-count)/(2*math.pow(cigma,2))
             cons=math.pow((cigma*math.sqrt(2*math.pi)),-24)

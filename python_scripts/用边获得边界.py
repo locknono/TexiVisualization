@@ -1,5 +1,12 @@
 # -*- coding: utf-8 -*-
 """
+Created on Tue May 22 20:57:21 2018
+
+@author: 44219
+"""
+
+# -*- coding: utf-8 -*-
+"""
 Created on Tue May 15 15:31:25 2018
 
 @author: xlh
@@ -54,8 +61,16 @@ with open('D:/Texi/myapp/public/data/drawData/valueHexagon2.0_502.json','r',enco
             if categoryList[i]==hexagonList[j]['category']:
                 classList[i].append(hexagonList[j])
                 
-    print('b')
+    print('classList ready')
     for i in range(len(classList)):
+        
+        
+        edgeDict={}
+        
+        for j in range(len(classList[i])):
+            for s in range(len(classList[i][j]['path'])-1):
+                classList[i][j]['path']
+        
         pointDict={}
         boundList=[]
         lineList=[]
@@ -143,7 +158,3 @@ with open('D:/Texi/myapp/public/data/drawData/valueHexagon2.0_502.json','r',enco
 with open('D:/Texi/myapp/public/data/drawData/bound_502.json','w',encoding='utf-8') as f:
     writeStr=json.dumps(AllLine)
     f.write(writeStr)
-        
-            
-                
-        

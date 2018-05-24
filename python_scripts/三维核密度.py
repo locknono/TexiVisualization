@@ -12,25 +12,28 @@ from itertools import islice
 import math
 import pandas as pd
 
-
-
 top = 22.80550
 bottom = 22.454
 left = 113.75643
 right = 114.65191
-sideLength=(right-left)/350
-rowWidth=2*sideLength*math.cos((math.pi/180)*30)
-colCount=int((right-left)/rowWidth)
-rowCount=int(((top-bottom)/(3*sideLength))*2)
 
+sideLength=(right-left)/350
+
+rowWidth=2*sideLength*math.cos((math.pi/180)*30)
+
+colCount=int((right-left)/rowWidth)
+
+rowCount=int(((top-bottom)/(3*sideLength))*2)
 
 
 cigma=sideLength*2.5
 
+timeN=48
+timeCigma=24/timeN
+
 
 fp = 'D:/Texi/myapp/public/data/sevenDayData'
 os.chdir(fp)
-
 
 hexagonList=[]
 with open('D:/Texi/myapp/public/data/drawData/hexagon.json','r',encoding='utf-8') as f:
@@ -46,6 +49,11 @@ for j in range(maxRow+1):
     matrix.append(rowList)
 
 
+for i in range(len(matrix)):
+    for j in range(len(matrix[i])):
+        matrix[i][j]['space']=0
+        matrix[i][j]['time']=0
+        
 def getDis(p1,p2):
     dis=math.sqrt(math.pow(p1[0]-p2[0],2)+math.pow(p1[1]-p2[1],2))
     return dis
@@ -54,8 +62,8 @@ def write(matrix,cigma):
     for i in range(len(matrix)):
         for j in range(len(matrix[i])):
             output.append(matrix[i][j])
-    with open('D:/Texi/myapp/public/data/drawData/524valueHexagon'+str(cigma/sideLength)+'_'+str(getClassNumber(matrix))+'.json','w',encoding='utf-8') as f:
-        writeStr=json.dumps(hexagonList)
+    with open('D:/Texi/myapp/public/data/drawData/valueHexagon'+str(cigma/sideLength)+'_'+str(getClassNumber(matrix))+'.json','w',encoding='utf-8') as f:
+        writeStr=json.dumps(output)
         f.write(writeStr)
         
 #找出当前正六边形和它周围的六边形的最大值
@@ -105,7 +113,6 @@ def getClass(thisHexagon,matrix):
     if(maxValue == matrix[row][col]['value']):
         #如果它的类已经被设置过了，那么就保留他原来的类
         if(matrix[row][col]['category']!=-1):
-            classNumber+=1
             chain=[]
             return
         #如果它的类还没有被设置，把它的类设置为一个从未出现过的新类
@@ -113,10 +120,10 @@ def getClass(thisHexagon,matrix):
             matrix[row][col]['category']=classNumber
             #print(maxValue)
             chain=[]
-            classNumber+=1
+            #classNumber+=1
             return
         
-    #如果当前的值不是最大的，找出他周围最大的一个
+    #如果当前的值不是最大的,找出他周围最大的一个
     else:
         maxIndex=-1
         for s in range(len(surround)):
@@ -138,7 +145,8 @@ def getClass(thisHexagon,matrix):
         else:
         """
         #如果它周围最大的一个已经有了归属类，就把这次寻找的整条链的类都设置成它周围的最大的六边形的归属类
-        #周围最大的一个有了归属类，那么这个点是终点吗？
+        #周围最大的一个有了归属类，那么这个点是终点吗？是
+        
         if(surround[maxIndex]['category']!=-1):
             matrix[row][col]['category']=surround[maxIndex]['category']
             if len(chain)>0 :
@@ -173,14 +181,15 @@ def getClassNumber(matrix):
             for s in range(len(value)):
                 if(value[s]==matrix[i][j]['category']):
                     matrix[i][j]['category']=s-1
-    print(value)
     print(len(value))
     return len(value)
 
             
 def clustering(matrix):
+    global classNumber
     for i in range(len(matrix)):
         for j in range(len(matrix[i])):
+            classNumber+=1
             if(matrix[i][j]['category']!=-1):
                 continue
             getClass(matrix[i][j],matrix)
@@ -191,7 +200,6 @@ def clustering(matrix):
 
 pathdir=os.listdir(fp)
 fileCount=0
-classNumber=0
 
 for c in [2]:
     cigma=sideLength*c
@@ -201,12 +209,26 @@ for c in [2]:
             #print(newdir)
             with open (newdir,'r',encoding='utf-8') as f:
                 fileCount+=1
+                if(fileCount>=3000):
+                    break
                 print(fileCount)
                 reader=csv.reader(f)
-                for line in islice(reader, 1, None): 
-                        lat = float(line[2])
-                        lng = float(line[1])
-                                
+                tmp=0
+                for line in islice(reader, 1, None):
+                    
+                    time=line[1]
+                    #day:from 18 to 24
+                    day = int(time.split(' ')[0].split('/')[2])
+                    
+                    status=float(line[4])
+                    if(status!=0 and status!=1):
+                        continue
+                    
+                    hour=int(time.split(' ')[1].split(':')[0])
+                    
+                    if(tmp != status):
+                        lat = float(line[3])
+                        lng = float(line[2])
                         position=[lat,lng]
                         """判断有没有在海里的点
                         if(lat<22.524 and lng>113.784 and lng <113.90 and lat>22.522):
@@ -222,6 +244,8 @@ for c in [2]:
                             col=int((lng-left-sideLength*math.cos((math.pi/180)*30))/rowWidth)
                         if(col<0):
                             continue
+                        if(row > rowCount or col > colCount):
+                            continue
                         for s in range(row-8,row+8):
                             if(s<0 or s >rowCount):
                                 continue
@@ -230,14 +254,27 @@ for c in [2]:
                                     continue
                                 hexagonPoint=[matrix[s][t]['lat'],matrix[s][t]['lng']]
                                 #print(position[0]-matrix[s][t]['lat'])
-                                if(getDis(position,hexagonPoint)<(3*cigma)):
+                                if((getDis(position,hexagonPoint))<(3*cigma)):
                                     exp=-(math.pow(getDis(position,hexagonPoint),2)/(2*math.pow(cigma,2)))
                                     cons=1/(cigma*math.sqrt(2*math.pi))
                                     value=cons*math.pow(math.e,exp)
-                                    matrix[s][t]['value']+=value
+                                    matrix[s][t]['space']+=value
+                            for m in range(int(hour-3*timeCigma),int(hour+3*timeCigma)+1):
+                                exp=-(math.pow((hour-m),2)/(2*math.pow(timeCigma,2)))
+                                cons=1/(timeCigma*math.sqrt(2*math.pi))
+                                value=cons*math.pow(math.e,exp)
+                                matrix[row][col]['time']+=value
+                        tmp=status
                         #print(tmp)
+    for i in range(len(matrix)):
+        for j in range(len(matrix[i])):
+            matrix[i][j]['value']=matrix[i][j]['space']*matrix[i][j]['time']
+                
     clustering(matrix)
     write(matrix,cigma)
+    
+    
+    """
     hexagonList=[]
     with open('D:/Texi/myapp/public/data/drawData/hexagon.json','r',encoding='utf-8') as f:
         hexagonList=json.loads(f.read())
@@ -251,16 +288,9 @@ for c in [2]:
                 rowList.append(i)
         matrix.append(rowList)
     fileCount=0
+    """
     
 
                     
             
             
-        
-        
-        
-        
-                        
-
-    
-        
