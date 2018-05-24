@@ -14,7 +14,7 @@ left = 113.75643
 right = 114.65191
 
 
-sideLength=(right-left)/300
+sideLength=(right-left)/350
 rowWidth=2*sideLength*math.cos((math.pi/180)*30)
 print(rowWidth)
 rowCount=int((right-left)/rowWidth)

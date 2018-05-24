@@ -17,7 +17,7 @@ top = 22.80550
 bottom = 22.454
 left = 113.75643
 right = 114.65191
-sideLength=(right-left)/300
+sideLength=(right-left)/350
 rowWidth=2*sideLength*math.cos((math.pi/180)*30)
 
 #colCount代表列数
@@ -301,11 +301,14 @@ def reduction():
     print(len(classSet))
 
 def write():
+    output=[]
     for i in range(len(matrix)):
         for j in range(len(matrix[i])):
             matrix[i][j].pop('z')
+            matrix[i][j].pop('value')
+            output.append(matrix[i][j])
     with open('D:/Texi/myapp/public/data/drawData/prism.json','w',encoding='utf-8') as f:
-        writeStr=json.dumps(matrix)
+        writeStr=json.dumps(output)
         f.write(writeStr)
 clustering()
 reduction()

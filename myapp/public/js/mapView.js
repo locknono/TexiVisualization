@@ -361,11 +361,7 @@ var mapView = (function () {
                 .y(function (d) {
                     return map.latLngToLayerPoint(d).y
                 })
-            
-             
-                    
-                    
-               
+
             selection.append("g")
                 .selectAll("path")
                 .data(hexagonData)
@@ -378,63 +374,10 @@ var mapView = (function () {
                 .style("pointer-events", "auto")
                 .style("fill", function (d) {
                     return 'white'
-                    //return classScale(d.category);
+                    return classScale(d.category);
                 })
-                .style("stroke","black")
-                .style("stroke-width",0.1)
-
-                for(var i =0;i<hexagonData.length;i++){
-                    var d=hexagonData[i]
-                    var center=[d.lat,d.lng];
-                  
-                var cx=map.latLngToLayerPoint(center).x;
-                
-                var cy=map.latLngToLayerPoint(center).y;
-                selection.append("circle")
-                .attr("cx",cx)
-                .attr("cy",cy)
-                .attr("r",0.2)
-                .attr("fill","black")
-                .attr("stroke","black")
-                }
-                /* .style("opacity", function (d) {
-                    if (d.category === -1) {
-                        return 0
-                    }
-                    return options.normal_opacity;
-                })
-                .on("mouseover", function (d) {
-                    console.log(d.category);
-                }) */
-
-            /* for (var i = 0; i < hexagonData.length; i++) {
-                selection.append("g")
-                    .selectAll("path")
-                    .data(hexagonData[i])
-                    .enter()
-                    .append("path")
-                    .attr("d", function (d) {
-                        return hexLine(d.path)
-                    })
-                    .attr("class", "hex")
-                    .style("pointer-events", "auto")
-                    .style("fill", function (d) {
-                        return d3.color(classScale(d.category))
-                        //return d3.color(classScale(d.category)).darker(Math.random()*1);
-                    })
-                    .style("stroke","black")
-                    .style("opacity", function (d) {
-                        if (d.category === -1) {
-                            return 0
-                        }
-                        return options.normal_opacity;
-                    })
-                    .on("mouseover", function (d) {
-                        console.log(d.category);
-                    })
-            } */
-
-
+                .style("stroke", "black")
+                .style("stroke-width", 0.1)
         })
     }
 
