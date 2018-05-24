@@ -14,12 +14,12 @@ left = 113.75643
 right = 114.65191
 
 
-sideLength=(right-left)/350
+sideLength=(right-left)/300
 rowWidth=2*sideLength*math.cos((math.pi/180)*30)
 print(rowWidth)
 rowCount=int((right-left)/rowWidth)
 print(rowCount)
-colCount=int(((top-bottom)/(3*sideLength))*2)
+colCount=int(((top-bottom-0.5*sideLength)/(3*sideLength))*2)
 print(colCount)
 
 
@@ -30,6 +30,7 @@ for j in range(0,rowCount+1):
             pointLng=left+j*rowWidth
         else:
             pointLng=left+j*rowWidth+sideLength*math.cos((math.pi/180)*30)
+            
         pointLat=top-1.5*i*sideLength
         point={}
         point['lat']=pointLat

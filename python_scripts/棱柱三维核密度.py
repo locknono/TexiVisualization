@@ -17,7 +17,7 @@ top = 22.80550
 bottom = 22.454
 left = 113.75643
 right = 114.65191
-sideLength=(right-left)/350
+sideLength=(right-left)/300
 rowWidth=2*sideLength*math.cos((math.pi/180)*30)
 
 #colCount代表列数
@@ -41,9 +41,9 @@ for i in range(len(matrix)):
             matrix[i][j]['z'][s]['row']=matrix[i][j]['row']
             matrix[i][j]['z'][s]['col']=matrix[i][j]['col']
             matrix[i][j]['z'][s]['level']=s
-cigma=sideLength*2.5
+cigma=sideLength*20
 timeN=len(matrix[0][0]['z'])
-timeCigma=(24/timeN)*2.5
+timeCigma=(24/timeN)*100
 
 
 def getDis(p1,p2):
@@ -96,7 +96,7 @@ for path in pathdir:
                 
                 #时间
                 for m in range(int(hour-3*timeCigma),int(hour+3*timeCigma)+1):
-                    if(m<0 or m >23):
+                    if(m<0 or m >timeN-1):
                         continue
                     timeExp=-(math.pow((hour-m),2)/(2*math.pow(timeCigma,2)))
                     timeCons=1/(timeCigma*math.sqrt(2*math.pi))
@@ -174,7 +174,7 @@ def getClass(thisPrism,thisHex):
                     rowAndCol['level']=curLevel
                     surroundRowAndCol.append(rowAndCol)
                     for s in range(curLevel-1,curLevel+2):
-                        if(s<0 or s>95):
+                        if(s<0 or (s>timeN-1)):
                             continue
                         surround.append(matrix[i][j]['z'][s])
                     
@@ -189,7 +189,7 @@ def getClass(thisPrism,thisHex):
                     surroundRowAndCol.append(rowAndCol)
                     
                     for s in range(curLevel-1,curLevel+2):
-                        if(s<0 or s>95):
+                        if(s<0 or s>(timeN-1)):
                             continue
                         surround.append(matrix[i][j]['z'][s])
                         """
@@ -203,7 +203,7 @@ def getClass(thisPrism,thisHex):
         surroundRowAndCol.append(rowAndCol)
         
         surround.append(thisHex['z'][(curLevel-1)])
-    if(curLevel!=95):
+    if(curLevel!=(timeN-1)):
         
         rowAndCol={}
         rowAndCol['row']=i
@@ -218,11 +218,13 @@ def getClass(thisPrism,thisHex):
         return
     
     if(getMax(surround)==thisPrism):
+        #现在的prism带有位置属性，用值来判断也能得到准确的位置
         if(thisPrism['c']==-1):
             thisPrism['c']=classNumber
             classNumber+=1
-        #如果寻找的起点是最大值，并且已经有了类别：
+        #如果寻找的起点是最大值，并且已经有了类别
         #对应的情况就是递归进入且递归进入点是最大的
+        #外层迭代进入一定是没有类别的
         elif (thisPrism['c']!=-1):
             classNumber+=1
             chain=[]
@@ -242,8 +244,8 @@ def getClass(thisPrism,thisHex):
             
             maxHexRow=maxPrism['row']
             maxHexCol=maxPrism['col']
-            
             maxHexLevel=maxPrism['level']
+            
             maxHex=matrix[maxHexRow][maxHexCol]
             
             #把起点和周围最大点加入寻找链
@@ -251,6 +253,7 @@ def getClass(thisPrism,thisHex):
             SurroundMax={'row':maxHexRow,'col':maxHexCol,'level':maxHexLevel}
             
             chain.append(this)
+            
             chain.append(SurroundMax)
                
             getClass(maxPrism,maxHex)

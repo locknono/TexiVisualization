@@ -30,8 +30,8 @@ print(colCount)
 hexagonList=[]
 for j in range(0,rowCount+1):
     for i in range(0,colCount+1):
-        #i代表列
-        #j代表行
+        #i代表行
+        #j代表列
         
         
         point={}

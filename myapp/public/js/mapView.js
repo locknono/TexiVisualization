@@ -351,17 +351,21 @@ var mapView = (function () {
     }
 
     function addHexagon(selection, projection) {
-        d3.json('data/drawData/524valueHexagon2.0_202.json', (error, hexagonData) => {
+        d3.json('data/drawData/hexagon.json', (error, hexagonData) => {
             console.log('hexagonData: ', hexagonData);
 
             var hexLine = d3.line()
                 .x(function (d) {
-                    return projection.latLngToLayerPoint(d).x
+                    return map.latLngToLayerPoint(d).x
                 })
                 .y(function (d) {
-                    return projection.latLngToLayerPoint(d).y
+                    return map.latLngToLayerPoint(d).y
                 })
-
+            
+             
+                    
+                    
+               
             selection.append("g")
                 .selectAll("path")
                 .data(hexagonData)
@@ -373,9 +377,27 @@ var mapView = (function () {
                 .attr("class", "hex")
                 .style("pointer-events", "auto")
                 .style("fill", function (d) {
-                    return classScale(d.category);
+                    return 'white'
+                    //return classScale(d.category);
                 })
-                .style("opacity", function (d) {
+                .style("stroke","black")
+                .style("stroke-width",0.1)
+
+                for(var i =0;i<hexagonData.length;i++){
+                    var d=hexagonData[i]
+                    var center=[d.lat,d.lng];
+                  
+                var cx=map.latLngToLayerPoint(center).x;
+                
+                var cy=map.latLngToLayerPoint(center).y;
+                selection.append("circle")
+                .attr("cx",cx)
+                .attr("cy",cy)
+                .attr("r",0.2)
+                .attr("fill","black")
+                .attr("stroke","black")
+                }
+                /* .style("opacity", function (d) {
                     if (d.category === -1) {
                         return 0
                     }
@@ -383,33 +405,35 @@ var mapView = (function () {
                 })
                 .on("mouseover", function (d) {
                     console.log(d.category);
-                })
+                }) */
 
-            /* for(var i = 0;i<hexagonData.length;i++){
+            /* for (var i = 0; i < hexagonData.length; i++) {
                 selection.append("g")
-                .selectAll("path")
-                .data(hexagonData[i])
-                .enter()
-                .append("path")
-                .attr("d", function (d) {
-                    return hexLine(d.path)
-                })
-                .attr("class", "hex")
-                .style("pointer-events", "auto")
-                .style("fill", function (d) {
-                    return classScale(d.category);
-                })
-                .style("opacity", function (d) {
-                    if (d.category === -1) {
-                        return 0
-                    }
-                    return options.normal_opacity;
-                })
-             .on("mouseover", function (d) {
-                console.log(d.category);
-            }) 
-                }
-                */
+                    .selectAll("path")
+                    .data(hexagonData[i])
+                    .enter()
+                    .append("path")
+                    .attr("d", function (d) {
+                        return hexLine(d.path)
+                    })
+                    .attr("class", "hex")
+                    .style("pointer-events", "auto")
+                    .style("fill", function (d) {
+                        return d3.color(classScale(d.category))
+                        //return d3.color(classScale(d.category)).darker(Math.random()*1);
+                    })
+                    .style("stroke","black")
+                    .style("opacity", function (d) {
+                        if (d.category === -1) {
+                            return 0
+                        }
+                        return options.normal_opacity;
+                    })
+                    .on("mouseover", function (d) {
+                        console.log(d.category);
+                    })
+            } */
+
 
         })
     }
