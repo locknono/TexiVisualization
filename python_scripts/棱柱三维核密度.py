@@ -41,7 +41,7 @@ for i in range(len(matrix)):
             matrix[i][j]['z'][s]['row']=matrix[i][j]['row']
             matrix[i][j]['z'][s]['col']=matrix[i][j]['col']
             matrix[i][j]['z'][s]['level']=s
-cigma=sideLength*20
+cigma=sideLength*0.5
 timeN=len(matrix[0][0]['z'])
 timeCigma=(24/timeN)*100
 
@@ -271,7 +271,18 @@ def getClass(thisPrism,thisHex):
             
                 
                 
-                
+def write(mapClassNumber):
+    output=[]
+    for i in range(len(matrix)):
+        for j in range(len(matrix[i])):
+            matrix[i][j].pop('z')
+            matrix[i][j].pop('value')
+            if(matrix[i][j]['category']!=-1):
+                output.append(matrix[i][j])
+    with open('D:/Texi/myapp/public/data/drawData/prism'+str(mapClassNumber)+'.json','w',encoding='utf-8') as f:
+        writeStr=json.dumps(output)
+        f.write(writeStr)
+          
 def reduction():
     for i in range(len(matrix)):
         for j in range(len(matrix[i])):
@@ -297,22 +308,14 @@ def reduction():
             if matrix[i][j]['category'] not in classSet:
                 classSet.append(matrix[i][j]['category'])
     classSet.sort()
+    mapClassNumber=len(classSet)
     print(classSet)
     print(len(classSet))
+    write(mapClassNumber)
 
-def write():
-    output=[]
-    for i in range(len(matrix)):
-        for j in range(len(matrix[i])):
-            matrix[i][j].pop('z')
-            matrix[i][j].pop('value')
-            output.append(matrix[i][j])
-    with open('D:/Texi/myapp/public/data/drawData/prism.json','w',encoding='utf-8') as f:
-        writeStr=json.dumps(output)
-        f.write(writeStr)
+
 clustering()
 reduction()
-write()
             
             
     

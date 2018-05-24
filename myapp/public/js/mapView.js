@@ -351,9 +351,8 @@ var mapView = (function () {
     }
 
     function addHexagon(selection, projection) {
-        d3.json('data/drawData/hexagon.json', (error, hexagonData) => {
+        d3.json('data/drawData/prism.json', (error, hexagonData) => {
             console.log('hexagonData: ', hexagonData);
-
             var hexLine = d3.line()
                 .x(function (d) {
                     return map.latLngToLayerPoint(d).x
@@ -373,7 +372,6 @@ var mapView = (function () {
                 .attr("class", "hex")
                 .style("pointer-events", "auto")
                 .style("fill", function (d) {
-                    return 'white'
                     return classScale(d.category);
                 })
                 .style("stroke", "black")
