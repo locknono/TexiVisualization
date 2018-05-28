@@ -111,7 +111,7 @@ for path in pathdir:
                 matrix[position][hour]+=1
 
 
-nCom=30
+nCom=5
 X = np.array(matrix)
 model = NMF(n_components=nCom, init='random', random_state=0)
 W = model.fit_transform(X)
@@ -122,7 +122,7 @@ maxIndexList=np.argmax(W,axis=1)
 maxValueList=[]
 for i in range(len(maxIndexList)):
     index=i
-    value=W[i][maxIndexList[i]]
+    value=math.log2(W[i][maxIndexList[i]]+1)
     maxValue={}
     maxValue['index']=index
     maxValue['value']=value
