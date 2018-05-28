@@ -41,7 +41,7 @@ for i in range(len(matrix)):
             matrix[i][j]['z'][s]['row']=matrix[i][j]['row']
             matrix[i][j]['z'][s]['col']=matrix[i][j]['col']
             matrix[i][j]['z'][s]['level']=s
-cigma=sideLength*0.5
+cigma=sideLength*0.1
 timeN=len(matrix[0][0]['z'])
 timeCigma=(24/timeN)*100
 
@@ -300,7 +300,6 @@ def reduction():
                     thisClass=mostCommon[1][0]
                 else:
                     thisClass=mostCommon[0][0]
-            
             matrix[i][j]['category']=thisClass
     classSet=[]
     for i in range(len(matrix)):

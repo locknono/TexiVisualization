@@ -38,6 +38,7 @@ os.chdir(fp)
 hexagonList=[]
 with open('D:/Texi/myapp/public/data/drawData/hexagon.json','r',encoding='utf-8') as f:
     hexagonList=json.loads(f.read())
+    
 matrix=[]
 maxRow=hexagonList[len(hexagonList)-1]['row']
 for j in range(maxRow+1):

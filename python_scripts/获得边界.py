@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """
 Created on Tue May 15 15:31:25 2018
-
 @author: xlh
 """
 import math
@@ -20,61 +19,40 @@ def getDis(p1,p2):
 
 
 AllLine=[]
-with open('D:/Texi/myapp/public/data/drawData/valueHexagon2.0_502.json','r',encoding='utf-8') as f:
+with open('D:/Texi/myapp/public/data/drawData/524valueHexagon2.0_202.json','r',encoding='utf-8') as f:
     hexagonList=json.loads(f.read())
     categoryList=[]
     for i in range(len(hexagonList)):
         if hexagonList[i]['category'] not in categoryList:
             categoryList.append(hexagonList[i]['category'])
     categoryList.sort()
-    print(categoryList[0])
     categoryList.pop(0)
     classList=[] #for a class
-    
-    """
-    for i in range(len(categoryList)):
-        classList.append([])
-        for j in range(len(hexagonList)):
-            if categoryList[i]==hexagonList[j]['category']:
-                classList[i].append(hexagonList[j])
-    """
-    """
-    for i in range(len(categoryList)):
-        classList.append([])
-    for i in range(len(hexagonList)):
-        for j in range(len(categoryList)):
-            if categoryList[j]==hexagonList[i]['category']:
-                print(categoryList[j])
-                classList[j].append(hexagonList[j])
-                continue
-    """
     for i in range(len(categoryList)):
         classList.append([])
         for j in range(len(hexagonList)):
             if categoryList[i]==hexagonList[j]['category']:
                 classList[i].append(hexagonList[j])
                 
-    print('b')
     for i in range(len(classList)):
         pointDict={}
         boundList=[]
         lineList=[]
         for j in range(len(classList[i])):
             for s in range(len(classList[i][j]['path'])-1):
-                pointPositonStr=str((classList[i][j]['path'][s][0]))+'-'+str(classList[i][j]['path'][s][1])
+                pointPositonStr=str(round(classList[i][j]['path'][s][0],5))+'-'+str(round(classList[i][j]['path'][s][1],5))
                 pointDict[pointPositonStr]=0
         for j in range(len(classList[i])):
             for s in range(len(classList[i][j]['path'])-1):
-                pointPositonStr=str((classList[i][j]['path'][s][0]))+'-'+str(classList[i][j]['path'][s][1])
+                pointPositonStr=str(round(classList[i][j]['path'][s][0],5))+'-'+str(round(classList[i][j]['path'][s][1],5))
                 pointDict[pointPositonStr]+=1
         for point in pointDict:
             if pointDict[point]<=2:
                 boundList.append(point)
-        if(len(boundList)==0):
-            continue
         lineList.append(boundList[0])
         boundList.pop(0)
         while(len(boundList)>0):
+            print(len(boundList))
             for p in range(len(boundList)):
                 p1str=boundList[p]
                 p2str=lineList[len(lineList)-1]
@@ -92,18 +70,13 @@ with open('D:/Texi/myapp/public/data/drawData/valueHexagon2.0_502.json','r',enco
                     lineList=[]
                     lineList.append(boundList[0])
                     boundList.pop(0)
-                    #print('none')
-                    
+                    print('none')
                     break
                     """
                     last=lineList.pop(len(lineList)-1)
                     print(last)
                     boundList.insert(0,last)
                     """
-                    
-                
-                    
-                
                 """
                 satisPoint=[]
                 for m in range(len(boundList)):
@@ -128,7 +101,6 @@ with open('D:/Texi/myapp/public/data/drawData/valueHexagon2.0_502.json','r',enco
                     boundList.pop(index)
                     break
                 """
-        
         lineList.append(lineList[0])
         thisClass={}
         thisClass['class']=classList[i][0]['category']
@@ -137,13 +109,9 @@ with open('D:/Texi/myapp/public/data/drawData/valueHexagon2.0_502.json','r',enco
             lineList[s][0]=float(lineList[s][0])
             lineList[s][1]=float(lineList[s][1])
         thisClass['path']=lineList
-        print(len(AllLine))
+        
         AllLine.append(thisClass)
         
-with open('D:/Texi/myapp/public/data/drawData/bound_502.json','w',encoding='utf-8') as f:
-    writeStr=json.dumps(AllLine)
-    f.write(writeStr)
-        
-            
-                
-        
+        with open('D:/Texi/myapp/public/data/drawData/bound202.json','w',encoding='utf-8') as f:
+            writeStr=json.dumps(AllLine)
+            f.write(writeStr)

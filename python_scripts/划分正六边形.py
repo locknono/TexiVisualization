@@ -14,7 +14,7 @@ left = 113.75643
 right = 114.65191
 
 
-sideLength=(right-left)/350
+sideLength=(right-left)/150
 rowWidth=2*sideLength*math.cos((math.pi/180)*30)
 print(rowWidth)
 rowCount=int((right-left)/rowWidth)
@@ -47,6 +47,7 @@ for j in range(0,rowCount+1):
         point6=[pointLat-sideLength,pointLng]
         path=[point1,point2,point3,point4,point5,point6,point1]
         point['path']=path
+
 with open('D:/Texi/myapp/public/data/drawData/hexagon.json','w',encoding='utf-8') as f:
     writeStr=json.dumps(hexagonList)
     f.write(writeStr)

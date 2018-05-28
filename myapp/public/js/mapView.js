@@ -17,14 +17,39 @@ var mapView = (function () {
     }).addTo(map);
     map.zoomControl.remove();
 
+    map.on('click', function (e) {
+        console.log('e: ', e);
+        var top = 22.80550
+        var bottom = 22.454
+        var left = 113.75643
+        var right = 114.65191
+        var lat = e.latlng.lat
+        var lng = e.latlng.lng
+        var sideLength = (right - left) / 150
+        var rowWidth = 2 * sideLength * Math.cos((Math.PI / 180) * 30)
+        var colCount = parseInt((right - left) / rowWidth)
+        var rowCount = parseInt(((top - bottom) / (3 * sideLength)) * 2)
+
+        var row = parseInt(Math.round((top - lat) / (1.5 * sideLength)))
+        if (row % 2 == 0) {
+            col = (Math.round((lng - left) / rowWidth))
+        } else if (row % 2 != 0) {
+            col = (Math.round((lng - left - sideLength * Math.cos((Math.PI / 180) * 30)) / rowWidth))
+        }
+        var position = col*rowCount+(row+1)
+        
+        console.log(row, col)
+        console.log('position: ', position);
+
+    })
     var classScale = d3.scaleOrdinal()
-        .range(['#e41a1c', '#377eb8', '#4daf4a', '#984ea3', '#ff7f00', '#ffff33', '#a65628',
-            '#f781bf', '#999999'
-        ]);
+        .range(['#377eb8', '#4daf4a', '#984ea3', '#ff7f00', '#ffff33', '#a65628', '#f781bf', '#999999', '#e41a1c', ]);
 
     var d3Overlay = L.d3SvgOverlay(function (selection, projection) {
         //addHexagonBorder(selection, projection);
+
         addHexagon(selection, projection);
+        //addPrismBorder(selection);
     }, {
         zoomDraw: false,
     });
@@ -289,14 +314,36 @@ var mapView = (function () {
            }) */
     }
 
+
+    function addPrismBorder(selection) {
+        var borderLine = d3.line()
+            .x(function (d) {
+                return map.latLngToLayerPoint(d).x
+            })
+            .y(function (d) {
+                return map.latLngToLayerPoint(d).y
+            })
+
+        d3.json('data/drawData/bound202.json', (error, prismBorder) => {
+            prismBorder.map(function (d) {
+                selection.append('path')
+                    .attr("d", borderLine(d.path))
+                    .attr("stroke", "black")
+                    .attr("fill", "none")
+            })
+        })
+    }
+
+
     function addHexagonBorder(selection, projection) {
         var borderLine = d3.line()
             .x(function (d) {
-                return projection.latLngToLayerPoint(d).x
+                return map.latLngToLayerPoint(d).x
             })
             .y(function (d) {
-                return projection.latLngToLayerPoint(d).y
+                return map.latLngToLayerPoint(d).y
             })
+
 
         getBorderLineData().then(function (borderData) {
             let classNumber = d3.max(borderData, function (d) {
@@ -351,7 +398,24 @@ var mapView = (function () {
     }
 
     function addHexagon(selection, projection) {
-        d3.json('data/drawData/prism.json', (error, hexagonData) => {
+        d3.json('data/drawData/asd.json', (error, hexagonData) => {
+            d3.json('data/drawData/seaPoint.json', (seaPoint) => {
+                for (var i = 0; i < seaPoint.length; i++) {
+                    selection.append("circle")
+                        .attr("cx", function (d) {
+                            console.log(seaPoint[i][0], seaPoint[i][1])
+                            return map.latLngToLayerPoint([seaPoint[i][0], seaPoint[i][1]]).x
+
+                        })
+                        .attr("cy", function (d) {
+                            return map.latLngToLayerPoint([seaPoint[i][0], seaPoint[i][1]]).y
+                        })
+                        .attr("r", 1)
+                        .attr("fill", "black")
+
+
+                }
+            })
             console.log('hexagonData: ', hexagonData);
             var hexLine = d3.line()
                 .x(function (d) {
@@ -372,16 +436,27 @@ var mapView = (function () {
                 .attr("class", "hex")
                 .style("pointer-events", "auto")
                 .style("fill", function (d) {
+                    if (d.category == -1) {
+                        d3.select(this).remove()
+                        return 'white'
+                    }
                     return classScale(d.category);
                 })
+                .style("opacity", 0.5)
                 .style("stroke", "black")
                 .style("stroke-width", 0.1)
+                .on("mouseover", d => {
+                    console.log('d.value: ', d.value);
+                    console.log('d.category: ', d.category);
+                    console.log('d.row: ', d.row);
+                    console.log('d.col: ', d.col);
+                })
         })
     }
 
     function getBorderLineData() {
         return new Promise(function (resolve, reject) {
-            d3.json('./data/drawData/bound_432.json', function (d) {
+            d3.json('./data/drawData/bound202.json', function (d) {
                 resolve(d);
             })
         });
