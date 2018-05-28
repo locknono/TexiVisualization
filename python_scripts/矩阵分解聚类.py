@@ -67,7 +67,7 @@ for i in range(len(hexagonList)):
     matrix.append([])
     
 for row in matrix:
-    for i in range(24):
+    for i in range(168):
         row.append(0)
 
 pointList=[]
@@ -106,6 +106,8 @@ for path in pathdir:
                     continue
                 position = (col*rowCount)+row
                 hexagonList[position]['value']+=1
+                
+                hour=(day-18)*24+hour
                 matrix[position][hour]+=1
 
 
@@ -150,7 +152,7 @@ for i in range(len(maxValueList)):
     elif(normalValue>1):
         hexagonList[index]['category']=nCom+1
     else:
-        if(normalCommunity>=nCom+1):
+        if(normalCommunity>=nCom):
             print(normalCommunity)
         hexagonList[index]['category']=normalCommunity
         

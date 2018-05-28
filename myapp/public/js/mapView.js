@@ -399,23 +399,6 @@ var mapView = (function () {
 
     function addHexagon(selection, projection) {
         d3.json('data/drawData/asd.json', (error, hexagonData) => {
-            d3.json('data/drawData/seaPoint.json', (seaPoint) => {
-                for (var i = 0; i < seaPoint.length; i++) {
-                    selection.append("circle")
-                        .attr("cx", function (d) {
-                            console.log(seaPoint[i][0], seaPoint[i][1])
-                            return map.latLngToLayerPoint([seaPoint[i][0], seaPoint[i][1]]).x
-
-                        })
-                        .attr("cy", function (d) {
-                            return map.latLngToLayerPoint([seaPoint[i][0], seaPoint[i][1]]).y
-                        })
-                        .attr("r", 1)
-                        .attr("fill", "black")
-
-
-                }
-            })
             console.log('hexagonData: ', hexagonData);
             var hexLine = d3.line()
                 .x(function (d) {
@@ -442,7 +425,7 @@ var mapView = (function () {
                     }
                     return classScale(d.category);
                 })
-                .style("opacity", 0.5)
+                .style("opacity", 0.8)
                 .style("stroke", "black")
                 .style("stroke-width", 0.1)
                 .on("mouseover", d => {
