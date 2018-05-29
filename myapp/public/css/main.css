@@ -5,14 +5,27 @@
   padding: 0px;
   margin: 10px 20px;
 }
+#odView {
+  height: 30%;
+  width: 68%;
+  right: 0px;
+  margin: 0px;
+  position: absolute;
+  border-top: none;
+}
+#odView svg {
+  height: 100%;
+  width: 100%;
+}
 #map {
   border-top: none;
   border-bottom: none;
   border-left: none;
-  height: 100%;
+  height: 70%;
   width: 68%;
   margin: 0px;
   right: 0px;
+  bottom: 0px;
   position: absolute;
 }
 #suspendingDiv {

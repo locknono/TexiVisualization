@@ -4,6 +4,7 @@
 @mapWidth:68%;
 @fluxNetHeight:50%;
 @hexBorderStroke:#D4D4D4;
+@mapHeight:70%;
 #container-main{
     position: relative;
     height:@screen-height;
@@ -11,16 +12,30 @@
     padding:0px;
     margin:@screen-margin @screen-margin+10px;
 }
+#odView{
+    height:100%-@mapHeight;
+    width:@mapWidth;
+    right:0px;
+    margin:0px;
+    position:absolute;
+    border-top:none;
+    svg{
+        height:100%;
+        width:100%;
+    }
+}
 #map{
     border-top:none;
     border-bottom:none;
     border-left:none;
-    height:100%;
+    height:@mapHeight;
     width:@mapWidth;
     margin:0px;
     right:0px;
+    bottom:0px;
     position: absolute;
 }
+
 
 #suspendingDiv{
     position: absolute;
