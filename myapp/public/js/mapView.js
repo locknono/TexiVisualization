@@ -373,6 +373,7 @@ var mapView = (function () {
                     return options.classScale(d.class);
                 })
                 .on("mouseover", function (d) {
+                    odView.addLineInClass(d.category);
                     console.log(d.class);
                     d3.select(this).style("opacity", options.mouseover_opacity);
                     d3.select("#netSvg").select("[id='" + d.class + "']")
@@ -453,6 +454,7 @@ var mapView = (function () {
                 .style("stroke", "black")
                 .style("stroke-width", 0.1)
                 .on("mouseover", d => {
+                    odView.addLineInClass(d.category);
                     selection.selectAll("[areaClass='" + d.area + "']")
                         .style("opacity", options.mouseover_opacity)
                         .style("stroke-width", 1)
