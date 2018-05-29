@@ -110,9 +110,9 @@ for path in pathdir:
                 matrix[position][hour]+=1
 
 
-nCom=13
-firstSecNCom=8
-secondSecNcom=5
+nCom=20
+firstSecNCom=5
+secondSecNcom=15
 X = np.array(matrix)
 model = NMF(n_components=nCom, init='random', random_state=0)
 W = model.fit_transform(X)
@@ -199,7 +199,7 @@ for i in range(len(maxValueList)):
         if(normalValue>1):
             print('>1')
         normalCommunity=int((normalValue)/secondSecLength)+firstSecNCom
-        
+        print(normalCommunity)
     #normalValue=(value-minValue)/(maxValue-minValue)
     
     #normalCommunity=int((normalValue-minValue)/secLength-1)
