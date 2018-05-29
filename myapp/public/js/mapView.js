@@ -45,9 +45,7 @@ var mapView = (function () {
     var classScale = d3.scale.category20();
     //.range(['#377eb8', '#4daf4a', '#984ea3', '#ff7f00', '#ffff33', '#a65628', '#f781bf', '#999999', '#e41a1c', ]);
 
-    var areaScale = d3.scaleOrdinal()
-        .domain([0, 1, 2, 3, 4, 5])
-        .range(['#e41a1c', '#377eb8', '#4daf4a', '#984ea3', '#ffff33', '#ff7f00', ])
+
     var d3Overlay = L.d3SvgOverlay(function (selection, projection) {
         //addHexagonBorder(selection, projection);
 
@@ -425,7 +423,7 @@ var mapView = (function () {
                     if (d.area == -1) {
                         d3.select(this).remove()
                     } else {
-                        return areaScale(d.area);
+                        return options.areaScale(d.area);
                     }
                     /* var thisArea = -1;
                     for (var i = 0; i < matchValue.length; i++) {
