@@ -110,8 +110,8 @@ for path in pathdir:
                 matrix[position][hour]+=1
 
 
-nCom=5
-firstSecNCom=3
+nCom=10
+firstSecNCom=8
 secondSecNcom=2
 X = np.array(matrix)
 model = NMF(n_components=nCom, init='random', random_state=0)
@@ -166,7 +166,7 @@ secondSecMaxValue=maxValueList[-1]['value']
 
 #maxValue=maxValueList[-int(len(maxValueList)/5)]['value']
 
-firstSecMaxValue=maxValueList[-int(len(maxValueList)/4)]['value']
+firstSecMaxValue=maxValueList[-int(len(maxValueList)/5)]['value']
 
 secondSecMaxValue=maxValueList[-1]['value']
 
