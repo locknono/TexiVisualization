@@ -42,7 +42,7 @@ var mapView = (function () {
         console.log('position: ', position);
 
     })
-    var classScale = d3.scale.category20();
+
     //.range(['#377eb8', '#4daf4a', '#984ea3', '#ff7f00', '#ffff33', '#a65628', '#f781bf', '#999999', '#e41a1c', ]);
 
 
@@ -354,7 +354,7 @@ var mapView = (function () {
             for (var i = 0; i <= classNumber; i++) {
                 classDomain.push(i)
             }
-            classScale.domain(classDomain);
+            options.classScale.domain(classDomain);
 
             console.log('borderData: ', borderData);
             selection.append("g")
@@ -371,7 +371,7 @@ var mapView = (function () {
                     return borderLine(d.path)
                 })
                 .style("fill", function (d) {
-                    return classScale(d.class);
+                    return options.classScale(d.class);
                 })
                 .on("mouseover", function (d) {
                     console.log(d.class);
@@ -456,6 +456,7 @@ var mapView = (function () {
                 .on("mouseover", d => {
                     selection.selectAll("[areaClass='" + d.area + "']")
                         .style("opacity", options.mouseover_opacity)
+                        .style("stroke-width", 1)
                     console.log('d.area: ', d.area);
                     /* if (d.category == 6) {
                         selection.selectAll("[id='" + d.category + "']")
@@ -471,8 +472,8 @@ var mapView = (function () {
                 })
                 .on("mouseout", d => {
                     selection.selectAll("[areaClass='" + d.area + "']")
-                        .style("opacity", options.normal_opacity);
-
+                        .style("opacity", options.normal_opacity)
+                        .style("stroke-width", 0.1)
 
                 })
         })
@@ -520,7 +521,6 @@ var mapView = (function () {
 
 
     return {
-        classScale: classScale,
         pieView: pieViewForOneClass,
         showDiv: showDiv,
         hideDiv: hideDiv

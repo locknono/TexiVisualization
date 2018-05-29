@@ -79,7 +79,7 @@
                 return rScale(d.number)
             })
             .style('fill', function (d) {
-                return mapView.classScale(d.class);
+                return options.classScale(d.class);
             })
             .style("stroke", "none")
             .attr("id", function (d) {
