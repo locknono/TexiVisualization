@@ -36,14 +36,14 @@ var mapView = (function () {
         } else if (row % 2 != 0) {
             col = (Math.round((lng - left - sideLength * Math.cos((Math.PI / 180) * 30)) / rowWidth))
         }
-        var position = col*rowCount+(row+1)
-        
+        var position = col * rowCount + (row + 1)
+
         console.log(row, col)
         console.log('position: ', position);
 
     })
     var classScale = d3.scale.category20();
-        //.range(['#377eb8', '#4daf4a', '#984ea3', '#ff7f00', '#ffff33', '#a65628', '#f781bf', '#999999', '#e41a1c', ]);
+    //.range(['#377eb8', '#4daf4a', '#984ea3', '#ff7f00', '#ffff33', '#a65628', '#f781bf', '#999999', '#e41a1c', ]);
 
     var d3Overlay = L.d3SvgOverlay(function (selection, projection) {
         //addHexagonBorder(selection, projection);
@@ -425,15 +425,21 @@ var mapView = (function () {
                     }
                     return classScale(d.category);
                 })
-                .style("cursor","crosshair")
+                .attr("id", function (d) {
+                    return d.category
+                })
+                .style("cursor", "crosshair")
                 .style("opacity", 1)
                 .style("stroke", "black")
                 .style("stroke-width", 0.1)
                 .on("mouseover", d => {
-                    console.log('d.value: ', d.value);
+                    selection.selectAll("[id='" + d.category + "']")
+                        .style("fill", "black")
                     console.log('d.category: ', d.category);
-                    console.log('d.row: ', d.row);
-                    console.log('d.col: ', d.col);
+                })
+                .on("mouseout", d => {
+                    selection.selectAll("[id='" + d.category + "']")
+                        .style("fill", classScale(d.category));
                 })
         })
     }

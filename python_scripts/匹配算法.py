@@ -18,6 +18,8 @@ import random
 from sklearn.datasets import make_blobs
 import copy
 import decimal
+import numpy as np
+
 decimal.getcontext().prec = 20
 
 
@@ -25,11 +27,14 @@ top = 22.80550
 bottom = 22.454
 left = 113.75643
 right = 114.65191
-sideLength=(right-left)/350
+
+sideLength=(right-left)/150
+
 rowWidth=2*sideLength*math.cos((math.pi/180)*30)
 
 #colCount代表列数
 colCount=int((right-left)/rowWidth)
+
 rowCount=int(((top-bottom)/(3*sideLength))*2)
 
 fp = 'D:/Texi/myapp/public/data/sevenDayData'
@@ -64,7 +69,7 @@ def getResult(cValueArray1,cValueArray2):
         if((c1+c2)==0):
             value=0
         else:
-            value=(decimal.Decimal(decimal.Decimal((c1-c2))**2))/decimal.Decimal((c1+c2))
+            value=(decimal.Decimal(decimal.Decimal((c1-c2))**2))/decimal.Decimal(math.fabs(c1+c2))
         result+=value
     result=result/2
     return result
@@ -108,7 +113,7 @@ arr1=[1,1000]
 arr2=[0,2]
 #result:496.507992007992
 
-with open('D:/Texi/myapp/public/data/drawData/524valueHexagon2.0_202.json','r',encoding='utf-8') as f:
+with open('D:/Texi/myapp/public/data/drawData/asd.json','r',encoding='utf-8') as f:
     hexagonList=json.loads(f.read())
 
 fileCount=0
@@ -139,7 +144,7 @@ for path in pathdir:
     if os.path.isfile(newdir):     #如果是文件
         with open (newdir,'r',encoding='utf-8') as f:
             fileCount+=1
-            print(fileCount)
+            #print(fileCount)
             reader=csv.reader(f)
             for line in islice(reader, 2, None):
                 time=line[0]
@@ -174,6 +179,8 @@ for i in range(len(fluxArray)):
         print(i,j)
         print(match(fluxArray[i],fluxArray[j]))
         matchMatrix[i].append(match(fluxArray[i],fluxArray[j]))
+        
+
         
 
                 
