@@ -81,7 +81,7 @@ def match(arr1,arr2):
     cValueArray1=fourierTransform(siArray1,10)
     cValueArray2=fourierTransform(siArray2,10)
     result=getResult(cValueArray1,cValueArray2)
-    return result
+    return float(result)
 
     
 arr1=[1,2,3,4,5]
@@ -167,19 +167,60 @@ for path in pathdir:
                 #fluxArray中,-1的类别占索引0
                 hourIndex=(day-18)*24+hour
                 fluxArray[classId+1][hourIndex]+=1
-                
+     
+
+#涉及到fluxArray就用i和j,涉及到matrix就用i-1和j-1           
 matchMatrix=[]
 for i in range(len(fluxArray)):
-    matchMatrix.append([])
     if(i==0):
+        #0代表类别-1
         continue
+    matchMatrix.append([])
     for j in range(len(fluxArray)):
+        classOne=i-1
+        classTwo=j-1
         if(j==0):
             continue
-        print(i,j)
-        print(match(fluxArray[i],fluxArray[j]))
-        matchMatrix[i].append(match(fluxArray[i],fluxArray[j]))
         
+        if(j<i):
+            matchMatrix[classOne].append(matchMatrix[classTwo][classOne])
+            print(str(classOne)+'-'+str(classTwo)+':'+str(matchMatrix[classTwo][classOne]))
+            continue
+        matchValue=match(fluxArray[i],fluxArray[j])
+        matchMatrix[classOne].append(matchValue)
+        print(str(classOne)+'-'+str(classTwo)+':'+str(matchValue))
+
+
+npMatrix=np.array(matchMatrix)
+indexArray=np.argsort(npMatrix,axis=1)
+
+minArray=[]
+for index,each in enumerate(indexArray):
+    """
+    classOne=index
+    classTwo=each[1]
+    npMatrix[index][each[1]]
+    """
+    minArray.append([])
+    for i in range(1,len(indexArray)):
+        row={}
+        key=str(index)+'-'+str(each[i])
+        row['link']=key
+        row['value']=npMatrix[index][each[i]]
+        minArray[index].append(row)
+
+
+with open('D:/Texi/myapp/public/data/drawData/matchValue.json','w',encoding='utf-8') as f:
+    writeStr=json.dumps(minArray)
+    f.write(writeStr)
+    
+    
+    
+
+
+        
+
+
 
         
 

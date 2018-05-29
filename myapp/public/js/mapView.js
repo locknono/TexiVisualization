@@ -399,7 +399,6 @@ var mapView = (function () {
 
     function addHexagon(selection, projection) {
         d3.json('data/drawData/asd.json', (error, hexagonData) => {
-            console.log('hexagonData: ', hexagonData);
             var hexLine = d3.line()
                 .x(function (d) {
                     return map.latLngToLayerPoint(d).x
@@ -408,6 +407,23 @@ var mapView = (function () {
                     return map.latLngToLayerPoint(d).y
                 })
 
+            classArray = []
+            d3.json('data/drawData/matchValue.json', (error, matchValue) => {
+                console.log('matchValue: ', matchValue);
+                var classCount = d3.max(hexagonData, d => {
+                    return (d.category)
+                })
+                classCount = classCount + 1;
+                var number = 0;
+                while (number < classCount - 6) {
+                    number = 0
+                    for (var i = 0; i < classArray.length; i++) {
+                        number += classArray.length
+                    }
+
+                }
+                console.log('classCount: ', classCount);
+            })
             selection.append("g")
                 .selectAll("path")
                 .data(hexagonData)
@@ -433,6 +449,12 @@ var mapView = (function () {
                 .style("stroke", "black")
                 .style("stroke-width", 0.1)
                 .on("mouseover", d => {
+                    if (d.category == 6) {
+                        selection.selectAll("[id='" + d.category + "']")
+                            .style("fill", "black")
+                        selection.selectAll("[id='" + 16 + "']")
+                            .style("fill", "yellow")
+                    }
                     selection.selectAll("[id='" + d.category + "']")
                         .style("fill", "black")
                     console.log('d.category: ', d.category);
