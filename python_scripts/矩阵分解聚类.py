@@ -121,31 +121,82 @@ maxIndexList=np.argmax(W,axis=1)
 
 maxValueList=[]
 for i in range(len(maxIndexList)):
-    index=i
     value=math.log2(W[i][maxIndexList[i]]+1)
-    maxValue={}
-    maxValue['index']=index
-    maxValue['value']=value
-    maxValueList.append(maxValue)
     
+    maxValue={}
+    maxValue['index']=i
+    maxValue['value']=value
+    
+    maxValueList.append(maxValue)
+"""
+maxValueList3=[]
+for i in range(len(maxIndexList)):
+    value=math.log2(W[i][maxIndexList[i]]+1)
+    maxValueList3.append(value)
+maxValueList3.sort()
+    
+maxValueList2=copy.deepcopy(maxValueList)
+kList=[]
+for i in range(len(maxValueList2)-1):
+    value=maxValueList2[i]['value']
+    nextValue=maxValueList2[i+1]['value']
+    k=nextValue-value
+    kList.append(k)
+"""
 maxValueList=sorted(maxValueList, key=lambda m: m['value'])
-                
+         
+for i in range(len(maxValueList)-1):
+    value=maxValueList[i]['value']
+    nextValue=maxValueList[i+1]['value']
+    maxValueList[i]['k']=nextValue-value
+
 minValue=maxValueList[0]['value']
 
-maxValue=maxValueList[-int(len(maxValueList)/20)]['value']
+"""
+firstSecMaxValue=0
+for i in range(len(maxValueList)-1):
+    if(maxValueList[i]['k']>0.5):
+        firstSecMaxValue=maxValueList[i+1]['value']
+        print(i,(maxValueList[i]['k']))
+        break
+"""
 
-diff=maxValue-minValue
+secondSecMaxValue=maxValueList[-1]['value']
 
-secLength=diff/nCom
+#maxValue=maxValueList[-int(len(maxValueList)/5)]['value']
+
+firstSecMaxValue=maxValueList[-int(len(maxValueList)/5)]['value']
+
+secondSecMaxValue=maxValueList[-1]['value']
+
+firstSecDiff=firstSecMaxValue-minValue
+
+secondSecDiff=secondSecMaxValue-firstSecMaxValue
+
+#diff=maxValue-minValue
+
+#secLength=diff/nCom
+
+firstSecLength=firstSecDiff/(nCom/2)
+
+secondSecLength=secondSecDiff/(nCom/2)
 
 for i in range(len(maxValueList)):
     
     value=maxValueList[i]['value']
     index=maxValueList[i]['index']
     
-    normalValue=(value-minValue)/(maxValue-minValue)
+    k=maxValueList[i]['k']
+    if value<=firstSecMaxValue:
+        normalValue=(value-minValue)/firstSecDiff
+        normalCommunity=int((normalValue)/firstSecLength-1)
+    elif value>firstSecMaxValue and value < secondSecMaxValue:
+        normalValue=(value-firstSecMaxValue)/secondSecDiff
+        normalCommunity=int((normalValue)/secondSecDiff)+(nCom/2)
+        
+    #normalValue=(value-minValue)/(maxValue-minValue)
     
-    normalCommunity=int((normalValue-minValue)/secLength-1)
+    #normalCommunity=int((normalValue-minValue)/secLength-1)
     
     if(value==0):
         hexagonList[index]['category']=-1
@@ -159,7 +210,11 @@ for i in range(len(maxValueList)):
 with open('D:/Texi/myapp/public/data/drawData/asd.json','w',encoding='utf-8') as f:
     writeStr=json.dumps(hexagonList)
     f.write(writeStr)
-        
+"""
+with open('D:/Texi/myapp/public/data/drawData/maxValue.json','w',encoding='utf-8') as f:
+    writeStr=json.dumps(maxValueList3)
+    f.write(writeStr)
+"""     
         
 
 
