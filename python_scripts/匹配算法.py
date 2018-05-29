@@ -190,28 +190,109 @@ for i in range(len(fluxArray)):
         matchMatrix[classOne].append(matchValue)
         print(str(classOne)+'-'+str(classTwo)+':'+str(matchValue))
 
+oneDimenstionMatchMatrix=[]
+for i in range(len(fluxArray)):
+    if(i==0):
+        #0代表类别-1
+        continue
+    for j in range(len(fluxArray)):
+        classOne=i-1
+        classTwo=j-1
+        if(j==0):
+            continue
+        if(j<i):
+            continue
+        value={}
+        value['link']=str(i-1)+'-'+str(j-1)
+        matchValue=match(fluxArray[i],fluxArray[j])
+        value['value']=matchValue
+        oneDimenstionMatchMatrix.append(value)
+        print(str(classOne)+'-'+str(classTwo)+':'+str(matchValue))
 
+oneDimenstionMatchMatrix=sorted(oneDimenstionMatchMatrix, key=lambda m: m['value'])
+
+linkClassArray=[]
+for each in oneDimenstionMatchMatrix:
+    if each['value']==0:
+        continue
+    if each['value']>100:
+        break
+    classArray=each['link'].split('-')
+    classOne=int(classArray[0])
+    classTwo=int(classArray[1])
+    for link in linkClassArray:
+        if(classOne in link and classTwo not in link):
+            link.append(classTwo)
+            break
+        elif(classOne not in link and classTwo in link):
+            link.append(classOne)
+            break
+        elif(classOne in link and classTwo in link):
+            break
+    else:
+        linkClassArray.append([classOne,classTwo])
+    if len(linkClassArray)>=5:
+        break
+            
+    
+    
+
+"""
 npMatrix=np.array(matchMatrix)
 indexArray=np.argsort(npMatrix,axis=1)
-
+indexArray2=np.argsort(npMatrix)
 minArray=[]
-for index,each in enumerate(indexArray):
-    """
+for index,each in enumerate(indexArray):    
     classOne=index
     classTwo=each[1]
     npMatrix[index][each[1]]
-    """
     minArray.append([])
     for i in range(1,len(indexArray)):
         row={}
         key=str(index)+'-'+str(each[i])
         row['link']=key
         row['value']=npMatrix[index][each[i]]
+        row[key]=npMatrix[index][each[i]]
         minArray[index].append(row)
+"""
+def overlap(class1,class2):
+    overlap=False
+    for i in class1:
+        for j in class2:
+            if i == j :
+                overlap=True
+    return overlap
+    
+
+linkClass2=[]
+        
+for i in range(len(linkClassArray)):    
+    for j in range(len(linkClassArray)):
+        if i!=j and overlap(linkClassArray[i],linkClassArray[j]):
+            linkClassArray[i].extend(linkClassArray[j])
+            linkClassArray[i]=list(set(linkClassArray[i]))
+for index1,i in enumerate(linkClassArray):
+    for index2,j in enumerate(linkClassArray):
+        if index1!=index2 and i==j:
+            linkClassArray.pop(index1)
 
 
+for each in hexagonList:
+    for index,area in enumerate(linkClassArray):
+        for value in area:
+            if each['category']==value:
+                each['area']=index
+                break
+    if each['area']==None:
+        each['area']=each['category']
+       
+                
 with open('D:/Texi/myapp/public/data/drawData/matchValue.json','w',encoding='utf-8') as f:
-    writeStr=json.dumps(minArray)
+    writeStr=json.dumps(linkClassArray)
+    f.write(writeStr)
+    
+with open('D:/Texi/myapp/public/data/drawData/asd.json','w',encoding='utf-8') as f:
+    writeStr=json.dumps(hexagonList)
     f.write(writeStr)
     
     
