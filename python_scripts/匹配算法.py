@@ -146,7 +146,7 @@ for path in pathdir:
             fileCount+=1
             #print(fileCount)
             reader=csv.reader(f)
-            for line in islice(reader, 2, None):
+            for line in islice(reader, 1, None):
                 time=line[0]
                 day=int(time.split('-')[0])
                 hour=int(time.split('-')[1])

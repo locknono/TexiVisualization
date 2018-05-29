@@ -97,34 +97,70 @@ for path in pathdir:
                     source=track[0]
                     target=track[1]
                 
-                sourceTime=source[0]
-                sourceDay=int(sourceTime.split('-')[0])
-                sourceHour=int(sourceTime.split('-')[1])
-                souceMinute=int(sourceTime.split('-')[2])
+                    sourceTime=source[0]
+                    sourceDay=int(sourceTime.split('-')[0])
+                    sourceHour=int(sourceTime.split('-')[1])
+                    souceMinute=int(sourceTime.split('-')[2])
+                    
+                    sourceLng=float(source[1])
+                    sourceLat=float(source[2])
+                    
+                    #status=int(line[3])
+                    
+                    row=int(round((top-sourceLat)/(1.5*sideLength)))
+                    if(row<0 or row>=rowCount):
+                        continue
+                    if(row%2==0):
+                        col=(round((sourceLng-left)/rowWidth))           
+                    elif(row%2!=0):
+                        col=(round((sourceLng-left-sideLength*math.cos((math.pi/180)*30))/rowWidth))
+                    if(col<0 or col>=colCount):
+                        continue
+                    
+                    sourceMinuteInOneDay=sourceHour*60+souceMinute
+                    
+                    sourceSecIndex=int(sourceMinuteInOneDay/minuteSec)
+                    
+                    sourceClassId=matrix[row][col]['category']
+                    
+                    targetTime=target[0]
+                    targetDay=int(targetTime.split('-')[0])
+                    targetHour=int(targetTime.split('-')[1])
+                    souceMinute=int(targetTime.split('-')[2])
+                    
+                    targetLng=float(target[1])
+                    targetLat=float(target[2])
+                    
+                    #status=int(line[3])
+                    
+                    row=int(round((top-targetLat)/(1.5*sideLength)))
+                    if(row<0 or row>=rowCount):
+                        continue
+                    if(row%2==0):
+                        col=(round((targetLng-left)/rowWidth))           
+                    elif(row%2!=0):
+                        col=(round((targetLng-left-sideLength*math.cos((math.pi/180)*30))/rowWidth))
+                    if(col<0 or col>=colCount):
+                        continue
+                    
+                    targetMinuteInOneDay=targetHour*60+souceMinute
+                    
+                    targetSecIndex=int(targetMinuteInOneDay/minuteSec)
+                    
+                    targetClassId=matrix[row][col]['category']
+                    
+                    if sourceClassId == targetClassId:
+                        if sourceMinuteInOneDay>=targetMinuteInOneDay:
+                            continue
+                        odData[sourceClassId]['od'].append([sourceMinuteInOneDay,targetMinuteInOneDay])
+                        
                 
-                sourceLng=float(source[1])
-                sourceLat=float(source[2])
-                
-                #status=int(line[3])
-                
-                row=int(round((top-sourceLat)/(1.5*sideLength)))
-                if(row<0 or row>=rowCount):
-                    continue
-                if(row%2==0):
-                    col=(round((lng-left)/rowWidth))           
-                elif(row%2!=0):
-                    col=(round((lng-left-sideLength*math.cos((math.pi/180)*30))/rowWidth))
-                if(col<0 or col>=colCount):
-                    continue
-                
-                minuteInOneDay=hour*60+minute
-                
-                secIndex=int(minuteInOneDay/minuteSec)
-                
-                classId=matrix[row][col]
                 
                 
-
+                
+with open('D:/Texi/myapp/public/data/drawData/odIn.json','w',encoding='utf-8') as f:
+    writeStr=json.dumps(odData)
+    f.write(writeStr)
 
 
 

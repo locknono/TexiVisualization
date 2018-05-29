@@ -87,7 +87,7 @@ for path in pathdir:
             """
             reader=csv.reader(f)
             writeList=[]
-            for line in islice(reader,2, None):
+            for line in islice(reader,1, None):
                 time=line[0]
                 day=int(time.split('-')[0])
                 hour=int(time.split('-')[1])
