@@ -12,7 +12,7 @@ import json
 
 
 
-fp = 'D:/Texi/myapp/public/data/sevenDayData2'
+fp = 'D:/TexiData/sevenDayData2'
 os.chdir(fp)
 
 pathdir=os.listdir(fp)
@@ -40,7 +40,9 @@ for path in pathdir:
                 
                 hour=time.split(' ')[1].split(':')[0]
                 
-                time = str(day)+'-'+str(int(hour))
+                minute=int(time.split(' ')[1].split(':')[1])
+                
+                time = str(day)+'-'+str(int(hour))+'-'+str(minute)
                 if(tmp!=status):
                     writeLine=[]
                     writeLine.append(time)
@@ -50,7 +52,7 @@ for path in pathdir:
                     thisFile.append(writeLine)
                     tmp=status
     if(len(thisFile)!=0):
-        with open("D:/Texi/myapp/public/data/sevenDayData/"+path,"w",encoding='utf-8',newline='') as csvfile: 
+        with open("D:/TexiData/sevenDayData/"+path,"w",encoding='utf-8',newline='') as csvfile: 
             writer = csv.writer(csvfile)
             #先写入columns_name
             writer.writerow(['time','jd','wd','status'])

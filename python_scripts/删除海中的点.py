@@ -44,7 +44,7 @@ colCount=int((right-left)/rowWidth)
 
 rowCount=int(((top-bottom)/(3*sideLength))*2)
 
-fp = 'D:/Texi/myapp/public/data/sevenDayData'
+fp = 'D:/TexiData/sevenDayData'
 os.chdir(fp)
 
 pathdir=os.listdir(fp)
@@ -200,7 +200,7 @@ for path in pathdir:
                     writeList.append(line)
                     
             if(len(writeList)!=0):
-                with open("D:/Texi/myapp/public/data/cleanData/"+path,"w",encoding='utf-8',newline='') as csvfile: 
+                with open("D:/TexiData/cleanData/"+path,"w",encoding='utf-8',newline='') as csvfile: 
                     writer = csv.writer(csvfile)
                     #先写入columns_name
                     writer.writerow(['time','jd','wd','status'])
