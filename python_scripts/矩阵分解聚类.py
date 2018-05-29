@@ -106,12 +106,13 @@ for path in pathdir:
                     continue
                 position = (col*rowCount)+row
                 hexagonList[position]['value']+=1
-                
                 hour=(day-18)*24+hour
                 matrix[position][hour]+=1
 
 
-nCom=100
+nCom=5
+firstSecNCom=3
+secondSecNcom=2
 X = np.array(matrix)
 model = NMF(n_components=nCom, init='random', random_state=0)
 W = model.fit_transform(X)
@@ -177,22 +178,27 @@ secondSecDiff=secondSecMaxValue-firstSecMaxValue
 
 #secLength=diff/nCom
 
-firstSecLength=firstSecDiff/(nCom/2)
+firstSecLength=1/firstSecNCom
 
-secondSecLength=secondSecDiff/(nCom/2)
+secondSecLength=1/secondSecNcom
 
 for i in range(len(maxValueList)):
     
     value=maxValueList[i]['value']
     index=maxValueList[i]['index']
+    """
+    if(i!=len(maxValueList)-1):
+        k=maxValueList[i]['k']
+    """
     
-    k=maxValueList[i]['k']
     if value<=firstSecMaxValue:
         normalValue=(value-minValue)/firstSecDiff
         normalCommunity=int((normalValue)/firstSecLength-1)
     elif value>firstSecMaxValue and value < secondSecMaxValue:
         normalValue=(value-firstSecMaxValue)/secondSecDiff
-        normalCommunity=int((normalValue)/secondSecDiff)+(nCom/2)
+        if(normalValue>1):
+            print('>1')
+        normalCommunity=int((normalValue)/secondSecLength)+firstSecNCom
         
     #normalValue=(value-minValue)/(maxValue-minValue)
     
