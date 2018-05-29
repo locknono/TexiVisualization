@@ -66,6 +66,12 @@ os.chdir(fp)
 
 pathdir=os.listdir(fp)
 
+odData=[]
+for i in range(-1,classCount):
+    od={}
+    od['class']=i
+    od['od']=[]
+    odData.append(od)
 
 oneDayMinute = 24*60
 
@@ -84,18 +90,24 @@ for path in pathdir:
             """
             reader=csv.reader(f)
             writeList=[]
+            track=[]
             for line in islice(reader,2, None):
-                time=line[0]
-                day=int(time.split('-')[0])
-                hour=int(time.split('-')[1])
-                minute=int(time.split('-')[2])
+                track.append(line)
+                if(len(track)==2):
+                    source=track[0]
+                    target=track[1]
                 
-                lng=float(line[1])
-                lat=float(line[2])
+                sourceTime=source[0]
+                sourceDay=int(sourceTime.split('-')[0])
+                sourceHour=int(sourceTime.split('-')[1])
+                souceMinute=int(sourceTime.split('-')[2])
                 
-                status=int(line[3])
+                sourceLng=float(source[1])
+                sourceLat=float(source[2])
                 
-                row=int(round((top-lat)/(1.5*sideLength)))
+                #status=int(line[3])
+                
+                row=int(round((top-sourceLat)/(1.5*sideLength)))
                 if(row<0 or row>=rowCount):
                     continue
                 if(row%2==0):
@@ -108,6 +120,8 @@ for path in pathdir:
                 minuteInOneDay=hour*60+minute
                 
                 secIndex=int(minuteInOneDay/minuteSec)
+                
+                classId=matrix[row][col]
                 
                 
 
