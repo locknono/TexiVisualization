@@ -166,7 +166,7 @@ secondSecMaxValue=maxValueList[-1]['value']
 
 #maxValue=maxValueList[-int(len(maxValueList)/5)]['value']
 
-firstSecMaxValue=maxValueList[-int(len(maxValueList)/5)]['value']
+firstSecMaxValue=maxValueList[-int(len(maxValueList)/4)]['value']
 
 secondSecMaxValue=maxValueList[-1]['value']
 
