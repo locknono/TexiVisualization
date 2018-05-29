@@ -22,7 +22,8 @@ import numpy as np
 
 with open('D:/Texi/myapp/public/data/drawData/asd.json','r',encoding='utf-8') as f:
     hexagonList=json.loads(f.read())
-    
+
+
 top = 22.80550
 bottom = 22.454
 left = 113.75643
@@ -37,10 +38,39 @@ colCount=int((right-left)/rowWidth)
 
 rowCount=int(((top-bottom)/(3*sideLength))*2)
 
+
+maxRow=0
+for i in range(len(hexagonList)):
+    if hexagonList[i]['row']>maxRow:
+        maxRow=hexagonList[i]['row']
+        
+hexagonListDF=pd.DataFrame(hexagonList)
+
+classCount=len(hexagonListDF.groupby(['category']))
+
+matrix=[]
+
+for j in range(maxRow+1):
+    rowList=[]
+    for i in hexagonList:
+        if(i['row'] == j):
+            i['value']=0
+            i['kClass']=-1
+            rowList.append(i)
+    matrix.append(rowList)
+
+
+
 fp = 'D:/Texi/myapp/public/data/sevenDayData'
 os.chdir(fp)
 
 pathdir=os.listdir(fp)
+
+
+oneDayMinute = 24*60
+
+minuteSec=10
+
 
 for path in pathdir:
     thisFile=[]
@@ -74,6 +104,10 @@ for path in pathdir:
                     col=(round((lng-left-sideLength*math.cos((math.pi/180)*30))/rowWidth))
                 if(col<0 or col>=colCount):
                     continue
+                
+                minuteInOneDay=hour*60+minute
+                
+                secIndex=int(minuteInOneDay/minuteSec)
                 
                 
 

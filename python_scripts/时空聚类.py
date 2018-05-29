@@ -99,7 +99,7 @@ for path in pathdir:
             tmp=1
             #track[0]表示起点
             track=[]
-            for line in islice(reader, 2, None):
+            for line in islice(reader,2, None):
                 
                 track.append(line)
                 

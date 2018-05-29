@@ -78,7 +78,7 @@ for path in pathdir:
             reader=csv.reader(f)
             writeList=[]
             appendFlag=True
-            for line in islice(reader, 1, None):
+            for line in islice(reader,2, None):
                 if(appendFlag==False):
                     appendFlag=True
                     continue
