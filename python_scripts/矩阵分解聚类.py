@@ -110,8 +110,8 @@ for path in pathdir:
                 matrix[position][hour]+=1
 
 
-nCom=20
-firstSecNCom=15
+nCom=13
+firstSecNCom=8
 secondSecNcom=5
 X = np.array(matrix)
 model = NMF(n_components=nCom, init='random', random_state=0)
