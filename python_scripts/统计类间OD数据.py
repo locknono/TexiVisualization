@@ -86,11 +86,6 @@ for path in pathdir:
     newdir = os.path.join(fp,path)
     if os.path.isfile(newdir):     
         with open (newdir,'r',encoding='utf-8') as f:
-            #print(fileCount)
-            """
-            if(fileCount>2000):
-                break
-            """
             reader=csv.reader(f)
             writeList=[]
             track=[]
@@ -110,21 +105,21 @@ for path in pathdir:
                     
                     #status=int(line[3])
                     
-                    row=int(round((top-sourceLat)/(1.5*sideLength)))
-                    if(row<0 or row>=rowCount):
+                    sourceRow=int(round((top-sourceLat)/(1.5*sideLength)))
+                    if(sourceRow<0 or sourceRow>=rowCount):
                         continue
-                    if(row%2==0):
-                        col=(round((sourceLng-left)/rowWidth))           
-                    elif(row%2!=0):
-                        col=(round((sourceLng-left-sideLength*math.cos((math.pi/180)*30))/rowWidth))
-                    if(col<0 or col>=colCount):
+                    if(sourceRow%2==0):
+                        sourceCol=(round((sourceLng-left)/rowWidth))           
+                    elif(sourceRow%2!=0):
+                        sourceCol=(round((sourceLng-left-sideLength*math.cos((math.pi/180)*30))/rowWidth))
+                    if(sourceCol<0 or sourceCol>=colCount):
                         continue
                     
                     sourceMinuteInOneDay=sourceHour*60+souceMinute
                     
                     sourceSecIndex=int(sourceMinuteInOneDay/minuteSec)
                     
-                    sourceClassId=matrix[row][col]['category']
+                    sourceClassId=matrix[sourceRow][sourceCol]['category']
                     
                     targetTime=target[0]
                     targetDay=int(targetTime.split('-')[0])
@@ -136,21 +131,21 @@ for path in pathdir:
                     
                     #status=int(line[3])
                     
-                    row=int(round((top-targetLat)/(1.5*sideLength)))
-                    if(row<0 or row>=rowCount):
+                    targetRow=int(round((top-targetLat)/(1.5*sideLength)))
+                    if(targetRow<0 or targetRow>=rowCount):
                         continue
-                    if(row%2==0):
-                        col=(round((targetLng-left)/rowWidth))           
-                    elif(row%2!=0):
-                        col=(round((targetLng-left-sideLength*math.cos((math.pi/180)*30))/rowWidth))
-                    if(col<0 or col>=colCount):
+                    if(targetRow%2==0):
+                        targetCol=(round((targetLng-left)/rowWidth))           
+                    elif(targetRow%2!=0):
+                        targetCol=(round((targetLng-left-sideLength*math.cos((math.pi/180)*30))/rowWidth))
+                    if(targetCol<0 or targetCol>=colCount):
                         continue
                     
                     targetMinuteInOneDay=targetHour*60+souceMinute
                     
                     targetSecIndex=int(targetMinuteInOneDay/minuteSec)
                     
-                    targetClassId=matrix[row][col]['category']
+                    targetClassId=matrix[targetRow][targetCol]['category']
                     
                     if sourceClassId != targetClassId:
                         if sourceMinuteInOneDay>=targetMinuteInOneDay:
@@ -160,12 +155,7 @@ for path in pathdir:
                                 od['od'].append([sourceMinuteInOneDay,targetMinuteInOneDay])
                                 od['count']+=1
                                 
-                        
-                
-                
-                
-
-with open('D:/Texi/myapp/public/data/drawData/odOut.json','w',encoding='utf-8') as f:
+with open('D:/Texi/myapp/public/data/drawData/odInter.json','w',encoding='utf-8') as f:
     writeStr=json.dumps(odData)
     f.write(writeStr)
 

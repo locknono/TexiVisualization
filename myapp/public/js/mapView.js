@@ -527,3 +527,4 @@ var mapView = (function () {
         hideDiv: hideDiv
     };
 })()
+
