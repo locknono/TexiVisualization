@@ -6,10 +6,14 @@
     console.log('height: ', height);
 
     var force = d3.forceSimulation()
-        .force("charge", d3.forceManyBody().strength(-700).distanceMin(50).distanceMax(150))
         .force("link", d3.forceLink().id(function (d) {
-            return d.index
-        }))
+                return d.index
+            })
+            .distance(function (d) {
+                return 200 - d.value * 4
+            })
+        )
+        .force("charge", d3.forceManyBody().strength(-2500).distanceMin(0).distanceMax(600))
         .alphaTarget(0.05)
         .force("center", d3.forceCenter(width / 2, height / 2))
         .force("y", d3.forceY(0.001))
@@ -36,12 +40,14 @@
         console.log('json: ', json);
 
         var valueRange = d3.extent(json.links, function (d) {
+
             return d.value
         })
         console.log('valueRange: ', valueRange);
+        console.log('valueRange: ', valueRange);
         var strokeScale = d3.scaleLinear()
             .domain(valueRange)
-            .range([0, 5])
+            .range([0, 20])
 
         force
             .nodes(json.nodes)
@@ -55,6 +61,7 @@
             .attr("stroke-width", function (d) {
                 return strokeScale(d.value)
             })
+            .style("stroke-linecap", "round")
             .attr("class", "link");
 
         var node = svg.selectAll(".node")
@@ -72,25 +79,27 @@
         console.log('nodeNumberRange: ', nodeNumberRange);
         var rScale = d3.scaleLinear()
             .domain(nodeNumberRange)
-            .range([0.5, 15])
+            .range([5, 15])
 
         node.append('circle')
             .attr('r', function (d) {
                 return rScale(d.number)
             })
             .style('fill', function (d) {
-                return options.classScale(d.class);
+                return options.areaScale(d.class);
             })
             .style("stroke", "none")
             .attr("id", function (d) {
                 return d.class
             })
             .on("mouseover", function (d) {
-                d3.select("#map").select("[id='" + d.class + "']").style("opacity", options.mouseover_opacity);
+                console.log(d.class);
+                d3.select("#map").selectAll("[id='" + d.class + "']").style("stroke-width", 1);
                 mapView.pieView(d.class);
             })
             .on("mouseout", function (d) {
-                d3.select("#map").select("[id='" + d.class + "']").style("opacity", options.normal_opacity);
+                //d3.select("#map").selectAll("[id='" + d.class + "']").style("opacity", options.normal_opacity);
+                d3.select("#map").selectAll("[id='" + d.class + "']").style("stroke-width", 0.1);
                 mapView.hideDiv();
             })
 

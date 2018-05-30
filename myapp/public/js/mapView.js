@@ -425,23 +425,6 @@ var mapView = (function () {
                     } else {
                         return options.areaScale(d.category);
                     }
-                    /* var thisArea = -1;
-                    for (var i = 0; i < matchValue.length; i++) {
-                        for (var j = 0; j < matchValue[i].length; j++) {
-                            if (d.category == matchValue[i][j]) {
-                                thisArea = i;
-                            }
-                        }
-                    }
-                    if (d.category == -1) {
-                        d3.select(this).remove()
-                        return 'white'
-                    }
-                    if (thisArea == -1) {
-                        return "white"
-                    } else {
-                        return areaScale(thisArea);
-                    } */
                 })
                 .attr("id", function (d) {
                     return d.category
@@ -519,9 +502,13 @@ var mapView = (function () {
             });
         });
     }
+    function selectEffect(selection){
+        selection.style("stroke-width", 1);
+    }
     return {
         pieView: pieViewForOneClass,
         showDiv: showDiv,
-        hideDiv: hideDiv
+        hideDiv: hideDiv,
+        selectEffect:selectEffect
     };
 })()
