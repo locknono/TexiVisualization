@@ -76,53 +76,75 @@ for path in pathdir:
     newdir = os.path.join(fp,path) # 将文件名加入到当前文件路径后面
     if os.path.isfile(newdir):     #如果是文件
         with open (newdir,'r',encoding='utf-8') as f:
+            #print(fileCount)
+            """
+            if(fileCount>2000):
+                break
+            """
             reader=csv.reader(f)
-            tmp=0
-            nextPass=False
-            for line in islice(reader, 1, None): 
-                status=int(line[3])
-                #statusDict[status]=0
+            writeList=[]
+            track=[]
+            for line in islice(reader,1, None):
+                track.append(line)
+                if(len(track)==2):
+                    source=track[0]
+                    target=track[1]
                 
-                #两两读，如果有其中一个不满足条件，那就两条都跳过
-                
-                #从空载到打表，上车了 
-                if ((tmp==0) and (status==1)):
-                    sourceLat=float(line[2])
-                    sourceLng=float(line[1])
-                    row=int((top-sourceLat)/(1.5*sideLength))
-                    if(row<0):
-                        nextPass=True
+                    sourceTime=source[0]
+                    sourceDay=int(sourceTime.split('-')[0])
+                    sourceHour=int(sourceTime.split('-')[1])
+                    souceMinute=int(sourceTime.split('-')[2])
+                    
+                    sourceLng=float(source[1])
+                    
+                    sourceLat=float(source[2])
+                    
+                    #status=int(line[3])
+                    
+                    sourceRow=int(round((top-sourceLat)/(1.5*sideLength)))
+                    if(sourceRow<0 or sourceRow>=rowCount):
+                        track=[]
                         continue
-                    if(row%2==0):
-                        col=int((sourceLng-left)/rowWidth)
-                    else:
-                        col=int((sourceLng-left-sideLength*math.cos((math.pi/180)*30))/rowWidth)
-                    if(col<0):
-                        nextPass=True
+                    if(sourceRow%2==0):
+                        sourceCol=(round((sourceLng-left)/rowWidth))           
+                    elif(sourceRow%2!=0):
+                        sourceCol=(round((sourceLng-left-sideLength*math.cos((math.pi/180)*30))/rowWidth))
+                    if(sourceCol<0 or sourceCol>=colCount):
+                        track=[]
                         continue
-                    if(row>rowCount or col>colCount):
-                        nextPass=True
+                    
+                    sourceMinuteInOneDay=sourceHour*60+souceMinute
+                    
+                    
+                    sourceClassId=matrix[sourceRow][sourceCol]['category']
+                    
+                    targetTime=target[0]
+                    targetDay=int(targetTime.split('-')[0])
+                    targetHour=int(targetTime.split('-')[1])
+                    souceMinute=int(targetTime.split('-')[2])
+                    
+                    targetLng=float(target[1])
+                    targetLat=float(target[2])
+                    
+                    #status=int(line[3])
+                    
+                    targetRow=int(round((top-targetLat)/(1.5*sideLength)))
+                    if(targetRow<0 or targetRow>=rowCount):
+                        track=[]
                         continue
-                    sourceClass=matrix[row][col]['category']
-                    tmp=1
-                    continue
-                #下车
-                elif ((tmp==1) and (status==0) and nextPass==False):
-                    targetLat=float(line[2])
-                    targetLng=float(line[1])
-                    row=int((top-targetLat)/(1.5*sideLength))
-                    if(row<0):
+                    if(targetRow%2==0):
+                        targetCol=(round((targetLng-left)/rowWidth))           
+                    elif(targetRow%2!=0):
+                        targetCol=(round((targetLng-left-sideLength*math.cos((math.pi/180)*30))/rowWidth))
+                    if(targetCol<0 or targetCol>=colCount):
+                        track=[]
                         continue
-                    if(row%2==0):
-                        col=int((targetLng-left)/rowWidth)
-                    else:
-                        col=int((targetLng-left-sideLength*math.cos((math.pi/180)*30))/rowWidth)
-                    if(col<0):
-                        continue
-                    if(row>rowCount or col>colCount):
-                        continue
-                    targetClass=matrix[row][col]['category']
-                    tmp=0
+                    
+                    targetMinuteInOneDay=targetHour*60+souceMinute
+                    
+                    
+                    targetClassId=matrix[targetRow][targetCol]['category']
+                    
                     
                     
                     #如果links之中没有这条轨迹，就把这条轨迹加入links中，赋值value为0
@@ -130,16 +152,17 @@ for path in pathdir:
                     
                     exist=False
                     for each in links:
-                        if each['source']==sourceClass and each['target']==targetClass:
+                        if each['source']==sourceClassId and each['target']==targetClassId:
                             exist=True
                             each['value']+=1
                             break
                     if(exist ==False):
-                        track={}
-                        track['source']=sourceClass
-                        track['target']=targetClass
-                        track['value']=1
-                        links.append(track)
+                        trackLink={}
+                        trackLink['source']=sourceClassId
+                        trackLink['target']=targetClassId
+                        trackLink['value']=1
+                        links.append(trackLink)
+                    track=[]
                     
         
 

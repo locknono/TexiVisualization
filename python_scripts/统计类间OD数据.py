@@ -86,11 +86,18 @@ for path in pathdir:
     newdir = os.path.join(fp,path)
     if os.path.isfile(newdir):     
         with open (newdir,'r',encoding='utf-8') as f:
+            #print(fileCount)
+            """
+            if(fileCount>2000):
+                break
+            """
             reader=csv.reader(f)
             writeList=[]
             track=[]
             for line in islice(reader,1, None):
                 track.append(line)
+                if len(track)>2:
+                    print('>')
                 if(len(track)==2):
                     source=track[0]
                     target=track[1]
@@ -101,18 +108,21 @@ for path in pathdir:
                     souceMinute=int(sourceTime.split('-')[2])
                     
                     sourceLng=float(source[1])
+                    
                     sourceLat=float(source[2])
                     
                     #status=int(line[3])
                     
                     sourceRow=int(round((top-sourceLat)/(1.5*sideLength)))
                     if(sourceRow<0 or sourceRow>=rowCount):
+                        track=[]
                         continue
                     if(sourceRow%2==0):
                         sourceCol=(round((sourceLng-left)/rowWidth))           
                     elif(sourceRow%2!=0):
                         sourceCol=(round((sourceLng-left-sideLength*math.cos((math.pi/180)*30))/rowWidth))
                     if(sourceCol<0 or sourceCol>=colCount):
+                        track=[]
                         continue
                     
                     sourceMinuteInOneDay=sourceHour*60+souceMinute
@@ -133,12 +143,14 @@ for path in pathdir:
                     
                     targetRow=int(round((top-targetLat)/(1.5*sideLength)))
                     if(targetRow<0 or targetRow>=rowCount):
+                        track=[]
                         continue
                     if(targetRow%2==0):
                         targetCol=(round((targetLng-left)/rowWidth))           
                     elif(targetRow%2!=0):
                         targetCol=(round((targetLng-left-sideLength*math.cos((math.pi/180)*30))/rowWidth))
                     if(targetCol<0 or targetCol>=colCount):
+                        track=[]
                         continue
                     
                     targetMinuteInOneDay=targetHour*60+souceMinute
