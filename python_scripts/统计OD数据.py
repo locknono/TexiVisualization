@@ -91,7 +91,7 @@ for path in pathdir:
             reader=csv.reader(f)
             writeList=[]
             track=[]
-            for line in islice(reader,2, None):
+            for line in islice(reader,1, None):
                 track.append(line)
                 if(len(track)==2):
                     source=track[0]
@@ -157,7 +157,7 @@ for path in pathdir:
                 
                 
                 
-                
+
 with open('D:/Texi/myapp/public/data/drawData/odIn.json','w',encoding='utf-8') as f:
     writeStr=json.dumps(odData)
     f.write(writeStr)
