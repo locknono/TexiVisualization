@@ -18,7 +18,7 @@ var mapView = (function () {
     map.zoomControl.remove();
 
     map.on('click', function (e) {
-        console.log('e: ', e);
+        
         var top = 22.80550
         var bottom = 22.454
         var left = 113.75643
@@ -38,8 +38,8 @@ var mapView = (function () {
         }
         var position = col * rowCount + (row + 1)
 
-        console.log(row, col)
-        console.log('position: ', position);
+        
+        
 
     })
 
@@ -48,7 +48,7 @@ var mapView = (function () {
     var d3Overlay = L.d3SvgOverlay(function (selection, projection) {
         //addHexagonBorder(selection, projection);
 
-        addHexagon(selection, projection);
+        addHexagon(selection, projection,7);
         //addPrismBorder(selection);
     }, {
         zoomDraw: false,
@@ -92,7 +92,7 @@ var mapView = (function () {
         getSuspendingData(thisClass).then(function (suspedingData) {
             svg.selectAll("path").remove();
             svg.selectAll("circle").remove();
-            console.log('suspedingData: ', suspedingData);
+            
 
             var thisClassMaxWorkOn = d3.max(suspedingData.workOn);
             var thisClassMaxWorkOff = d3.max(suspedingData.workOff);
@@ -102,8 +102,8 @@ var mapView = (function () {
 
             var thisClassMaxOn = d3.max([thisClassMaxWorkOn, thisClassMaxEndOn]);
             var thisClassMaxOff = d3.max([thisClassMaxWorkOff, thisClassMaxEndOff]);
-            console.log('thisClassMaxWorkOn: ', thisClassMaxWorkOn);
-            console.log('thisClassMaxOn: ', thisClassMaxOn);
+            
+            
             var circleRadius = 50;
 
             var onScale = d3.scaleLinear()
@@ -125,7 +125,7 @@ var mapView = (function () {
                 thisArc.outerRadius = circleRadius + onScale(suspedingData.workOn[i]);
                 arcArray.push(thisArc);
             }
-            console.log('arcArray: ', arcArray);
+            
             var flArcsG = svg.append("g").attr("class", "arcG")
                 .attr("transform", "translate(" + (width / 2) + ',' + (height / 2) + ')');
 
@@ -355,7 +355,7 @@ var mapView = (function () {
             }
             options.classScale.domain(classDomain);
 
-            console.log('borderData: ', borderData);
+            
             selection.append("g")
                 .selectAll("path")
                 .data(borderData)
@@ -374,7 +374,7 @@ var mapView = (function () {
                 })
                 .on("mouseover", function (d) {
                     odView.addLineInClass(d.category);
-                    console.log(d.class);
+                    
                     d3.select(this).style("opacity", options.mouseover_opacity);
                     d3.select("#netSvg").select("[id='" + d.class + "']")
                         .style("stroke", "black")
@@ -398,8 +398,8 @@ var mapView = (function () {
         })
     }
 
-    function addHexagon(selection, projection) {
-        d3.json('data/drawData/asd.json', (error, hexagonData) => {
+    function addHexagon(selection, projection, clusterNumber) {
+        d3.json('data/drawData/matrixCluster_' + clusterNumber.toString() + '.json', (error, hexagonData) => {
             var hexLine = d3.line()
                 .x(function (d) {
                     return map.latLngToLayerPoint(d).x
@@ -420,10 +420,10 @@ var mapView = (function () {
                 .style("pointer-events", "auto")
                 .style("fill", function (d) {
 
-                    if (d.area == -1) {
+                    if (d.category == -1) {
                         d3.select(this).remove()
                     } else {
-                        return options.areaScale(d.area);
+                        return options.areaScale(d.category);
                     }
                     /* var thisArea = -1;
                     for (var i = 0; i < matchValue.length; i++) {
@@ -455,10 +455,10 @@ var mapView = (function () {
                 .style("stroke-width", 0.1)
                 .on("mouseover", d => {
                     odView.addLineInClass(d.category);
-                    selection.selectAll("[areaClass='" + d.area + "']")
+                    selection.selectAll("[id='" + d.category + "']")
                         .style("opacity", options.mouseover_opacity)
                         .style("stroke-width", 1)
-                    console.log('d.area: ', d.area);
+                    
                     /* if (d.category == 6) {
                         selection.selectAll("[id='" + d.category + "']")
                             .style("fill", "black")
@@ -467,12 +467,12 @@ var mapView = (function () {
                     }
                     selection.selectAll("[id='" + d.category + "']")
                         .style("fill", "black")
-                    console.log('d.category: ', d.category);
+                    
                 })
                 */
                 })
                 .on("mouseout", d => {
-                    selection.selectAll("[areaClass='" + d.area + "']")
+                    selection.selectAll("[id='" + d.category + "']")
                         .style("opacity", options.normal_opacity)
                         .style("stroke-width", 0.1)
 
@@ -519,12 +519,9 @@ var mapView = (function () {
             });
         });
     }
-
-
     return {
         pieView: pieViewForOneClass,
         showDiv: showDiv,
         hideDiv: hideDiv
     };
 })()
-

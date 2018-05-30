@@ -25,7 +25,7 @@ var odView = (function () {
         svg.selectAll(".lineG").remove();
         var controlPointYScale = d3.scaleLinear()
             .domain([0, width - margin.left - margin.right])
-            .range([margin.top - 15, -200])
+            .range([margin.top - 15, -margin.top])
         var lineG = svg.append("g")
             .attr("class", "lineG")
         d3.json('data/drawData/odIn.json', (error, data) => {
@@ -35,7 +35,6 @@ var odView = (function () {
                 //此时的source,target代表轴上的坐标,坐标原点是左上角（0,0）
                 let diffLength = target - source;
                 let controlPointY = controlPointYScale(diffLength);
-
                 let path = d3.path();
                 path.moveTo(source, margin.top);
                 path.quadraticCurveTo(((source + target) / 2), controlPointY, target, margin.top);
@@ -44,7 +43,6 @@ var odView = (function () {
                     .attr("stroke", "black")
                     .attr("fill", "none")
             }
-
         })
     }
     return {

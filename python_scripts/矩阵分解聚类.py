@@ -110,9 +110,9 @@ for path in pathdir:
                 matrix[position][hour]+=1
 
 
-nCom=18
-firstSecNCom=6
-secondSecNcom=12
+nCom=7
+firstSecNCom=4
+secondSecNcom=3
 X = np.array(matrix)
 model = NMF(n_components=nCom, init='random', random_state=0)
 W = model.fit_transform(X)
@@ -213,7 +213,7 @@ for i in range(len(maxValueList)):
             print(normalCommunity)
         hexagonList[index]['category']=normalCommunity
         
-with open('D:/Texi/myapp/public/data/drawData/asd.json','w',encoding='utf-8') as f:
+with open('D:/Texi/myapp/public/data/drawData/matrixCluster_'+str(nCom)+'.json','w',encoding='utf-8') as f:
     writeStr=json.dumps(hexagonList)
     f.write(writeStr)
 """

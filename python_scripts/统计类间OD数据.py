@@ -20,7 +20,7 @@ import copy
 import decimal
 import numpy as np
 
-with open('D:/Texi/myapp/public/data/drawData/asd.json','r',encoding='utf-8') as f:
+with open('D:/Texi/myapp/public/data/drawData/matrixCluster_7.json','r',encoding='utf-8') as f:
     hexagonList=json.loads(f.read())
 
 
