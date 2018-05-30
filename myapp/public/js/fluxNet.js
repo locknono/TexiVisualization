@@ -32,7 +32,7 @@
         d.fy = null;
     }
 
-    d3.json("./data/drawData/netFlux.json", function (json) {
+    d3.json("./data/drawData/netFlux_7.json", function (json) {
         console.log('json: ', json);
 
         var valueRange = d3.extent(json.links, function (d) {

@@ -56,8 +56,6 @@ for j in range(maxRow+1):
     rowList=[]
     for i in hexagonList:
         if(i['row'] == j):
-            i['value']=0
-            i['kClass']=-1
             rowList.append(i)
     matrix.append(rowList)
 
@@ -69,7 +67,7 @@ os.chdir(fp)
 pathdir=os.listdir(fp)
 
 odData=[]
-for i in range(-1,classCount):
+for i in range(0,classCount-1):
     od={}
     od['class']=i
     od['od']=[]
@@ -95,6 +93,8 @@ for path in pathdir:
             track=[]
             for line in islice(reader,1, None):
                 track.append(line)
+                if len(track)>2:
+                    print('>')
                 if(len(track)==2):
                     source=track[0]
                     target=track[1]
@@ -105,18 +105,21 @@ for path in pathdir:
                     souceMinute=int(sourceTime.split('-')[2])
                     
                     sourceLng=float(source[1])
+                    
                     sourceLat=float(source[2])
                     
                     #status=int(line[3])
                     
                     sourceRow=int(round((top-sourceLat)/(1.5*sideLength)))
                     if(sourceRow<0 or sourceRow>=rowCount):
+                        track=[]
                         continue
                     if(sourceRow%2==0):
                         sourceCol=(round((sourceLng-left)/rowWidth))           
                     elif(sourceRow%2!=0):
                         sourceCol=(round((sourceLng-left-sideLength*math.cos((math.pi/180)*30))/rowWidth))
                     if(sourceCol<0 or sourceCol>=colCount):
+                        track=[]
                         continue
                     
                     sourceMinuteInOneDay=sourceHour*60+souceMinute
@@ -137,12 +140,14 @@ for path in pathdir:
                     
                     targetRow=int(round((top-targetLat)/(1.5*sideLength)))
                     if(targetRow<0 or targetRow>=rowCount):
+                        track=[]
                         continue
                     if(targetRow%2==0):
                         targetCol=(round((targetLng-left)/rowWidth))           
                     elif(targetRow%2!=0):
                         targetCol=(round((targetLng-left-sideLength*math.cos((math.pi/180)*30))/rowWidth))
                     if(targetCol<0 or targetCol>=colCount):
+                        track=[]
                         continue
                     
                     targetMinuteInOneDay=targetHour*60+souceMinute
@@ -153,9 +158,20 @@ for path in pathdir:
                     
                     if sourceClassId == targetClassId:
                         if sourceMinuteInOneDay>=targetMinuteInOneDay:
+                            track=[]
                             continue
+                        if sourceClassId==-1:
+                            print(track)
                         odData[sourceClassId]['od'].append([sourceMinuteInOneDay,targetMinuteInOneDay])
-                        
+                    track=[]
+for i in odData:
+    a=set()
+    for od in i['od']:
+        a.add(tuple(od))
+    b=[]
+    for each in a:
+        b.append(list(each))
+    i['od']=b
 with open('D:/Texi/myapp/public/data/drawData/odIn.json','w',encoding='utf-8') as f:
     writeStr=json.dumps(odData)
     f.write(writeStr)

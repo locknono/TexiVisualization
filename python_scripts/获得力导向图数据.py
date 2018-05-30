@@ -17,9 +17,14 @@ top = 22.80550
 bottom = 22.454
 left = 113.75643
 right = 114.65191
-sideLength=(right-left)/350
+
+sideLength=(right-left)/150
+
 rowWidth=2*sideLength*math.cos((math.pi/180)*30)
+
+#colCount代表列数
 colCount=int((right-left)/rowWidth)
+
 rowCount=int(((top-bottom)/(3*sideLength))*2)
 
 
@@ -27,7 +32,7 @@ fp = 'D:/Texi/myapp/public/data/sevenDayData'
 os.chdir(fp)
 
 
-with open('D:/Texi/myapp/public/data/drawData/valueHexagon2.0_215.json','r',encoding='utf-8') as f:
+with open('D:/Texi/myapp/public/data/drawData/matrixCluster_7.json','r',encoding='utf-8') as f:
     classList=json.loads(f.read())
 
 #matrix for all hexagon
@@ -42,7 +47,7 @@ for j in range(maxRow+1):
 
 nodes=[]
 numberList=[]
-with open('D:/Texi/myapp/public/data/drawData/valueHexagon2.0_215.json','r',encoding='utf-8') as f:
+with open('D:/Texi/myapp/public/data/drawData/matrixCluster_7.json','r',encoding='utf-8') as f:
     hexagonList=json.loads(f.read())
     categoryList=[]
     for i in range(len(hexagonList)):
@@ -64,7 +69,6 @@ with open('D:/Texi/myapp/public/data/drawData/valueHexagon2.0_215.json','r',enco
 
 pathdir=os.listdir(fp)
 
-fileCount=0
 links=[]
 
 statusDict={}
@@ -72,37 +76,40 @@ for path in pathdir:
     newdir = os.path.join(fp,path) # 将文件名加入到当前文件路径后面
     if os.path.isfile(newdir):     #如果是文件
         with open (newdir,'r',encoding='utf-8') as f:
-            fileCount+=1
-            print(fileCount)
             reader=csv.reader(f)
             tmp=0
+            nextPass=False
             for line in islice(reader, 1, None): 
-                status=float(line[4])
+                status=int(line[3])
                 #statusDict[status]=0
-                if(status!=0 and status!=1):
-                    continue
+                
+                #两两读，如果有其中一个不满足条件，那就两条都跳过
+                
                 #从空载到打表，上车了 
                 if ((tmp==0) and (status==1)):
-                    sourceLat=float(line[3])
-                    sourceLng=float(line[2])
+                    sourceLat=float(line[2])
+                    sourceLng=float(line[1])
                     row=int((top-sourceLat)/(1.5*sideLength))
                     if(row<0):
+                        nextPass=True
                         continue
                     if(row%2==0):
                         col=int((sourceLng-left)/rowWidth)
                     else:
                         col=int((sourceLng-left-sideLength*math.cos((math.pi/180)*30))/rowWidth)
                     if(col<0):
+                        nextPass=True
                         continue
                     if(row>rowCount or col>colCount):
+                        nextPass=True
                         continue
                     sourceClass=matrix[row][col]['category']
                     tmp=1
                     continue
                 #下车
-                elif ((tmp==1) and (status==0)):
-                    targetLat=float(line[3])
-                    targetLng=float(line[2])
+                elif ((tmp==1) and (status==0) and nextPass==False):
+                    targetLat=float(line[2])
+                    targetLng=float(line[1])
                     row=int((top-targetLat)/(1.5*sideLength))
                     if(row<0):
                         continue
@@ -136,7 +143,12 @@ for path in pathdir:
                     
         
 
-
+with open('D:/Texi/myapp/public/data/drawData/netFlux_7.json','w',encoding='utf-8') as f:
+    write={}
+    write['nodes']=nodes
+    write['links']=links
+    writeStr=json.dumps(write)
+    f.write(writeStr)
                 
                 
                     
