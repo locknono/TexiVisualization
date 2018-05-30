@@ -23,7 +23,7 @@ colCount=int((right-left)/rowWidth)
 rowCount=int(((top-bottom)/(3*sideLength))*2)
 
 
-fp = 'D:/Texi/myapp/public/data/originalData/processedData'
+fp = 'D:/Texi/myapp/public/data/sevenDayData'
 os.chdir(fp)
 
 
