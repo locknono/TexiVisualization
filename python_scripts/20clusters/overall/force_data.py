@@ -118,6 +118,7 @@ for path in pathdir:
                     sourceClassId=matrix[sourceRow][sourceCol]['category']
                     
                     targetTime=target[0]
+                    
                     targetDay=int(targetTime.split('-')[0])
                     targetHour=int(targetTime.split('-')[1])
                     souceMinute=int(targetTime.split('-')[2])

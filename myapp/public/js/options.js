@@ -1,24 +1,30 @@
 var options = (function () {
     var clusterNumber = d3.select("#container-main").attr("clusterNumber");
-    var status=d3.select("#container-main").attr("status");
-    var rootPath = 'data/drawData/' + clusterNumber.toString()+'/'+status+'/';
+    var status = d3.select("#container-main").attr("status");
+    var rootPath = 'data/drawData/' + clusterNumber.toString() + '/' + status + '/';
     var areaScale = d3.scaleOrdinal().domain([])
-        .range(['#999999','#377eb8','D7EFA1','#4daf4a','#984ea3','#ff7f00','#ffff33','#a65628','#f781bf','#8400E8','#e41a1c'])
-    var svg=d3.select("#headingSvg");
+        .range(['#999999', '#377eb8', 'D7EFA1', '#4daf4a', '#984ea3', '#ff7f00', '#ffff33', '#a65628', '#f781bf', '#8400E8', '#e41a1c'])
+    var svg = d3.select("#headingSvg");
     var width = parseFloat(svg.style("width").split('px')[0]),
         height = parseFloat(svg.style("height").split('px')[0]);
-    for(var i =0;i<clusterNumber;i++){
+    for (var i = 0; i < clusterNumber; i++) {
         svg.append("circle")
-        .attr("cx",width-13-26*i)
-        .attr("cy",height/2)
-        .attr("r",10)
-        .style("fill",areaScale(i))
+            .attr("cx", width - 13 - 26 * i)
+            .attr("cy", height / 2)
+            .attr("r", 10)
+            .style("fill", areaScale(i))
     }
     var classScale = d3.scale.category20();
+    $(function () {
+        $("input").checkboxradio();
+    });
+    if ($('#ratio-1').is(':checked')) {
+        $('#ratio-1').prop('checked',true);
+    }
     return {
         rootPath: rootPath,
         clusterNumber: clusterNumber,
-        status:status,
+        status: status,
         normal_opacity: 0.5,
         mouseover_opacity: 0.75,
         suspending_outer_color: "#D6BD3E",

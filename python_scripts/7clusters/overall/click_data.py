@@ -121,21 +121,21 @@ for path in pathdir:
                 
                 lng=float(line[1])
                 lat=float(line[2])
-                
-                row=int((top-lat)/(1.5*sideLength))
+                        
+                row=int(round((top-lat)/(1.5*sideLength)))
                 if(row<0 or row>rowCount):
                     continue
                 if(row%2==0):
-                    col=int((lng-left)/rowWidth)
+                    col=(round((lng-left)/rowWidth))           
                 else:
-                    col=int((lng-left-sideLength*math.cos((math.pi/180)*30))/rowWidth)
+                    col=(round((lng-left-sideLength*math.cos((math.pi/180)*30))/rowWidth))
                 if(col<0 or col>colCount):
                     continue
                 
                 thisClass=matrix[row][col]['category']
                 
                 if thisClass<0:
-                    continue
+                    print('a')
                 if status ==1:
                     clickData[thisClass]['con'][hour]+=1
                     hexagonClickData[row][col]['con'][hour]+=1

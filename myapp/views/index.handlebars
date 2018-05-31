@@ -1,7 +1,7 @@
 <div id='heading' class='panel panel-default'>
     <svg id='headingSvg'></svg>
     <span class='headingText'>Visual Exploration of Urban Functions</span>
-    <div id='chooseClusterNumber'class="btn-group">
+    <div id='chooseClusterNumber' class="btn-group">
         <button type="button" class="btn btn-default">Choose clusters</button>
         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <span class="caret"></span>
@@ -22,6 +22,15 @@
             </li>
         </ul>
     </div>
+    <div id='chooseStatus'>
+        <label for="radio-1">All</label>
+        <input type="radio" name="radio-1" id="radio-1">
+        <label for="radio-2">On</label>
+        <input type="radio" name="radio-2" id="radio-2">
+        <label for="radio-3">Off</label>
+        <input type="radio" name="radio-3" id="radio-3">
+    </div>
+
 </div>
 <div id='container-main' class="panel panel-default" clusterNumber={{clusterNumber}} status={{status}}>
     <div id='fluxNet' class='panel panel-default'>
