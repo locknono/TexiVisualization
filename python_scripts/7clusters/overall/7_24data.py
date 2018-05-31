@@ -12,7 +12,8 @@ import json
 import math
 import pandas as pd
 import numpy as np
-with open('D:/Texi/myapp/public/data/drawData/matrixCluster_7.json','r',encoding='utf-8') as f:
+import rootPath
+with open(rootPath.rootPath+'matrixCluster.json','r',encoding='utf-8') as f:
     hexagonList=json.loads(f.read())
 
 
@@ -118,10 +119,10 @@ for i in classPieData:
     i['max']=int(maxFlux)
 
                 
-with open('D:/Texi/myapp/public/data/drawData/pieData.json','w',encoding='utf-8') as f:
+with open(rootPath.rootPath+'pieData.json','w',encoding='utf-8') as f:
     writeStr=json.dumps(pieData)
     f.write(writeStr)
-with open('D:/Texi/myapp/public/data/drawData/classPieData.json','w',encoding='utf-8') as f:
+with open(rootPath.rootPath+'classPieData.json','w',encoding='utf-8') as f:
     writeStr=json.dumps(classPieData)
     f.write(writeStr)
                 

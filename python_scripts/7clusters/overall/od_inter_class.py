@@ -19,7 +19,7 @@ from sklearn.datasets import make_blobs
 import copy
 import decimal
 import numpy as np
-
+import rootPath
 with open('D:/Texi/myapp/public/data/drawData/matrixCluster_7.json','r',encoding='utf-8') as f:
     hexagonList=json.loads(f.read())
 

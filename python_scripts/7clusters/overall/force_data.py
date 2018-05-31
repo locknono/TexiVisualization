@@ -11,7 +11,7 @@ import csv
 from itertools import islice  
 import math
 import pandas as pd
-
+import rootPath
 
 top = 22.80550
 bottom = 22.454

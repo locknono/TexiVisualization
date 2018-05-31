@@ -34,7 +34,7 @@ import copy
 import numpy as np
 from sklearn.decomposition import NMF
 from sklearn.cluster import KMeans
-
+import rootPath
 
 
 top = 22.80550
@@ -42,6 +42,7 @@ bottom = 22.454
 left = 113.75643
 right = 114.65191
 
+print(rootPath.rootPath)
 sideLength=(right-left)/150
 
 rowWidth=2*sideLength*math.cos((math.pi/180)*30)
@@ -56,7 +57,7 @@ os.chdir(fp)
 
 pathdir=os.listdir(fp)
 
-with open('D:/Texi/myapp/public/data/drawData/hexagon.json','r',encoding='utf-8') as f:
+with open(rootPath.rootPath+'hexagon.json','r',encoding='utf-8') as f:
     hexagonList=json.loads(f.read())
     
 matrix=[]
@@ -213,7 +214,7 @@ for i in range(len(maxValueList)):
             print(normalCommunity)
         hexagonList[index]['category']=normalCommunity
         
-with open('D:/Texi/myapp/public/data/drawData/matrixCluster_'+str(nCom)+'.json','w',encoding='utf-8') as f:
+with open(rootPath.rootPath+'matrixCluster.json','w',encoding='utf-8') as f:
     writeStr=json.dumps(hexagonList)
     f.write(writeStr)
 """
