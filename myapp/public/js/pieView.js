@@ -34,7 +34,7 @@ var pieView = (function () {
             .selectAll(".path").remove();
         flInfoG.selectAll(".valueText").remove();
 
-        d3.json('./data/drawData/classPieData.json', function (classPieData) {
+        d3.json(options.rootPath+'classPieData.json', function (classPieData) {
             var volumeData = classPieData[classId].pieData;
 
             var minFlux = classPieData[classId].min;
@@ -105,7 +105,7 @@ var pieView = (function () {
                 })
         })
     }
-    d3.json('./data/drawData/pieData.json', function (volumeData) {
+    d3.json(options.rootPath+'pieData.json', function (volumeData) {
         var minFlux = d3.min(volumeData, function (d) {
             return d3.min(d);
         })

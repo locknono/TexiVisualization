@@ -124,7 +124,7 @@ var odView = (function () {
 
     function getOdInData() {
         return new Promise(function (resolve, reject) {
-            d3.json('data/drawData/odIn.json', (error, data) => {
+            d3.json(options.rootPath+'odIn.json', (error, data) => {
                 resolve(data);
             })
         })
@@ -139,7 +139,7 @@ var odView = (function () {
             .range([margin.top - 15, -margin.top])
         var lineG = svg.append("g")
             .attr("class", "lineG")
-        d3.json('data/drawData/odIn.json', (error, data) => {
+        d3.json(options.rootPath+'odIn.json', (error, data) => {
             for (var j = 0; j < data[classId].od.length; j++) {
                 let source = axisXSacle(data[classId].od[j][0]),
                     target = axisXSacle(data[classId].od[j][1]);

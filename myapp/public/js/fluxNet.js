@@ -38,9 +38,9 @@
         d.fy = null;
     }
 
-    d3.json("./data/drawData/netFlux_7.json", function (json) {
-        d3.json("data/drawData/odInter.json", function (data) {
-            d3.json('data/drawData/odIn.json', (error, odInData) => {
+    d3.json(options.rootPath+"netFlux.json", function (json) {
+        d3.json(options.rootPath+"odInter.json", function (data) {
+            d3.json(options.rootPath+'odIn.json', (error, odInData) => {
                 var valueRange = d3.extent(json.links, function (d) {
                     return d.value
                 })

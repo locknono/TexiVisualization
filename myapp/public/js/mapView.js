@@ -85,10 +85,8 @@ var mapView = (function () {
             .outerRadius(function (d) {
                 return d.outerRadius;
             });
-        d3.json('data/drawData/classClickData.json', function (classClickData) {
+        d3.json(options.rootPath + 'classClickData.json', function (classClickData) {
             getSuspendingData(row, col).then(function (suspedingData) {
-
-
                 svg.selectAll("path").remove();
                 svg.selectAll("circle").remove();
 
@@ -446,8 +444,8 @@ var mapView = (function () {
     var curClass = -1;
 
     function addHexagon(selection, projection, clusterNumber) {
-        d3.json('data/drawData/matrixCluster_' + clusterNumber.toString() + '.json', (error, hexagonData) => {
-            d3.json('data/drawData/odIn.json', (error, odInData) => {
+        d3.json(options.rootPath + 'matrixCluster.json', (error, hexagonData) => {
+            d3.json(options.rootPath + 'odIn.json', (error, odInData) => {
                 var hexLine = d3.line()
                     .x(function (d) {
                         return map.latLngToLayerPoint(d).x
@@ -583,7 +581,8 @@ var mapView = (function () {
                 url: "/showSuspending",
                 data: {
                     row: row,
-                    col: col
+                    col: col,
+                    clusterNumber: options.clusterNumber
                 },
                 success: function (data) {
                     resolve(data[0]);

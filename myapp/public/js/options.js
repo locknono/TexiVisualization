@@ -1,10 +1,11 @@
-var options = (function () {
-    var rootPath = 'data/drawData/'
+var options = (function (classNumber) {
+    var rootPath = 'data/drawData/'+classNumber.toString()+'/';
     var areaScale = d3.scaleOrdinal().domain([])
         .range(['#B8DDEF', '#1f78b4', '#b2df8a', '#ffff33', '#33a02c', '#fb9a99', '#e31a1c', '#fdbf6f', '#ff7f00', '#cab2d6', '#6a3d9a', '#ffff99', '#b15928'])
     var classScale = d3.scale.category20();
     return {
         rootPath:rootPath,
+        clusterNumber:classNumber,
         normal_opacity: 1,
         mouseover_opacity: 1,
         suspending_outer_color: "#D6BD3E",
@@ -16,4 +17,4 @@ var options = (function () {
         odLineOpacity: 0.5,
         odLineColor: '0x00D3FF',
     }
-}())
+}(7))
