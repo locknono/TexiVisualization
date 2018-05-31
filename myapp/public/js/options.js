@@ -11,5 +11,6 @@ var options = (function () {
         pieview_colorscale: d3.interpolateYlGnBu,
         areaScale: areaScale,
         classScale: classScale,
+        forceLineColor:'#C2D2D3',
     }
 }())

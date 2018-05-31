@@ -172,6 +172,23 @@ for i in odData:
     for each in a:
         b.append(list(each))
     i['od']=b
+
+for i in odData:
+    print(len(i['od']))
+    if len(i['od'])>3000:
+        for j in range(len(i['od'])-1,-1,-1):
+            if j%2==1:
+                i['od'].pop(j)
+        for j in range(len(i['od'])-1,-1,-1):
+            if j%2==1:
+                i['od'].pop(j)
+        for j in range(len(i['od'])-1,-1,-1):
+            if j%2==1:
+                i['od'].pop(j)
+for i in odData:
+    print(len(i['od']))
+        
+
 with open('D:/Texi/myapp/public/data/drawData/odIn.json','w',encoding='utf-8') as f:
     writeStr=json.dumps(odData)
     f.write(writeStr)

@@ -161,12 +161,25 @@ for path in pathdir:
                     
                     if sourceClassId != targetClassId:
                         if sourceMinuteInOneDay>=targetMinuteInOneDay:
+                            track=[]
                             continue
                         for od in odData:
                             if od['direc'] ==(sourceClassId,targetClassId):
                                 od['od'].append([sourceMinuteInOneDay,targetMinuteInOneDay])
                                 od['count']+=1
-                                
+                    track=[]
+                    
+for i in odData:
+    a=set()
+    for od in i['od']:
+        a.add(tuple(od))
+    b=[]
+    for each in a:
+        b.append(list(each))
+    i['od']=b
+    i['count']=len(i['od'])
+for i in odData:
+    print(i['count'],len(i['od']))
 with open('D:/Texi/myapp/public/data/drawData/odInter.json','w',encoding='utf-8') as f:
     writeStr=json.dumps(odData)
     f.write(writeStr)
