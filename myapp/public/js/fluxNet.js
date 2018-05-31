@@ -66,7 +66,6 @@
                     .style("stroke-linecap", "round")
                     .attr("class", "link")
                     .on("click", function (d) {
-                        console.log('d: ', d);
                         let source = d.source.class;
                         let target = d.target.class;
                         odView.addLineInterClass(source, target, data)

@@ -91,8 +91,8 @@ var mapView = (function () {
                 svg.selectAll("circle").remove();
 
                 var thisClassMaxOn = d3.max(classClickData[classId].con);
-                
-                
+
+
 
                 var thisClassMaxOff = d3.max(classClickData[classId].off);
                 /* 
@@ -505,6 +505,8 @@ var mapView = (function () {
                             hideDiv();
                         } else if (curClass != d.category && curClass != -1) {
                             selection.selectAll("[id='" + curClass + "']")
+                                .style("opacity", options.normal_opacity)
+                            selection.selectAll("[id='" + curClass + "']")
                                 .style("stroke-width", 0.1)
                             d3.select("#netSvg").select("[id='" + curClass + "']")
                                 .style("stroke", "none")
@@ -522,11 +524,15 @@ var mapView = (function () {
                         }
                     })
                     .on("mouseover", function (d) {
-                        d3.select(this).style("stroke-width", 1);
+                        
+                            d3.select(this).style("stroke-width", 1);
+                        
                         suspedingViewForOneHexagon(d.row, d.col, d.category);
                     })
                     .on("mouseout", function (d) {
-                        d3.select(this).style("stroke-width", 0.1);
+                        if(curClass!=d.category){
+                            d3.select(this).style("stroke-width", 0.1);
+                        }
                         hideDiv();
                     })
                 /* if (d.category == 6) {
@@ -583,8 +589,8 @@ var mapView = (function () {
                     row: row,
                     col: col,
                     clusterNumber: options.clusterNumber,
-                    status:options.status,
-                    
+                    status: options.status,
+
                 },
                 success: function (data) {
                     resolve(data[0]);
