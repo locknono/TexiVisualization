@@ -140,15 +140,15 @@ for path in pathdir:
                         continue
                     
                     targetMinuteInOneDay=targetHour*60+souceMinute
-                    
-                    
+                                 
                     targetClassId=matrix[targetRow][targetCol]['category']
-                    
-                    
-                    
+                                       
                     #如果links之中没有这条轨迹，就把这条轨迹加入links中，赋值value为0
                     #如果links之中已经有了这条轨迹，那么links中这条轨迹的value+=1
                     
+                    if sourceClassId == -1 or targetClassId ==-1:
+                        track=[]
+                        continue
                     exist=False
                     for each in links:
                         if each['source']==sourceClassId and each['target']==targetClassId:

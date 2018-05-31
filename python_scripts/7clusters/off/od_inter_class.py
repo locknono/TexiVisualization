@@ -178,8 +178,6 @@ for i in odData:
         b.append(list(each))
     i['od']=b
     i['count']=len(i['od'])
-for i in odData:
-    print(i['count'],len(i['od']))
 with open(rootPath.rootPath+'odInter.json','w',encoding='utf-8') as f:
     writeStr=json.dumps(odData)
     f.write(writeStr)

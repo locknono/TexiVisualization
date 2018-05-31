@@ -106,10 +106,10 @@ for path in pathdir:
                 if(col<0 or col>=colCount):
                     continue
                 
-                """
-                if status !=1:
+                
+                if status !=0:
                     continue
-                """ 
+                
                 position = (col*rowCount)+row
                 hexagonList[position]['value']+=1
                 hour=(day-18)*24+hour

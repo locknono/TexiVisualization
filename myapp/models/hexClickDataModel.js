@@ -5,6 +5,7 @@ const Schema = mongoose.Schema,
 const hexClickDataSchema = new Schema({
     row: Number,
     col: Number,
+    n:Number,
     con: [Number],
     off: [Number]
 }, {

@@ -582,7 +582,9 @@ var mapView = (function () {
                 data: {
                     row: row,
                     col: col,
-                    clusterNumber: options.clusterNumber
+                    clusterNumber: options.clusterNumber,
+                    status:options.status,
+                    
                 },
                 success: function (data) {
                     resolve(data[0]);

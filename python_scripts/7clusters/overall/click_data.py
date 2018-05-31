@@ -42,6 +42,7 @@ fileCount=0
 with open(rootPath.rootPath+'matrixCluster.json','r',encoding='utf-8') as f:
     classList=json.loads(f.read())
 
+classNumber=rootPath.rootPath.split('/')[-3]
 #matrix for all hexagon
 matrix=[]
 maxRow=classList[len(classList)-1]['row']
@@ -59,7 +60,7 @@ for index,i in enumerate(matrix):
         thisHex={}
         thisHex['row']=j['row']
         thisHex['col']=j['col']
-        thisHex['class']=j['category']
+        thisHex['n']=int(classNumber)
         thisHex['con']=[]
         thisHex['off']=[]
         for j in range(24):
@@ -107,11 +108,8 @@ for path in pathdir:
             print(fileCount)
             """
             reader=csv.reader(f)
-            tmp=0
             for line in islice(reader, 1, None):
-                
                 status=int(line[3])
-                
                 time=line[0]
                 #day:from 18 to 24
                 day = int(time.split('-')[0])

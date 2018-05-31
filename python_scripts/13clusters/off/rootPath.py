@@ -1,0 +1,1 @@
+rootPath='D:/Texi/myapp/public/data/drawData/7/0/'

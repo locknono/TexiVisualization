@@ -12,10 +12,10 @@
             .distance(function (d) {
                 console.log('d.value: ', d.value);
                 return 200 - Math.pow(1.38, d.value);
-                
+
             })
         )
-        .force("charge", d3.forceManyBody().strength(-2500).distanceMin(0).distanceMax(600))
+        .force("charge", d3.forceManyBody().strength(-2500).distanceMin(0).distanceMax(280))
         .alphaTarget(0.05)
         .force("center", d3.forceCenter(width / 2, height / 2))
         .force("y", d3.forceY(0.001))
@@ -38,15 +38,15 @@
         d.fy = null;
     }
 
-    d3.json(options.rootPath+"netFlux.json", function (json) {
-        d3.json(options.rootPath+"odInter.json", function (data) {
-            d3.json(options.rootPath+'odIn.json', (error, odInData) => {
+    d3.json(options.rootPath + "netFlux.json", function (json) {
+        d3.json(options.rootPath + "odInter.json", function (data) {
+            d3.json(options.rootPath + 'odIn.json', (error, odInData) => {
                 var valueRange = d3.extent(json.links, function (d) {
                     return d.value
                 })
                 console.log('valueRange: ', valueRange);
                 var strokeScale = d3.scaleLinear()
-                    .domain([valueRange[0]+3.5,valueRange[1]])
+                    .domain([valueRange[0] + 3.5, valueRange[1]])
                     .range([2, 20])
 
                 force
@@ -60,8 +60,8 @@
                     .attr("stroke", options.forceLineColor)
                     .attr("stroke-width", function (d) {
                         return strokeScale(d.value)
-
                     })
+                    .style("opacity",0.5)
                     .style("cursor", "crosshair")
                     .style("stroke-linecap", "round")
                     .attr("class", "link")
@@ -101,12 +101,13 @@
                         return d.class
                     })
                     .on("mouseover", function (d) {
-                        
+                        d3.select(this).style("stroke", "black").style("stroke-width", 2)
                         odView.addLineInClass(d.class, odInData);
                         pieView.pieViewInClass(d.class);
                         d3.select("#map").selectAll("[id='" + d.class + "']").style("stroke-width", 1);
                     })
                     .on("mouseout", function (d) {
+                        d3.select(this).style("stroke", "none")
                         //d3.select("#map").selectAll("[id='" + d.class + "']").style("opacity", options.normal_opacity);
                         d3.select("#map").selectAll("[id='" + d.class + "']").style("stroke-width", 0.1);
                         mapView.hideDiv();

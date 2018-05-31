@@ -31,6 +31,7 @@ colCount=int((right-left)/rowWidth)
 
 rowCount=int(((top-bottom)/(3*sideLength))*2)
 
+classNumber=rootPath.rootPath.split('/')[-3]
 
 fp = 'D:/Texi/myapp/public/data/sevenDayData'
 os.chdir(fp)
@@ -59,7 +60,7 @@ for index,i in enumerate(matrix):
         thisHex={}
         thisHex['row']=j['row']
         thisHex['col']=j['col']
-        thisHex['class']=j['category']
+        thisHex['n']=int(classNumber)
         thisHex['con']=[]
         thisHex['off']=[]
         for j in range(24):

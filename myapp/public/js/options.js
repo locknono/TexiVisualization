@@ -8,6 +8,7 @@ var options = (function () {
     return {
         rootPath: rootPath,
         clusterNumber: clusterNumber,
+        status:status,
         normal_opacity: 1,
         mouseover_opacity: 1,
         suspending_outer_color: "#D6BD3E",
