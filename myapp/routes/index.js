@@ -21,7 +21,7 @@ router.get('/showBorderLine', function (req, res) {
   });
 });
 
-router.get('/showSuspending', function (req, res) {
+router.get('/(:clusterNumber)?/showSuspending', function (req, res) {
   let row = req.query.row;
   let col = req.query.col;
   let clusterNumber = req.query.clusterNumber;
@@ -29,8 +29,9 @@ router.get('/showSuspending', function (req, res) {
     row: row,
     col: col
   }, function (err, data) {
-    if (err) console.log(err);
-    else {
+    if (err) {
+      console.log(err);
+    } else {
       res.json(data);
     }
   });

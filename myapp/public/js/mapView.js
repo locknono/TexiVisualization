@@ -91,8 +91,8 @@ var mapView = (function () {
                 svg.selectAll("circle").remove();
 
                 var thisClassMaxOn = d3.max(classClickData[classId].con);
-                console.log('classId: ', classId);
-                console.log('thisClassMaxOn: ', thisClassMaxOn);
+                
+                
 
                 var thisClassMaxOff = d3.max(classClickData[classId].off);
                 /* 
@@ -578,7 +578,7 @@ var mapView = (function () {
         return new Promise(function (resolve, reject) {
             $.ajax({
                 type: "get",
-                url: "/showSuspending",
+                url: "/" + options.clusterNumber.toString() + "/showSuspending",
                 data: {
                     row: row,
                     col: col,
