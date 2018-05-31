@@ -64,7 +64,7 @@ var mapView = (function () {
             .style("top", "-200px");
     }
 
-    function suspedingViewForOneHexagon(row, col) {
+    function suspedingViewForOneHexagon(row, col, classId) {
         showDiv();
         var svg = d3.select('#suspendingSvg');
         var width = parseFloat(svg.style("width").split('px')[0]),
@@ -85,86 +85,82 @@ var mapView = (function () {
             .outerRadius(function (d) {
                 return d.outerRadius;
             });
+        d3.json('data/drawData/classClickData.json', function (classClickData) {
+            getSuspendingData(row, col).then(function (suspedingData) {
+                console.log('suspedingData: ', suspedingData);
+                console.log('classClickData: ', classClickData);
+                svg.selectAll("path").remove();
+                svg.selectAll("circle").remove();
 
-        getSuspendingData(row, col).then(function (suspedingData) {
-            console.log('suspedingData: ', suspedingData);
-            svg.selectAll("path").remove();
-            svg.selectAll("circle").remove();
+                var thisClassMaxOn = d3.max(classClickData[classId].con);
+                var thisClassMaxOff = d3.max(classClickData[classId].off);
 
+                var thisClassMaxOn = d3.max(suspedingData.con);
+                var thisClassMaxOff = d3.max(suspedingData.off);
 
-            var thisClassMaxWorkOn = d3.max(suspedingData.workOn);
-            var thisClassMaxWorkOff = d3.max(suspedingData.workOff);
-            var thisClassMaxEndOn = d3.max(suspedingData.endOn);
-            var thisClassMaxEndOff = d3.max(suspedingData.endOff);
+                var circleRadius = 50;
 
+                var onScale = d3.scaleLinear()
+                    .domain([0, thisClassMaxOn])
+                    .range([0, tierRadius]);
+                var offScale = d3.scaleLinear()
+                    .domain([0, thisClassMaxOff])
+                    .range([0, -tierRadius]);
 
-            var thisClassMaxOn = d3.max([thisClassMaxWorkOn, thisClassMaxEndOn]);
-            var thisClassMaxOff = d3.max([thisClassMaxWorkOff, thisClassMaxEndOff]);
+                var arcArray = [];
 
+                for (var i = 0; i < suspedingData.con.length; i++) {
+                    var thisArc = new Object();
+                    thisArc.value = suspedingData.con[i];
+                    thisArc.startAngle = 2 * Math.PI / 24 * i;
+                    thisArc.endAngle = 2 * Math.PI / 24 * (i + 1);
+                    thisArc.innerRadius = circleRadius;
+                    thisArc.outerRadius = circleRadius + onScale(suspedingData.con[i]);
+                    arcArray.push(thisArc);
+                }
 
-            var circleRadius = 50;
+                var flArcsG = svg.append("g").attr("class", "arcG")
+                    .attr("transform", "translate(" + (width / 2) + ',' + (height / 2) + ')');
 
-            var onScale = d3.scaleLinear()
-                .domain([0, thisClassMaxOn])
-                .range([0, tierRadius]);
-            var offScale = d3.scaleLinear()
-                .domain([0, thisClassMaxOff])
-                .range([0, -tierRadius]);
+                var fl = flArcsG
+                    .selectAll(".path")
+                    .data(arcArray)
+                    .enter()
+                    .append("path")
+                    .attr("d", arc)
+                    .style("stroke", "black")
+                    .style("stroke-width", "0.2px")
+                    .style("fill", function (d) {
+                        return options.suspending_outer_color;
+                    })
 
-            var arcArray = [];
+                arcArray = [];
+                for (var i = 0; i < suspedingData.off.length; i++) {
+                    var thisArc = new Object();
+                    thisArc.value = suspedingData.off[i];
+                    thisArc.startAngle = 2 * Math.PI / 24 * i;
+                    thisArc.endAngle = 2 * Math.PI / 24 * (i + 1);
+                    thisArc.innerRadius = circleRadius;
+                    thisArc.outerRadius = circleRadius + offScale(suspedingData.off[i]);
+                    arcArray.push(thisArc);
+                }
 
-            for (var i = 0; i < suspedingData.workOn.length; i++) {
+                var flArcsG = svg.append("g").attr("class", "arcG")
+                    .attr("transform", "translate(" + (width / 2) + ',' + (height / 2) + ')');
 
-                var thisArc = new Object();
-                thisArc.value = suspedingData.workOn[i];
-                thisArc.startAngle = 2 * Math.PI / 24 * i;
-                thisArc.endAngle = 2 * Math.PI / 24 * (i + 1);
-                thisArc.innerRadius = circleRadius;
-                thisArc.outerRadius = circleRadius + onScale(suspedingData.workOn[i]);
-                arcArray.push(thisArc);
-            }
-
-            var flArcsG = svg.append("g").attr("class", "arcG")
-                .attr("transform", "translate(" + (width / 2) + ',' + (height / 2) + ')');
-
-            var fl = flArcsG
-                .selectAll(".path")
-                .data(arcArray)
-                .enter()
-                .append("path")
-                .attr("d", arc)
-                .style("stroke", "black")
-                .style("stroke-width", "0.2px")
-                .style("fill", function (d) {
-                    return options.suspending_outer_color;
-                })
-
-            arcArray = [];
-            for (var i = 0; i < suspedingData.workOff.length; i++) {
-                var thisArc = new Object();
-                thisArc.value = suspedingData.workOff[i];
-                thisArc.startAngle = 2 * Math.PI / 24 * i;
-                thisArc.endAngle = 2 * Math.PI / 24 * (i + 1);
-                thisArc.innerRadius = circleRadius;
-                thisArc.outerRadius = circleRadius + offScale(suspedingData.workOff[i]);
-                arcArray.push(thisArc);
-            }
-
-            var flArcsG = svg.append("g").attr("class", "arcG")
-                .attr("transform", "translate(" + (width / 2) + ',' + (height / 2) + ')');
-
-            var fl = flArcsG
-                .selectAll(".path")
-                .data(arcArray)
-                .enter()
-                .append("path")
-                .attr("d", arc)
-                .style("stroke", "black")
-                .style("stroke-width", "0.2px")
-                .style("fill", function (d) {
-                    return options.suspending_inner_color;
-                })
-        });
+                var fl = flArcsG
+                    .selectAll(".path")
+                    .data(arcArray)
+                    .enter()
+                    .append("path")
+                    .attr("d", arc)
+                    .style("stroke", "black")
+                    .style("stroke-width", "0.2px")
+                    .style("fill", function (d) {
+                        return options.suspending_inner_color;
+                    })
+            });
+        })
 
 
         /*    d3.json('data/drawData/clickData.json', function (clickData) {
@@ -352,8 +348,6 @@ var mapView = (function () {
                 classDomain.push(i)
             }
             options.classScale.domain(classDomain);
-
-
             selection.append("g")
                 .selectAll("path")
                 .data(borderData)
@@ -371,14 +365,12 @@ var mapView = (function () {
                     return options.classScale(d.class);
                 })
                 .on("mouseover", function (d) {
-
                     odView.addLineInClass(d.category);
                     d3.select(this).style("opacity", options.mouseover_opacity);
                     d3.select("#netSvg").select("[id='" + d.class + "']")
                         .style("stroke", "black")
                         .style("stroke-width", 2)
                     pieViewForOneClass(d.class);
-
                 })
                 .on("mouseout", function (d) {
                     d3.select(this).style("opacity", options.normal_opacity);
@@ -400,50 +392,50 @@ var mapView = (function () {
     function addHexagon(selection, projection, clusterNumber) {
         d3.json('data/drawData/matrixCluster_' + clusterNumber.toString() + '.json', (error, hexagonData) => {
             d3.json('data/drawData/odIn.json', (error, odInData) => {
-                    var hexLine = d3.line()
-                        .x(function (d) {
-                            return map.latLngToLayerPoint(d).x
-                        })
-                        .y(function (d) {
-                            return map.latLngToLayerPoint(d).y
-                        })
+                var hexLine = d3.line()
+                    .x(function (d) {
+                        return map.latLngToLayerPoint(d).x
+                    })
+                    .y(function (d) {
+                        return map.latLngToLayerPoint(d).y
+                    })
 
-                    selection.append("g")
-                        .selectAll("path")
-                        .data(hexagonData)
-                        .enter()
-                        .append("path")
-                        .attr("d", function (d) {
-                            return hexLine(d.path)
-                        })
-                        .attr("class", "hex")
-                        .style("pointer-events", "auto")
-                        .style("fill", function (d) {
+                selection.append("g")
+                    .selectAll("path")
+                    .data(hexagonData)
+                    .enter()
+                    .append("path")
+                    .attr("d", function (d) {
+                        return hexLine(d.path)
+                    })
+                    .attr("class", "hex")
+                    .style("pointer-events", "auto")
+                    .style("fill", function (d) {
 
-                            if (d.category == -1) {
-                                d3.select(this).remove()
-                            } else {
-                                return options.areaScale(d.category);
-                            }
-                        })
-                        .attr("id", function (d) {
-                            return d.category
-                        })
-                        .attr("areaClass", function (d) {
-                            return d.area
-                        })
-                        .style("cursor", "crosshair")
-                        .style("opacity", options.normal_opacity)
-                        .style("stroke", "black")
-                        .style("stroke-width", 0.1)
-                        .on("mouseover", d => {
-                            pieView.pieViewInClass(d.category);
-                            odView.addLineInClass(d.category, odInData);
-                            selection.selectAll("[id='" + d.category + "']")
-                                .style("opacity", options.mouseover_opacity)
-                                .style("stroke-width", 1)
-                            suspedingViewForOneHexagon(d.row, d.col);
-                        })
+                        if (d.category == -1) {
+                            d3.select(this).remove()
+                        } else {
+                            return options.areaScale(d.category);
+                        }
+                    })
+                    .attr("id", function (d) {
+                        return d.category
+                    })
+                    .attr("areaClass", function (d) {
+                        return d.area
+                    })
+                    .style("cursor", "crosshair")
+                    .style("opacity", options.normal_opacity)
+                    .style("stroke", "black")
+                    .style("stroke-width", 0.1)
+                    .on("mouseover", d => {
+                        pieView.pieViewInClass(d.category);
+                        odView.addLineInClass(d.category, odInData);
+                        selection.selectAll("[id='" + d.category + "']")
+                            .style("opacity", options.mouseover_opacity)
+                            .style("stroke-width", 1)
+                        suspedingViewForOneHexagon(d.row, d.col, d.category);
+                    })
                     /* if (d.category == 6) {
                         selection.selectAll("[id='" + d.category + "']")
                             .style("fill", "black")
@@ -455,13 +447,13 @@ var mapView = (function () {
                     
                 })
                 */
-                })
-                .on("mouseout", d => {
-                    selection.selectAll("[id='" + d.category + "']")
-                        .style("opacity", options.normal_opacity)
-                        .style("stroke-width", 0.1)
+                    .on("mouseout", d => {
+                        selection.selectAll("[id='" + d.category + "']")
+                            .style("opacity", options.normal_opacity)
+                            .style("stroke-width", 0.1)
 
-                })
+                    })
+            })
         })
     }
 
