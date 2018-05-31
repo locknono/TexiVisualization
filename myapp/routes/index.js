@@ -4,9 +4,13 @@ const borderLineModel = require('../models/borderLine')
 const suspendingDataModel = require('../models/suspendingData')
 const hexClickDataModel = require('../models/hexClickDataModel')
 /* GET home page. */
-router.get('/', function (req, res, next) {
-  res.render('index');
+router.get('/(:clusterNumber)?', function (req, res, next) {
+  let clusterNumber = req.params.clusterNumber
+  res.render('index', {
+    clusterNumber: clusterNumber
+  });
 });
+
 
 router.get('/showBorderLine', function (req, res) {
   borderLineModel.find({}, function (err, data) {
@@ -30,6 +34,7 @@ router.get('/showSuspending', function (req, res) {
       res.json(data);
     }
   });
+
 });
 
 
