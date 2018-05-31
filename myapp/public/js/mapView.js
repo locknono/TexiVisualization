@@ -61,7 +61,7 @@ var mapView = (function () {
     function hideDiv() {
         d3.select("#suspendingDiv").transition()
             .duration(1000)
-            .style("top", "-200px");
+            .style("top", "-500px");
     }
 
     function suspedingViewForOneHexagon(row, col, classId) {
@@ -507,7 +507,7 @@ var mapView = (function () {
                         selection.selectAll("[id='" + d.category + "']")
                             .style("opacity", options.normal_opacity)
                             .style("stroke-width", 0.1)
-
+                        hideDiv();
                     })
             })
         })
