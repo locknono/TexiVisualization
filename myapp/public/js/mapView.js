@@ -436,6 +436,7 @@ var mapView = (function () {
                     .style("stroke", "black")
                     .style("stroke-width", 0.1)
                     .on("mouseover", d => {
+                        pieView.pieViewInClass(d.category);
                         odView.addLineInClass(d.category, odInData);
                         selection.selectAll("[id='" + d.category + "']")
                             .style("opacity", options.mouseover_opacity)
