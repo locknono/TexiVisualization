@@ -49,11 +49,17 @@ var odView = (function () {
             renderer.render(stage);
             return;
         }
+        ScatterPlotGraphics.lineStyle(1, 0x000000, options.odLineOpacity)
+        
+        ScatterPlotGraphics.moveTo(margin.left + 0.5 * margin.left, margin.top);
+        ScatterPlotGraphics.lineTo(width - margin.right, margin.top);
+
         var controlPointYScale = d3.scaleLinear()
             .domain([0, width - margin.left - margin.right])
             .range([margin.top - 15, -margin.top])
 
         ScatterPlotGraphics.lineStyle(1, options.odLineColor, options.odLineOpacity)
+        //ScatterPlotGraphics.lineStyle(1, options.areaScale(classId).replace("#","0x"), options.odLineOpacity)
         for (var j = 0; j < data[classId].od.length; j++) {
             let source = axisXSacle(data[classId].od[j][0]),
                 target = axisXSacle(data[classId].od[j][1]);
@@ -83,6 +89,8 @@ var odView = (function () {
 
         const SEC = 5;
 
+       
+
         var controlPointYScale = d3.scaleLinear()
             .domain([0, width - margin.left - margin.right])
             .range([margin.top - 15 - SEC, margin.top - 1.8 * margin.top])
@@ -91,10 +99,19 @@ var odView = (function () {
             .domain([0, width - margin.left - margin.right])
             .range([margin.top + 15 + SEC, margin.top + 1.8 * margin.top])
 
+        ScatterPlotGraphics.lineStyle(1, 0x000000, options.odLineOpacity)
+
+        ScatterPlotGraphics.moveTo(margin.left + 0.5 * margin.left, margin.top-SEC);
+        ScatterPlotGraphics.lineTo(width - margin.right, margin.top-SEC);
+
+        ScatterPlotGraphics.moveTo(margin.left + 0.5 * margin.left, margin.top+SEC);
+        ScatterPlotGraphics.lineTo(width - margin.right, margin.top+SEC);
+
         ScatterPlotGraphics.lineStyle(1, options.odLineColor, options.odLineOpacity)
 
         for (var i = 0; i < drawData.length; i++) {
             if (i % 2 == 0) {
+                ScatterPlotGraphics.lineStyle(1, options.areaScale(sourceClassId).replace('#', '0x'), options.odLineOpacity)
                 let firstOD = drawData[i].od;
                 for (var j = 0; j < firstOD.length; j++) {
                     let source = axisXSacle(firstOD[j][0]),
@@ -105,6 +122,7 @@ var odView = (function () {
                     ScatterPlotGraphics.quadraticCurveTo(((source + target) / 2), controlPointY, target, margin.top - SEC);
                 }
             } else if (i % 2 != 0) {
+                ScatterPlotGraphics.lineStyle(1, options.areaScale(targetClassId).replace('#', '0x'), options.odLineOpacity)
                 let secondOD = drawData[i].od;
                 for (var j = 0; j < secondOD.length; j++) {
                     let source = axisXSacleBottom(secondOD[j][0]),
@@ -124,7 +142,7 @@ var odView = (function () {
 
     function getOdInData() {
         return new Promise(function (resolve, reject) {
-            d3.json(options.rootPath+'odIn.json', (error, data) => {
+            d3.json(options.rootPath + 'odIn.json', (error, data) => {
                 resolve(data);
             })
         })
@@ -139,7 +157,7 @@ var odView = (function () {
             .range([margin.top - 15, -margin.top])
         var lineG = svg.append("g")
             .attr("class", "lineG")
-        d3.json(options.rootPath+'odIn.json', (error, data) => {
+        d3.json(options.rootPath + 'odIn.json', (error, data) => {
             for (var j = 0; j < data[classId].od.length; j++) {
                 let source = axisXSacle(data[classId].od[j][0]),
                     target = axisXSacle(data[classId].od[j][1]);

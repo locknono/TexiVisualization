@@ -4,7 +4,7 @@ var mapView = (function () {
         zoomSnap: 0.1
     }).setView([22.631023, 114.164337], 10.8);
     var osmUrl =
-        "https://api.mapbox.com/styles/v1/locknono/cjh7jj0mo0yu32rlnk52glz3f/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoibG9ja25vbm8iLCJhIjoiY2poN2ppZHptMDM2bDMzbnhiYW9icjN4MiJ9.GalwMO67A3HawYH_Tg0-Qg",
+        "https://api.mapbox.com/styles/v1/mapbox/streets-v9/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoibG9ja25vbm8iLCJhIjoiY2poN2ppZHptMDM2bDMzbnhiYW9icjN4MiJ9.GalwMO67A3HawYH_Tg0-Qg",
         layer =
         'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>';
     L.tileLayer(osmUrl, {
@@ -524,13 +524,13 @@ var mapView = (function () {
                         }
                     })
                     .on("mouseover", function (d) {
-                        
-                            d3.select(this).style("stroke-width", 1);
-                        
+
+                        d3.select(this).style("stroke-width", 1);
+
                         suspedingViewForOneHexagon(d.row, d.col, d.category);
                     })
                     .on("mouseout", function (d) {
-                        if(curClass!=d.category){
+                        if (curClass != d.category) {
                             d3.select(this).style("stroke-width", 0.1);
                         }
                         hideDiv();

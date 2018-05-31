@@ -10,7 +10,7 @@
                 return d.index
             })
             .distance(function (d) {
-                console.log('d.value: ', d.value);
+                
                 return 200 - Math.pow(1.38, d.value);
 
             })
@@ -44,10 +44,10 @@
                 var valueRange = d3.extent(json.links, function (d) {
                     return d.value
                 })
-                console.log('valueRange: ', valueRange);
+                
                 var strokeScale = d3.scaleLinear()
                     .domain([valueRange[0] + 3.5, valueRange[1]])
-                    .range([2, 20])
+                    .range([0, 20])
 
                 force
                     .nodes(json.nodes)
@@ -57,8 +57,8 @@
                     .data(json.links)
                     .enter()
                     .append("line")
-                    .attr("stroke", options.forceLineColor)
-                    .attr("stroke-width", function (d) {
+                    .style("stroke", options.forceLineColor)
+                    .style("stroke-width", function (d) {
                         return strokeScale(d.value)
                     })
                     .style("opacity",0.5)
