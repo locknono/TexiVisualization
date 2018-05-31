@@ -1,10 +1,25 @@
 #heading {
   position: relative;
   top: 0px;
-  height: 45px;
+  height: 40px;
   width: 1500px;
   margin: 10px 20px 0px;
   border-bottom: none;
+}
+#heading svg {
+  position: absolute;
+  right: 0px;
+  width: 50%;
+  height: 100%;
+}
+#chooseClusterNumber {
+  margin: 3px 16px;
+}
+.headingText {
+  margin: 10px;
+  font-size: 15px;
+  font-weight: bold;
+  font-family: Helvetica Arial sans-serif;
 }
 #container-main {
   position: relative;

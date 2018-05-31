@@ -4,6 +4,16 @@ var options = (function () {
     var rootPath = 'data/drawData/' + clusterNumber.toString()+'/'+status+'/';
     var areaScale = d3.scaleOrdinal().domain([])
         .range(['#999999','#377eb8','D7EFA1','#4daf4a','#984ea3','#ff7f00','#ffff33','#a65628','#f781bf','#8400E8','#e41a1c'])
+    var svg=d3.select("#headingSvg");
+    var width = parseFloat(svg.style("width").split('px')[0]),
+        height = parseFloat(svg.style("height").split('px')[0]);
+    for(var i =0;i<clusterNumber;i++){
+        svg.append("circle")
+        .attr("cx",width-13-26*i)
+        .attr("cy",height/2)
+        .attr("r",10)
+        .style("fill",areaScale(i))
+    }
     var classScale = d3.scale.category20();
     return {
         rootPath: rootPath,

@@ -6,12 +6,28 @@
 @hexBorderStroke:#D4D4D4;
 @mapHeight:70%;
 #heading{
+    
     position: relative;
     top:0px;
-    height:45px;
+    height:40px;
     width:@screen-width;
     margin:@screen-margin @screen-margin+10px 0px;
     border-bottom:none;
+    svg{
+        position: absolute;
+        right:0px;
+        width:50%;
+        height:100%;
+    }
+}
+#chooseClusterNumber{
+    margin:3px 16px;
+}
+.headingText{
+    margin:10px;
+    font-size:15px;
+    font-weight:bold;
+    font-family:Helvetica Arial sans-serif;
 }
 #container-main{
     position: relative;
@@ -19,7 +35,9 @@
     width:@screen-width;
     padding:0px;
     margin: 0px @screen-margin+10px;
+
 }
+
 #odView{
     height:100%-@mapHeight;
     width:@mapWidth;
