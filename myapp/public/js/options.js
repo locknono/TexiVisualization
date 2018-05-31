@@ -12,5 +12,6 @@ var options = (function () {
         areaScale: areaScale,
         classScale: classScale,
         forceLineColor:'#C2D2D3',
+        odLineOpacity:0.2
     }
 }())

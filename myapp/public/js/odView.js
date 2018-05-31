@@ -16,11 +16,11 @@ var odView = (function () {
     var axis = d3.axisBottom(timeScale);
     var axisXSacle = d3.scaleLinear()
         .domain([0, 1440])
-        .range([margin.left + margin.left, (width - margin.right)]);
+        .range([margin.left + 0.5*margin.left, (width - margin.right)]);
 
     var axisXSacleBottom = d3.scaleLinear()
         .domain([0, 1440])
-        .range([(width - margin.right), margin.left + margin.left]);
+        .range([(width - margin.right), margin.left + 0.5*margin.left]);
 
     var stage = new PIXI.Container(); //创建一个舞台
     var ScatterPlotGraphics = new PIXI.Graphics() //创建一直画笔
@@ -49,7 +49,7 @@ var odView = (function () {
             .domain([0, width - margin.left - margin.right])
             .range([margin.top - 15, -margin.top])
 
-        ScatterPlotGraphics.lineStyle(1, 0x4682B4, 0.1)
+        ScatterPlotGraphics.lineStyle(1, 0x4682B4, options.odLineOpacity)
         for (var j = 0; j < data[classId].od.length; j++) {
 
             let source = axisXSacle(data[classId].od[j][0]),
@@ -77,16 +77,20 @@ var odView = (function () {
         console.log('drawData: ', drawData);
         //开始用画笔画点
         ScatterPlotGraphics.clear();
+        
+        const SEC = 5;
 
         var controlPointYScale = d3.scaleLinear()
             .domain([0, width - margin.left - margin.right])
-            .range([margin.top - 15, margin.top - 1.8 * margin.top])
+            .range([margin.top - 15-SEC, margin.top - 1.8 * margin.top])
 
         var controlPointYScaleBottom = d3.scaleLinear()
             .domain([0, width - margin.left - margin.right])
-            .range([margin.top + 15, margin.top + 1.8 * margin.top])
+            .range([margin.top + 15+SEC, margin.top + 1.8 * margin.top])
 
-        ScatterPlotGraphics.lineStyle(1, 0x4682B4, 0.1)
+        ScatterPlotGraphics.lineStyle(1, 0x4682B4, options.odLineOpacity)
+
+        
 
         for (var i = 0; i < drawData.length; i++) {
             if (i % 2 == 0) {
@@ -96,8 +100,8 @@ var odView = (function () {
                         target = axisXSacle(firstOD[j][1]);
                     let diffLength = target - source;
                     let controlPointY = controlPointYScale(diffLength);
-                    ScatterPlotGraphics.moveTo(source, margin.top);
-                    ScatterPlotGraphics.quadraticCurveTo(((source + target) / 2), controlPointY, target, margin.top);
+                    ScatterPlotGraphics.moveTo(source, margin.top-SEC);
+                    ScatterPlotGraphics.quadraticCurveTo(((source + target) / 2), controlPointY, target, margin.top-SEC);
                 }
             } else if (i % 2 != 0) {
                 let secondOD = drawData[i].od;
@@ -106,8 +110,8 @@ var odView = (function () {
                         target = axisXSacleBottom(secondOD[j][1]);
                     let diffLength = source - target;
                     let controlPointY = controlPointYScaleBottom(diffLength);
-                    ScatterPlotGraphics.moveTo(source, margin.top);
-                    ScatterPlotGraphics.quadraticCurveTo(((source + target) / 2), controlPointY, target, margin.top);
+                    ScatterPlotGraphics.moveTo(source, margin.top+SEC);
+                    ScatterPlotGraphics.quadraticCurveTo(((source + target) / 2), controlPointY, target, margin.top+SEC);
                 }
             }
         }
