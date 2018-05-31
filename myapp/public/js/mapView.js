@@ -61,7 +61,7 @@ var mapView = (function () {
     function hideDiv() {
         d3.select("#suspendingDiv").transition()
             .duration(1000)
-            .style("top", "-500px");
+            .style("top", "-210px");
     }
 
     function suspedingViewForOneHexagon(row, col, classId) {
@@ -444,6 +444,7 @@ var mapView = (function () {
             }) */
         })
     }
+    var curClass = -1;
 
     function addHexagon(selection, projection, clusterNumber) {
         d3.json('data/drawData/matrixCluster_' + clusterNumber.toString() + '.json', (error, hexagonData) => {
@@ -484,15 +485,46 @@ var mapView = (function () {
                     .style("opacity", options.normal_opacity)
                     .style("stroke", "black")
                     .style("stroke-width", 0.1)
-                    .on("mouseover", d => {
-                        pieView.pieViewInClass(d.category);
-                        odView.addLineInClass(d.category, odInData);
-                        selection.selectAll("[id='" + d.category + "']")
-                            .style("opacity", options.mouseover_opacity)
-                            .style("stroke-width", 1)
-                        suspedingViewForOneHexagon(d.row, d.col, d.category);
+                    .on("click", d => {
+                        if (curClass === -1) {
+                            curClass = d.category;
+                            pieView.pieViewInClass(d.category);
+                            odView.addLineInClass(d.category, odInData);
+                            selection.selectAll("[id='" + d.category + "']")
+                                .style("opacity", options.mouseover_opacity)
+                                .style("stroke-width", 1)
+                            d3.select("#netSvg").select("[id='" + d.category + "']")
+                                .style("stroke", "black")
+                                .style("stroke-width", 2)
+                            suspedingViewForOneHexagon(d.row, d.col, d.category);
+                        } else if (curClass === d.category) {
+                            curClass = -1
+                            selection.selectAll("[id='" + d.category + "']")
+                                .style("opacity", options.normal_opacity)
+                                .style("stroke-width", 0.1)
+                            d3.select("#netSvg").select("[id='" + d.category + "']")
+                                .style("stroke", "none")
+                            odView.addLineInClass(-1, odInData);
+                            hideDiv();
+                        } else if (curClass != d.category && curClass != -1) {
+                            selection.selectAll("[id='" + curClass + "']")
+                                .style("stroke-width", 0.1)
+                            d3.select("#netSvg").select("[id='" + curClass + "']")
+                                .style("stroke", "none")
+                            hideDiv();
+                            curClass = d.category;
+                            pieView.pieViewInClass(d.category);
+                            odView.addLineInClass(d.category, odInData);
+                            selection.selectAll("[id='" + d.category + "']")
+                                .style("opacity", options.mouseover_opacity)
+                                .style("stroke-width", 1)
+                            d3.select("#netSvg").select("[id='" + d.category + "']")
+                                .style("stroke", "black")
+                                .style("stroke-width", 2)
+                            suspedingViewForOneHexagon(d.row, d.col, d.category);
+                        }
                     })
-                    /* if (d.category == 6) {
+                /* if (d.category == 6) {
                         selection.selectAll("[id='" + d.category + "']")
                             .style("fill", "black")
                         selection.selectAll("[id='" + 16 + "']")
@@ -503,12 +535,14 @@ var mapView = (function () {
                     
                 })
                 */
-                    .on("mouseout", d => {
-                        selection.selectAll("[id='" + d.category + "']")
-                            .style("opacity", options.normal_opacity)
-                            .style("stroke-width", 0.1)
-                        hideDiv();
-                    })
+                /* .on("mouseout", d => {
+                    selection.selectAll("[id='" + d.category + "']")
+                        .style("opacity", options.normal_opacity)
+                        .style("stroke-width", 0.1)
+                    d3.select("#netSvg").select("[id='" + d.category + "']")
+                        .style("stroke", "none")
+                    hideDiv();
+                }) */
             })
         })
     }

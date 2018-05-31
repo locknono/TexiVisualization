@@ -43,8 +43,12 @@ var odView = (function () {
 
     function addLineInClassOnCanvas(classId, data) {
         //开始用画笔画点
-        ScatterPlotGraphics.clear();
 
+        ScatterPlotGraphics.clear();
+        if (classId === -1) {
+            renderer.render(stage);
+            return;
+        }
         var controlPointYScale = d3.scaleLinear()
             .domain([0, width - margin.left - margin.right])
             .range([margin.top - 15, -margin.top])
