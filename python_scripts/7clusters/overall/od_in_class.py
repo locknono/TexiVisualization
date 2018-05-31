@@ -19,10 +19,10 @@ from sklearn.datasets import make_blobs
 import copy
 import decimal
 import numpy as np
+import rootPath
 
 
-
-with open('D:/Texi/myapp/public/data/drawData/matrixCluster_7.json','r',encoding='utf-8') as f:
+with open(rootPath.rootPath+'matrixCluster.json','r',encoding='utf-8') as f:
     hexagonList=json.loads(f.read())
 
 
@@ -189,7 +189,7 @@ for i in odData:
     print(len(i['od']))
         
 
-with open('D:/Texi/myapp/public/data/drawData/odIn.json','w',encoding='utf-8') as f:
+with open(rootPath.rootPath+'odIn.json','w',encoding='utf-8') as f:
     writeStr=json.dumps(odData)
     f.write(writeStr)
 

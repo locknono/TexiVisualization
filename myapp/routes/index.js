@@ -5,9 +5,12 @@ const suspendingDataModel = require('../models/suspendingData')
 const hexClickDataModel = require('../models/hexClickDataModel')
 /* GET home page. */
 router.get('/(:clusterNumber)?', function (req, res, next) {
-  let clusterNumber = req.params.clusterNumber
+  let clusterNumber = req.params.clusterNumber;
+  let status = req.query.status;
+  console.log('status: ', status);
   res.render('index', {
-    clusterNumber: clusterNumber
+    clusterNumber: clusterNumber,
+    status: status
   });
 });
 
@@ -37,7 +40,5 @@ router.get('/(:clusterNumber)?/showSuspending', function (req, res) {
   });
 
 });
-
-
 
 module.exports = router;

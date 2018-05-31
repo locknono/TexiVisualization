@@ -7,6 +7,7 @@ Created on Thu May 10 12:31:36 2018
 
 import math
 import json
+import rootPath
 
 top = 22.80550
 bottom = 22.454
@@ -48,7 +49,7 @@ for j in range(0,rowCount+1):
         path=[point1,point2,point3,point4,point5,point6,point1]
         point['path']=path
 
-with open('D:/Texi/myapp/public/data/drawData/hexagon.json','w',encoding='utf-8') as f:
+with open(rootPath.rootPath+'hexagon.json','w',encoding='utf-8') as f:
     writeStr=json.dumps(hexagonList)
     f.write(writeStr)
     

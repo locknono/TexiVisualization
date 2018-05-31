@@ -16,7 +16,7 @@ import csv
 from itertools import islice  
 import json
 import math
-
+import rootPath
 top = 22.80550
 bottom = 22.454
 left = 113.75643
@@ -39,7 +39,7 @@ pathdir=os.listdir(fp)
 
 fileCount=0
 
-with open('D:/Texi/myapp/public/data/drawData/matrixCluster_7.json','r',encoding='utf-8') as f:
+with open(rootPath.rootPath+'matrixCluster.json','r',encoding='utf-8') as f:
     classList=json.loads(f.read())
 
 #matrix for all hexagon
@@ -71,7 +71,7 @@ for index,i in enumerate(matrix):
 #numberList:the number of hexagon each sorted class has
         
 numberList=[]
-with open('D:/Texi/myapp/public/data/drawData/matrixCluster_7.json','r',encoding='utf-8') as f:
+with open(rootPath.rootPath+'matrixCluster.json','r',encoding='utf-8') as f:
     hexagonList=json.loads(f.read())
     categoryList=[]
     for i in range(len(hexagonList)):
@@ -138,7 +138,6 @@ for path in pathdir:
                 
                 if thisClass<0:
                     continue
-                
                 if status ==1:
                     clickData[thisClass]['con'][hour]+=1
                     hexagonClickData[row][col]['con'][hour]+=1
@@ -172,11 +171,11 @@ for i in hexagonClickData:
 
         
         
-with open('D:/Texi/myapp/public/data/drawData/classClickData.json','w',encoding='utf-8') as f:
+with open(rootPath.rootPath+'classClickData.json','w',encoding='utf-8') as f:
     writeStr=json.dumps(clickData)
     f.write(writeStr)
 
-with open('D:/Texi/myapp/public/data/drawData/hexClickData.json','w',encoding='utf-8') as f:
+with open(rootPath.rootPath+'hexClickData.json','w',encoding='utf-8') as f:
     output =[]
     for i in hexagonClickData:
         for s in i:

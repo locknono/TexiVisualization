@@ -20,7 +20,7 @@ import copy
 import decimal
 import numpy as np
 import rootPath
-with open('D:/Texi/myapp/public/data/drawData/matrixCluster_7.json','r',encoding='utf-8') as f:
+with open(rootPath.rootPath+'matrixCluster.json','r',encoding='utf-8') as f:
     hexagonList=json.loads(f.read())
 
 
@@ -180,7 +180,7 @@ for i in odData:
     i['count']=len(i['od'])
 for i in odData:
     print(i['count'],len(i['od']))
-with open('D:/Texi/myapp/public/data/drawData/odInter.json','w',encoding='utf-8') as f:
+with open(rootPath.rootPath+'odInter.json','w',encoding='utf-8') as f:
     writeStr=json.dumps(odData)
     f.write(writeStr)
 

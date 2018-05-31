@@ -32,7 +32,7 @@ fp = 'D:/Texi/myapp/public/data/sevenDayData'
 os.chdir(fp)
 
 
-with open('D:/Texi/myapp/public/data/drawData/matrixCluster_7.json','r',encoding='utf-8') as f:
+with open(rootPath.rootPath+'matrixCluster.json','r',encoding='utf-8') as f:
     classList=json.loads(f.read())
 
 #matrix for all hexagon
@@ -47,7 +47,7 @@ for j in range(maxRow+1):
 
 nodes=[]
 numberList=[]
-with open('D:/Texi/myapp/public/data/drawData/matrixCluster_7.json','r',encoding='utf-8') as f:
+with open(rootPath.rootPath+'matrixCluster.json','r',encoding='utf-8') as f:
     hexagonList=json.loads(f.read())
     categoryList=[]
     for i in range(len(hexagonList)):
@@ -115,7 +115,6 @@ for path in pathdir:
                     
                     sourceMinuteInOneDay=sourceHour*60+souceMinute
                     
-                    
                     sourceClassId=matrix[sourceRow][sourceCol]['category']
                     
                     targetTime=target[0]
@@ -166,8 +165,10 @@ for path in pathdir:
                     
         
 
-with open('D:/Texi/myapp/public/data/drawData/netFlux_7.json','w',encoding='utf-8') as f:
+with open(rootPath.rootPath+'netFlux.json','w',encoding='utf-8') as f:
     write={}
+    for each in links:
+        each['value']=math.log2(each['value'])
     write['nodes']=nodes
     write['links']=links
     writeStr=json.dumps(write)

@@ -105,6 +105,11 @@ for path in pathdir:
                     col=(round((lng-left-sideLength*math.cos((math.pi/180)*30))/rowWidth))
                 if(col<0 or col>=colCount):
                     continue
+                
+                """
+                if status !=1:
+                    continue
+                """ 
                 position = (col*rowCount)+row
                 hexagonList[position]['value']+=1
                 hour=(day-18)*24+hour
@@ -217,11 +222,7 @@ for i in range(len(maxValueList)):
 with open(rootPath.rootPath+'matrixCluster.json','w',encoding='utf-8') as f:
     writeStr=json.dumps(hexagonList)
     f.write(writeStr)
-"""
-with open('D:/Texi/myapp/public/data/drawData/maxValue.json','w',encoding='utf-8') as f:
-    writeStr=json.dumps(maxValueList3)
-    f.write(writeStr)
-"""     
+
         
 
 
