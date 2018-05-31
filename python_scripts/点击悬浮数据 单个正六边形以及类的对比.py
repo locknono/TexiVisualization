@@ -60,10 +60,10 @@ for index,i in enumerate(matrix):
         thisHex['row']=j['row']
         thisHex['col']=j['col']
         thisHex['class']=j['category']
-        thisHex['on']=[]
+        thisHex['con']=[]
         thisHex['off']=[]
         for j in range(24):
-            thisHex['on'].append(0)
+            thisHex['con'].append(0)
         for j in range(24):
             thisHex['off'].append(0)
         hexagonClickData[index].append(thisHex)
@@ -89,10 +89,10 @@ clickData=[]
 for i in range(len(categoryList)):
     thisClass={}
     thisClass['class']=categoryList[i]
-    thisClass['on']=[]
+    thisClass['con']=[]
     thisClass['off']=[]
     for j in range(24):
-        thisClass['on'].append(0)
+        thisClass['con'].append(0)
     for j in range(24):
         thisClass['off'].append(0)
     clickData.append(thisClass)
@@ -139,34 +139,34 @@ for path in pathdir:
                     continue
                 
                 if status ==1:
-                    clickData[thisClass]['on'][hour]+=1
-                    hexagonClickData[row][col]['on'][hour]+=1
+                    clickData[thisClass]['con'][hour]+=1
+                    hexagonClickData[row][col]['con'][hour]+=1
                 elif status==0:
                     clickData[thisClass]['off'][hour]+=1
                     hexagonClickData[row][col]['off'][hour]+=1
                     
             
 for i in range(len(clickData)):
-    for j in range(len(clickData[i]['on'])):
-        clickData[i]['on'][j]/=7
+    for j in range(len(clickData[i]['con'])):
+        clickData[i]['con'][j]/=7
         clickData[i]['off'][j]/=7
-        clickData[i]['on'][j]=clickData[i]['on'][j]/numberList[clickData[i]['class']]
+        clickData[i]['con'][j]=clickData[i]['con'][j]/numberList[clickData[i]['class']]
         clickData[i]['off'][j]=clickData[i]['off'][j]/numberList[clickData[i]['class']]
-        clickData[i]['on'][j]=round(clickData[i]['on'][j],6)
+        clickData[i]['con'][j]=round(clickData[i]['con'][j],6)
         clickData[i]['off'][j]=round(clickData[i]['off'][j],6)
 
 for i in hexagonClickData:
     for s in i:
-        for j in range(len(s['on'])):
-            s['on'][j]=s['on'][j]/7
+        for j in range(len(s['con'])):
+            s['con'][j]=s['con'][j]/7
             s['off'][j]=s['off'][j]/7
-            if s['on'][j]==0:
-                s['on'][j]=int(s['on'][j])
+            if s['con'][j]==0:
+                s['con'][j]=int(s['con'][j])
             else:
-                s['on'][j]=round(s['on'][j],6)
+                s['con'][j]=round(s['con'][j],6)
             if s['off'][j]==0:
                 s['off'][j]=int(s['off'][j])
-                s['on'][j]=round(s['on'][j],6)
+                s['con'][j]=round(s['con'][j],6)
             
 
         
