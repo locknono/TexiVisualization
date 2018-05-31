@@ -76,14 +76,14 @@ var odView = (function () {
     }
 
     function addLineInterClassOnCanvas(sourceClassId, targetClassId, data) {
-        console.log('data: ', data);
+        
         var drawData = []
         for (var i = 0; i < data.length; i++) {
             if (data[i].direc.indexOf(sourceClassId) != -1 && data[i].direc.indexOf(targetClassId) != -1) {
                 drawData.push(data[i])
             }
         }
-        console.log('drawData: ', drawData);
+        
         //开始用画笔画点
         ScatterPlotGraphics.clear();
 

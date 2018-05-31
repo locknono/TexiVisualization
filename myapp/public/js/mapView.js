@@ -61,7 +61,7 @@ var mapView = (function () {
     function hideDiv() {
         d3.select("#suspendingDiv").transition()
             .duration(1000)
-            .style("top", "-210px");
+            .style("top", "-400px");
     }
 
     function suspedingViewForOneHexagon(row, col, classId) {

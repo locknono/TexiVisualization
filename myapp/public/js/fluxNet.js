@@ -2,20 +2,15 @@
     var svg = d3.select("#netSvg");
     var width = parseFloat(svg.style("width").split('px')[0]),
         height = parseFloat(svg.style("height").split('px')[0]);
-
-
-
     var force = d3.forceSimulation()
         .force("link", d3.forceLink().id(function (d) {
                 return d.index
             })
             .distance(function (d) {
-                
-                return 200 - Math.pow(1.38, d.value);
-
+                return 200 - Math.pow(1.32, d.value);
             })
         )
-        .force("charge", d3.forceManyBody().strength(-2500).distanceMin(0).distanceMax(280))
+        .force("charge", d3.forceManyBody().strength(-2000).distanceMin(0).distanceMax(250))
         .alphaTarget(0.05)
         .force("center", d3.forceCenter(width / 2, height / 2))
         .force("y", d3.forceY(0.001))
@@ -44,7 +39,7 @@
                 var valueRange = d3.extent(json.links, function (d) {
                     return d.value
                 })
-                
+
                 var strokeScale = d3.scaleLinear()
                     .domain([valueRange[0] + 3.5, valueRange[1]])
                     .range([0, 20])
@@ -61,11 +56,18 @@
                     .style("stroke-width", function (d) {
                         return strokeScale(d.value)
                     })
-                    .style("opacity",0.5)
+                    .style("opacity", 0.5)
                     .style("cursor", "crosshair")
                     .style("stroke-linecap", "round")
                     .attr("class", "link")
                     .on("click", function (d) {
+
+                        svg.selectAll("circle").style("stroke", "none");
+                        svg.selectAll("circle").style("stroke", "none");
+
+                        svg.selectAll("[id='" + d.source.class + "']").style("stroke", "black").style("stroke-width", 2)
+                        svg.selectAll("[id='" + d.target.class + "']").style("stroke", "black").style("stroke-width", 2)
+
                         let source = d.source.class;
                         let target = d.target.class;
                         odView.addLineInterClass(source, target, data)
@@ -99,16 +101,19 @@
                     .attr("id", function (d) {
                         return d.class
                     })
-                    .on("mouseover", function (d) {
+                    .on("click", function (d) {
                         d3.select(this).style("stroke", "black").style("stroke-width", 2)
                         odView.addLineInClass(d.class, odInData);
                         pieView.pieViewInClass(d.class);
-                        d3.select("#map").selectAll("[id='" + d.class + "']").style("stroke-width", 1);
+
+                        d3.select("#map").selectAll("[id='" + d.class + "']").style("stroke-width", 1)
+                            .style("opacity", options.mouseover_opacity);
                     })
                     .on("mouseout", function (d) {
                         d3.select(this).style("stroke", "none")
                         //d3.select("#map").selectAll("[id='" + d.class + "']").style("opacity", options.normal_opacity);
-                        d3.select("#map").selectAll("[id='" + d.class + "']").style("stroke-width", 0.1);
+                        d3.select("#map").selectAll("[id='" + d.class + "']").style("stroke-width", 0.1)
+                            .style("opacity", options.mouseover_opacity);
                         mapView.hideDiv();
                     })
 

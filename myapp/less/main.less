@@ -5,12 +5,20 @@
 @fluxNetHeight:50%;
 @hexBorderStroke:#D4D4D4;
 @mapHeight:70%;
+#heading{
+    position: relative;
+    top:0px;
+    height:45px;
+    width:@screen-width;
+    margin:@screen-margin @screen-margin+10px 0px;
+    border-bottom:none;
+}
 #container-main{
     position: relative;
     height:@screen-height;
     width:@screen-width;
     padding:0px;
-    margin:@screen-margin @screen-margin+10px;
+    margin: 0px @screen-margin+10px;
 }
 #odView{
     height:100%-@mapHeight;
@@ -19,6 +27,7 @@
     margin:0px;
     position:absolute;
     border-top:none;
+    border-right:none;
     svg{
         float:top;
         position:absolute;
@@ -38,6 +47,7 @@
     border-top:none;
     border-bottom:none;
     border-left:none;
+    border-right:none;
     height:@mapHeight;
     width:@mapWidth;
     margin:0px;
@@ -49,7 +59,7 @@
 
 #suspendingDiv{
     position: absolute;
-    top:-200px;
+    top:-400px;
     right:0px;
     height:200px;
     width:200px;

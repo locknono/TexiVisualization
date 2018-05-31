@@ -16,7 +16,7 @@ var options = (function () {
         pieview_colorscale: d3.interpolateYlGnBu,
         areaScale: areaScale,
         classScale: classScale,
-        forceLineColor: '#00D3FF',
+        forceLineColor: '#D4D4D4',
         odLineOpacity: 0.5,
         odLineColor: '0x00D3FF',
     }

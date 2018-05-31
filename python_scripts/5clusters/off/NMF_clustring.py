@@ -116,9 +116,9 @@ for path in pathdir:
                 matrix[position][hour]+=1
 
 
-nCom=7
-firstSecNCom=4
-secondSecNcom=3
+nCom=5
+firstSecNCom=3
+secondSecNcom=2
 X = np.array(matrix)
 model = NMF(n_components=nCom, init='random', random_state=0)
 W = model.fit_transform(X)
