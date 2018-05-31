@@ -135,6 +135,7 @@ for path in pathdir:
                     continue
                 
                 thisClass=matrix[row][col]['category']
+                
                 if thisClass<0:
                     continue
                 

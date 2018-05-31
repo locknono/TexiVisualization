@@ -55,7 +55,7 @@ var mapView = (function () {
     function showDiv() {
         d3.select("#suspendingDiv").transition()
             .duration(1000)
-            .style("top", "0px");
+            .style("top", "250px");
     }
 
     function hideDiv() {
@@ -95,7 +95,6 @@ var mapView = (function () {
                 var thisClassMaxOn = d3.max(classClickData[classId].con);
                 console.log('classId: ', classId);
                 console.log('thisClassMaxOn: ', thisClassMaxOn);
-
 
                 var thisClassMaxOff = d3.max(classClickData[classId].off);
                 /* 
@@ -524,6 +523,14 @@ var mapView = (function () {
                             suspedingViewForOneHexagon(d.row, d.col, d.category);
                         }
                     })
+                    .on("mouseover", function (d) {
+                        d3.select(this).style("stroke-width", 1);
+                        suspedingViewForOneHexagon(d.row, d.col, d.category);
+                    })
+                    .on("mouseout", function (d) {
+                        d3.select(this).style("stroke-width", 0.1);
+                        hideDiv();
+                    })
                 /* if (d.category == 6) {
                         selection.selectAll("[id='" + d.category + "']")
                             .style("fill", "black")
@@ -594,7 +601,7 @@ var mapView = (function () {
         selection.style("stroke-width", 1);
     }
     return {
-        pieView: suspedingViewForOneHexagon,
+        suspedingViewForOneHexagon: suspedingViewForOneHexagon,
         showDiv: showDiv,
         hideDiv: hideDiv,
         selectEffect: selectEffect

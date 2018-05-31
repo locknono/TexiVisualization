@@ -10,7 +10,9 @@
                 return d.index
             })
             .distance(function (d) {
-                return 200 - d.value * 4
+                console.log('d.value: ', d.value);
+                return 200 - Math.pow(1.38, d.value);
+                
             })
         )
         .force("charge", d3.forceManyBody().strength(-2500).distanceMin(0).distanceMax(600))
@@ -44,8 +46,8 @@
                 })
                 console.log('valueRange: ', valueRange);
                 var strokeScale = d3.scaleLinear()
-                    .domain(valueRange)
-                    .range([0, 20])
+                    .domain([valueRange[0]+3.5,valueRange[1]])
+                    .range([2, 20])
 
                 force
                     .nodes(json.nodes)
@@ -85,7 +87,7 @@
 
                 var rScale = d3.scaleLinear()
                     .domain(nodeNumberRange)
-                    .range([10, 20])
+                    .range([10, 22])
 
                 node.append('circle')
                     .attr('r', function (d) {
@@ -99,10 +101,10 @@
                         return d.class
                     })
                     .on("mouseover", function (d) {
-                        odView.addLineInClass(d.class,odInData);
+                        
+                        odView.addLineInClass(d.class, odInData);
                         pieView.pieViewInClass(d.class);
                         d3.select("#map").selectAll("[id='" + d.class + "']").style("stroke-width", 1);
-                        mapView.pieView(d.class);
                     })
                     .on("mouseout", function (d) {
                         //d3.select("#map").selectAll("[id='" + d.class + "']").style("opacity", options.normal_opacity);
