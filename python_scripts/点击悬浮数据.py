@@ -40,8 +40,6 @@ for j in range(maxRow+1):
     matrix.append(rowList)
     
 #numberList:the number of hexagon each sorted class has
-    
-    
 numberList=[]
 with open('D:/Texi/myapp/public/data/drawData/valueHexagon2.0_215.json','r',encoding='utf-8') as f:
     hexagonList=json.loads(f.read())

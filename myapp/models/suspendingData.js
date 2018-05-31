@@ -10,5 +10,16 @@ const suspendingDataSchema = new Schema({
     endOff:[Number]
 },{ collection: 'clickData'});
 
+const hexClickDataSchema = new Schema({
+    row: Number,
+    col:Number,
+    on:[Number],
+    off:[Number]    
+},{ collection: 'hexClickData'});
+
 var suspendingDataModel = mongoose.model('suspendingData', suspendingDataSchema);
+
+var hexClickDataModel = mongoose.model('hexClickData', hexClickDataSchema);
+
+module.exports = hexClickDataModel;
 module.exports = suspendingDataModel;

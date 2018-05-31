@@ -64,7 +64,7 @@ var mapView = (function () {
             .style("top", "-200px");
     }
 
-    function pieViewForOneClass(thisClass) {
+    function suspedingViewForOneHexagon(row,col) {
         showDiv();
         var svg = d3.select('#suspendingSvg');
         var width = parseFloat(svg.style("width").split('px')[0]),

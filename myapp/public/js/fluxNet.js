@@ -38,103 +38,103 @@
 
     d3.json("./data/drawData/netFlux_7.json", function (json) {
         d3.json("data/drawData/odInter.json", function (data) {
-
-            var valueRange = d3.extent(json.links, function (d) {
-
-                return d.value
-            })
-
-            console.log('valueRange: ', valueRange);
-            var strokeScale = d3.scaleLinear()
-                .domain(valueRange)
-                .range([0, 20])
-
-            force
-                .nodes(json.nodes)
-                .force("link").links(json.links)
-
-            var link = svg.selectAll(".link")
-                .data(json.links)
-                .enter()
-                .append("line")
-                .attr("stroke", options.forceLineColor)
-                .attr("stroke-width", function (d) {
-                    return strokeScale(d.value)
-
+            d3.json('data/drawData/odIn.json', (error, odInData) => {
+                var valueRange = d3.extent(json.links, function (d) {
+                    return d.value
                 })
-                .style("cursor", "crosshair")
-                .style("stroke-linecap", "round")
-                .attr("class", "link")
-                .on("click", function (d) {
-                    console.log('d: ', d);
-                    let source = d.source.class;
-                    let target = d.target.class;
-                    odView.addLineInterClass(source, target, data)
-                })
+                console.log('valueRange: ', valueRange);
+                var strokeScale = d3.scaleLinear()
+                    .domain(valueRange)
+                    .range([0, 20])
 
-            var node = svg.selectAll(".node")
-                .data(json.nodes)
-                .enter().append("g")
-                .attr("class", "node")
-                .call(d3.drag()
-                    .on("start", dragstarted)
-                    .on("drag", dragged)
-                    .on("end", dragended));
+                force
+                    .nodes(json.nodes)
+                    .force("link").links(json.links)
 
-            var nodeNumberRange = d3.extent(json.nodes, function (d) {
-                return d.number
-            })
+                var link = svg.selectAll(".link")
+                    .data(json.links)
+                    .enter()
+                    .append("line")
+                    .attr("stroke", options.forceLineColor)
+                    .attr("stroke-width", function (d) {
+                        return strokeScale(d.value)
 
-            var rScale = d3.scaleLinear()
-                .domain(nodeNumberRange)
-                .range([10, 20])
-
-            node.append('circle')
-                .attr('r', function (d) {
-                    return rScale(d.number)
-                })
-                .style('fill', function (d) {
-                    return options.areaScale(d.class);
-                })
-                .style("stroke", "none")
-                .attr("id", function (d) {
-                    return d.class
-                })
-                .on("mouseover", function (d) {
-
-                    d3.select("#map").selectAll("[id='" + d.class + "']").style("stroke-width", 1);
-                    mapView.pieView(d.class);
-                })
-                .on("mouseout", function (d) {
-                    //d3.select("#map").selectAll("[id='" + d.class + "']").style("opacity", options.normal_opacity);
-                    d3.select("#map").selectAll("[id='" + d.class + "']").style("stroke-width", 0.1);
-                    mapView.hideDiv();
-                })
-
-            node.append("text")
-                .attr("dx", -18)
-                .attr("dy", 8)
-                .style("font-family", "overwatch")
-                .style("font-size", "18px")
-                .text(function (d) {
-                    return d.name
-                });
-
-            force.on("tick", function () {
-                link.attr("x1", function (d) {
-                        return d.source.x;
                     })
-                    .attr("y1", function (d) {
-                        return d.source.y;
+                    .style("cursor", "crosshair")
+                    .style("stroke-linecap", "round")
+                    .attr("class", "link")
+                    .on("click", function (d) {
+                        console.log('d: ', d);
+                        let source = d.source.class;
+                        let target = d.target.class;
+                        odView.addLineInterClass(source, target, data)
                     })
-                    .attr("x2", function (d) {
-                        return d.target.x;
+
+                var node = svg.selectAll(".node")
+                    .data(json.nodes)
+                    .enter().append("g")
+                    .attr("class", "node")
+                    .call(d3.drag()
+                        .on("start", dragstarted)
+                        .on("drag", dragged)
+                        .on("end", dragended));
+
+                var nodeNumberRange = d3.extent(json.nodes, function (d) {
+                    return d.number
+                })
+
+                var rScale = d3.scaleLinear()
+                    .domain(nodeNumberRange)
+                    .range([10, 20])
+
+                node.append('circle')
+                    .attr('r', function (d) {
+                        return rScale(d.number)
                     })
-                    .attr("y2", function (d) {
-                        return d.target.y;
+                    .style('fill', function (d) {
+                        return options.areaScale(d.class);
+                    })
+                    .style("stroke", "none")
+                    .attr("id", function (d) {
+                        return d.class
+                    })
+                    .on("mouseover", function (d) {
+                        odView.addLineInClass(d.class,odInData);
+                        pieView.pieViewInClass(d.class);
+                        d3.select("#map").selectAll("[id='" + d.class + "']").style("stroke-width", 1);
+                        mapView.pieView(d.class);
+                    })
+                    .on("mouseout", function (d) {
+                        //d3.select("#map").selectAll("[id='" + d.class + "']").style("opacity", options.normal_opacity);
+                        d3.select("#map").selectAll("[id='" + d.class + "']").style("stroke-width", 0.1);
+                        mapView.hideDiv();
+                    })
+
+                node.append("text")
+                    .attr("dx", -18)
+                    .attr("dy", 8)
+                    .style("font-family", "overwatch")
+                    .style("font-size", "18px")
+                    .text(function (d) {
+                        return d.name
                     });
-                node.attr("transform", function (d) {
-                    return "translate(" + d.x + "," + d.y + ")";
+
+                force.on("tick", function () {
+                    link.attr("x1", function (d) {
+                            return d.source.x;
+                        })
+                        .attr("y1", function (d) {
+                            return d.source.y;
+                        })
+                        .attr("x2", function (d) {
+                            return d.target.x;
+                        })
+                        .attr("y2", function (d) {
+                            return d.target.y;
+                        });
+                    node.attr("transform", function (d) {
+                        return "translate(" + d.x + "," + d.y + ")";
+                    });
                 });
             });
         });

@@ -51,7 +51,6 @@ var odView = (function () {
 
         ScatterPlotGraphics.lineStyle(1, options.odLineColor, options.odLineOpacity)
         for (var j = 0; j < data[classId].od.length; j++) {
-
             let source = axisXSacle(data[classId].od[j][0]),
                 target = axisXSacle(data[classId].od[j][1]);
             //此时的source,target代表轴上的坐标,坐标原点是左上角（0,0）
