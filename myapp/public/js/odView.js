@@ -10,6 +10,7 @@ var odView = (function () {
         right: 20,
         top: 140
     };
+    const SEC = 5;
     var timeScale = d3.scaleLinear()
         .domain([0, 1440])
         .range([margin.left, width - margin.left - margin.right])
@@ -42,25 +43,39 @@ var odView = (function () {
         .call(axis); */
 
     function addLineInClassOnCanvas(classId, data) {
+        console.log('data: ', data);
         //开始用画笔画点
-
         ScatterPlotGraphics.clear();
         if (classId === -1) {
             renderer.render(stage);
             return;
         }
         ScatterPlotGraphics.lineStyle(1, 0x000000, options.odLineOpacity)
-        
+
         ScatterPlotGraphics.moveTo(margin.left + 0.5 * margin.left, margin.top);
         ScatterPlotGraphics.lineTo(width - margin.right, margin.top);
 
-        var controlPointYScale = d3.scaleLinear()
+        /*  var controlPointYScale = d3.scaleLinear()
             .domain([0, width - margin.left - margin.right])
             .range([margin.top - 15, -margin.top])
-
+ */
         ScatterPlotGraphics.lineStyle(1, options.odLineColor, options.odLineOpacity)
         //ScatterPlotGraphics.lineStyle(1, options.areaScale(classId).replace("#","0x"), options.odLineOpacity)
-        for (var j = 0; j < data[classId].od.length; j++) {
+        data[classId].od = data[classId].od.sort((a, b) => {
+            return (a[1] - a[0]) - (b[1] - b[0]);
+        })
+        console.log('data[classId].od: ', data[classId].od);
+
+        var controlPointYScale = d3.scaleLinear()
+            .domain([0, width - margin.left - margin.right])
+            .range([margin.top - 15 - SEC, margin.top - 1.8 * margin.top])
+
+        var controlPointYScaleBottom = d3.scaleLinear()
+            .domain([0, width - margin.left - margin.right])
+            .range([margin.top + 15 + SEC, margin.top + 1.8 * margin.top])
+
+
+        for (var j = 0; j < data[classId].od.length / 2; j++) {
             let source = axisXSacle(data[classId].od[j][0]),
                 target = axisXSacle(data[classId].od[j][1]);
             //此时的source,target代表轴上的坐标,坐标原点是左上角（0,0）
@@ -70,26 +85,35 @@ var odView = (function () {
             ScatterPlotGraphics.moveTo(source, margin.top);
             ScatterPlotGraphics.quadraticCurveTo(((source + target) / 2), controlPointY, target, margin.top);
         }
+        for (var j = parseInt(data[classId].od.length / 2); j < data[classId].od.length; j++) {
+            let source = axisXSacle(data[classId].od[j][0]),
+                target = axisXSacle(data[classId].od[j][1]);
+            //此时的source,target代表轴上的坐标,坐标原点是左上角（0,0）
+            let diffLength = target - source;
+            let controlPointY = controlPointYScaleBottom(diffLength);
+            ScatterPlotGraphics.moveTo(source, margin.top + SEC);
+            ScatterPlotGraphics.quadraticCurveTo(((source + target) / 2), controlPointY, target, margin.top + SEC);
+        }
         ScatterPlotGraphics.x = 0;
         ScatterPlotGraphics.y = 0;
         renderer.render(stage);
     }
 
     function addLineInterClassOnCanvas(sourceClassId, targetClassId, data) {
-        
+
         var drawData = []
         for (var i = 0; i < data.length; i++) {
             if (data[i].direc.indexOf(sourceClassId) != -1 && data[i].direc.indexOf(targetClassId) != -1) {
                 drawData.push(data[i])
             }
         }
-        
+
         //开始用画笔画点
         ScatterPlotGraphics.clear();
 
-        const SEC = 5;
 
-       
+
+
 
         var controlPointYScale = d3.scaleLinear()
             .domain([0, width - margin.left - margin.right])
@@ -101,11 +125,11 @@ var odView = (function () {
 
         ScatterPlotGraphics.lineStyle(1, 0x000000, options.odLineOpacity)
 
-        ScatterPlotGraphics.moveTo(margin.left + 0.5 * margin.left, margin.top-SEC);
-        ScatterPlotGraphics.lineTo(width - margin.right, margin.top-SEC);
+        ScatterPlotGraphics.moveTo(margin.left + 0.5 * margin.left, margin.top - SEC);
+        ScatterPlotGraphics.lineTo(width - margin.right, margin.top - SEC);
 
-        ScatterPlotGraphics.moveTo(margin.left + 0.5 * margin.left, margin.top+SEC);
-        ScatterPlotGraphics.lineTo(width - margin.right, margin.top+SEC);
+        ScatterPlotGraphics.moveTo(margin.left + 0.5 * margin.left, margin.top + SEC);
+        ScatterPlotGraphics.lineTo(width - margin.right, margin.top + SEC);
 
         ScatterPlotGraphics.lineStyle(1, options.odLineColor, options.odLineOpacity)
 
