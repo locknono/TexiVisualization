@@ -2,6 +2,7 @@
     var svg = d3.select("#netSvg");
     var width = parseFloat(svg.style("width").split('px')[0]),
         height = parseFloat(svg.style("height").split('px')[0]);
+    var lineClicked = false;
     var force = d3.forceSimulation()
         .force("link", d3.forceLink().id(function (d) {
                 return d.index
@@ -61,16 +62,39 @@
                     .style("stroke-linecap", "round")
                     .attr("class", "link")
                     .on("click", function (d) {
+                        if (lineClicked === false) {
+                            lineClicked = true;
+                            svg.selectAll("circle").style("stroke", "none");
+                            svg.selectAll("circle").style("stroke", "none");
 
+                            svg.selectAll("[id='" + d.source.class + "']").style("stroke", "black").style("stroke-width", 2)
+                            svg.selectAll("[id='" + d.target.class + "']").style("stroke", "black").style("stroke-width", 2)
+
+                            d3.select("#map").selectAll("[id='" + d.source.class + "']").style("opacity", options.mouseover_opacity).style("stroke-width", 1)
+                            d3.select("#map").selectAll("[id='" + d.target.class + "']").style("opacity", options.mouseover_opacity).style("stroke-width", 1)
+
+                            let source = d.source.class;
+                            let target = d.target.class;
+                            odView.addLineInterClass(source, target, data)
+                        } else {
+                            lineClicked = false;
+                            svg.selectAll("circle").style("stroke", "none");
+                            svg.selectAll("circle").style("stroke", "none");
+
+                            d3.select("#map").selectAll("[id='" + d.source.class + "']").style("opacity", options.normal_opacity).style("stroke-width", 0.1)
+                            d3.select("#map").selectAll("[id='" + d.target.class + "']").style("opacity", options.normal_opacity).style("stroke-width", 0.1)
+                        }
+
+                    })
+                    .on("mouseout", d => {
+
+                        lineClicked = false;
                         svg.selectAll("circle").style("stroke", "none");
                         svg.selectAll("circle").style("stroke", "none");
 
-                        svg.selectAll("[id='" + d.source.class + "']").style("stroke", "black").style("stroke-width", 2)
-                        svg.selectAll("[id='" + d.target.class + "']").style("stroke", "black").style("stroke-width", 2)
+                        d3.select("#map").selectAll("[id='" + d.source.class + "']").style("opacity", options.normal_opacity).style("stroke-width", 0.1)
+                        d3.select("#map").selectAll("[id='" + d.target.class + "']").style("opacity", options.normal_opacity).style("stroke-width", 0.1)
 
-                        let source = d.source.class;
-                        let target = d.target.class;
-                        odView.addLineInterClass(source, target, data)
                     })
 
                 var node = svg.selectAll(".node")
@@ -81,11 +105,9 @@
                         .on("start", dragstarted)
                         .on("drag", dragged)
                         .on("end", dragended));
-
                 var nodeNumberRange = d3.extent(json.nodes, function (d) {
                     return d.number
                 })
-
                 var rScale = d3.scaleLinear()
                     .domain(nodeNumberRange)
                     .range([10, 22])
