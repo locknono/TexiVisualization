@@ -5,7 +5,30 @@ var options = (function () {
     var areaScale = d3.scaleOrdinal().domain([])
         .range(['#999999', '#377eb8', 'D7EFA1', '#4daf4a', '#984ea3', '#ff7f00', '#ffff33', '#a65628', '#f781bf', '#8400E8', '#e41a1c'])
 
-    
+    $(function () {
+        $("input").checkboxradio();
+        $("#radio-1").on("click", e => {
+            $('input').prop("checked", false);
+            window.location.href = clusterNumber + '?status=-1';
+        })
+        $("#radio-2").on("click", e => {
+            $('input').prop("checked", false);
+            window.location.href = clusterNumber + '?status=0';
+        })
+        $("#radio-3").on("click", e => {
+            $('input').prop("checked", false);
+            window.location.href = clusterNumber + '?status=1';
+        })
+    });
+    console.log('status: ', status);
+    if (status == -1) {
+        $('#radio-1').prop("checked", true);
+    } else if (status == 0) {
+        $('#radio-2').prop("checked", true);
+    } else if (status == 1) {
+        $('#radio-3').prop("checked", true);
+    }
+
     var svg = d3.select("#headingSvg");
     var width = parseFloat(svg.style("width").split('px')[0]),
         height = parseFloat(svg.style("height").split('px')[0]);
@@ -17,12 +40,6 @@ var options = (function () {
             .style("fill", areaScale(i))
     }
     var classScale = d3.scale.category20();
-    $(function () {
-        $("input").checkboxradio();
-        if (!($('#radio-1').is(':checked'))) {
-            $('#ratio-1').prop('checked',true);
-        }
-    });
     return {
         rootPath: rootPath,
         clusterNumber: clusterNumber,
