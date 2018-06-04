@@ -30,6 +30,7 @@ var pieView = (function () {
     var flInfoG = svg.append("g").attr("class", "arcInfoG");
 
     function pieViewInClass(classId, row, col) {
+        console.log('classId: ', classId);
         flArcsG
             .selectAll(".path").remove();
         flInfoG.selectAll(".valueText").remove();
@@ -39,12 +40,11 @@ var pieView = (function () {
             var filePath = options.rootPath + 'eachPieData/' + row + '_' + col + '.json';
         }
         d3.json(filePath, function (classPieData) {
-
             if (classId !== undefined) {
                 var volumeData = classPieData[classId].pieData;
                 var minFlux = classPieData[classId].min;
                 var maxFlux = classPieData[classId].max;
-            } else {
+            } else if(classId===undefined){
                 var volumeData = classPieData.pieData;
                 var minFlux = 0;
                 var maxFlux = classPieData.max;
@@ -116,74 +116,77 @@ var pieView = (function () {
                 })
         })
     }
-    d3.json(options.rootPath + 'pieData.json', function (volumeData) {
-        var minFlux = d3.min(volumeData, function (d) {
-            return d3.min(d);
-        })
-        var maxFlux = d3.max(volumeData, function (d) {
-            return d3.max(d);
-        })
-        var fluxExtent = ([minFlux, maxFlux]);
-
-        var fluxScale = d3.scaleLinear()
-            .domain(fluxExtent)
-            .range([0, 1]);
-
-        var arcArray = [];
-        for (var i = 0; i < volumeData.length; i++) {
-            for (var j = 0; j < volumeData[i].length; j++) {
-                var thisArc = new Object();
-                thisArc.value = volumeData[i][j];
-                thisArc.startAngle = 2 * Math.PI / 24 * j;
-                thisArc.endAngle = 2 * Math.PI / 24 * (j + 1);
-                thisArc.innerRadius = minRadius + i * tierRadius;
-                thisArc.outerRadius = minRadius + (i + 1) * tierRadius;
-                arcArray.push(thisArc);
+    function pieViewAll(){
+        d3.json(options.rootPath + 'pieData.json', function (volumeData) {
+            var minFlux = d3.min(volumeData, function (d) {
+                return d3.min(d);
+            })
+            var maxFlux = d3.max(volumeData, function (d) {
+                return d3.max(d);
+            })
+            var fluxExtent = ([minFlux, maxFlux]);
+    
+            var fluxScale = d3.scaleLinear()
+                .domain(fluxExtent)
+                .range([0, 1]);
+    
+            var arcArray = [];
+            for (var i = 0; i < volumeData.length; i++) {
+                for (var j = 0; j < volumeData[i].length; j++) {
+                    var thisArc = new Object();
+                    thisArc.value = volumeData[i][j];
+                    thisArc.startAngle = 2 * Math.PI / 24 * j;
+                    thisArc.endAngle = 2 * Math.PI / 24 * (j + 1);
+                    thisArc.innerRadius = minRadius + i * tierRadius;
+                    thisArc.outerRadius = minRadius + (i + 1) * tierRadius;
+                    arcArray.push(thisArc);
+                }
             }
-        }
-
-        var valueTextText = flInfoG.append("text").attr("class", "valueText")
-            .attr("x", width / 2 - 20)
-            .attr("y", height / 2 + 25)
-            .attr("text-anchor", "middle")
-
-        var valueText = flInfoG.append("text").attr("class", "valueText")
-            .attr("x", width / 2 + 18)
-            .attr("y", height / 2 + 25)
-            .attr("text-anchor", "middle")
-
-        var dayText = flInfoG.append("text").attr("class", "valueText")
-            .attr("x", width / 2)
-            .attr("y", height / 2 - 20)
-            .attr("text-anchor", "middle")
-        var hourText = flInfoG.append("text").attr("class", "valueText")
-            .attr("x", width / 2)
-            .attr("y", height / 2 - 5)
-            .attr("text-anchor", "middle")
-
-        var dayLabel = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-
-        var fl = flArcsG
-            .selectAll(".path")
-            .data(arcArray)
-            .enter()
-            .append("path")
-            .attr("d", arc)
-            .style("stroke", "steelblue")
-            .style("stroke-width", "0.2px")
-            .style("fill", function (d) {
-                return options.pieview_colorscale(fluxScale(d.value));
-
-            })
-            .on("mouseover", function (d, i) {
-                valueText.text(d.value)
-                valueTextText.text("value:")
-                //console.log('parseFloat(i / 24): ', parseFloat(i / 24));
-                dayText.text(dayLabel[parseInt(i / 24)]);
-                hourText.text(convert_to_ampm(parseInt(i % 24)));
-            })
-    })
-
+    
+            var valueTextText = flInfoG.append("text").attr("class", "valueText")
+                .attr("x", width / 2 - 20)
+                .attr("y", height / 2 + 25)
+                .attr("text-anchor", "middle")
+    
+            var valueText = flInfoG.append("text").attr("class", "valueText")
+                .attr("x", width / 2 + 18)
+                .attr("y", height / 2 + 25)
+                .attr("text-anchor", "middle")
+    
+            var dayText = flInfoG.append("text").attr("class", "valueText")
+                .attr("x", width / 2)
+                .attr("y", height / 2 - 20)
+                .attr("text-anchor", "middle")
+            var hourText = flInfoG.append("text").attr("class", "valueText")
+                .attr("x", width / 2)
+                .attr("y", height / 2 - 5)
+                .attr("text-anchor", "middle")
+    
+            var dayLabel = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    
+            var fl = flArcsG
+                .selectAll(".path")
+                .data(arcArray)
+                .enter()
+                .append("path")
+                .attr("d", arc)
+                .style("stroke", "steelblue")
+                .style("stroke-width", "0.2px")
+                .style("fill", function (d) {
+                    return options.pieview_colorscale(fluxScale(d.value));
+    
+                })
+                .on("mouseover", function (d, i) {
+                    valueText.text(d.value)
+                    valueTextText.text("value:")
+                    //console.log('parseFloat(i / 24): ', parseFloat(i / 24));
+                    dayText.text(dayLabel[parseInt(i / 24)]);
+                    hourText.text(convert_to_ampm(parseInt(i % 24)));
+                })
+        })    
+    }
+    
+    pieViewAll();
 
     var day_labels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
     var label_rad = 106;
@@ -247,6 +250,7 @@ var pieView = (function () {
 
 
     return {
-        pieViewInClass: pieViewInClass
+        pieViewInClass: pieViewInClass,
+        pieViewAll:pieViewAll,
     }
 })();
