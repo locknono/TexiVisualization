@@ -29,16 +29,27 @@ var pieView = (function () {
 
     var flInfoG = svg.append("g").attr("class", "arcInfoG");
 
-    function pieViewInClass(classId) {
+    function pieViewInClass(classId, row, col) {
         flArcsG
             .selectAll(".path").remove();
         flInfoG.selectAll(".valueText").remove();
+        if (row === undefined && col === undefined) {
+            var filePath = options.rootPath + 'classPieData.json';
+        } else if (classId === undefined) {
+            var filePath = options.rootPath + 'eachPieData/' + row + '_' + col + '.json';
+        }
+        d3.json(filePath, function (classPieData) {
 
-        d3.json(options.rootPath+'classPieData.json', function (classPieData) {
-            var volumeData = classPieData[classId].pieData;
+            if (classId !== undefined) {
+                var volumeData = classPieData[classId].pieData;
+                var minFlux = classPieData[classId].min;
+                var maxFlux = classPieData[classId].max;
+            } else {
+                var volumeData = classPieData.pieData;
+                var minFlux = 0;
+                var maxFlux = classPieData.max;
+            }
 
-            var minFlux = classPieData[classId].min;
-            var maxFlux = classPieData[classId].max;
             var fluxExtent = ([minFlux, maxFlux]);
 
             var fluxScale = d3.scaleLinear()
@@ -105,7 +116,7 @@ var pieView = (function () {
                 })
         })
     }
-    d3.json(options.rootPath+'pieData.json', function (volumeData) {
+    d3.json(options.rootPath + 'pieData.json', function (volumeData) {
         var minFlux = d3.min(volumeData, function (d) {
             return d3.min(d);
         })

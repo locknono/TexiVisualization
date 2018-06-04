@@ -526,6 +526,7 @@ var mapView = (function () {
                     .on("mouseover", function (d) {
                         d3.select(this).style("stroke-width", 1);
                         suspedingViewForOneHexagon(d.row, d.col, d.category);
+                        pieView.pieViewInClass(classId = undefined, row = d.row, col = d.col);
                     })
                     .on("mouseout", function (d) {
                         if (curClass != d.category) {

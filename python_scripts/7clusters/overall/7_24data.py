@@ -51,7 +51,15 @@ for j in range(maxRow+1):
             i['kClass']=-1
             rowList.append(i)
     matrix.append(rowList)
-    
+
+for i in range(len(matrix)):
+    for j in range(len(matrix[i])):
+        pieData=[]
+        for s in range(0,7):
+            pieData.append([])
+            for m in range(0,24):
+                pieData[s].append(0)
+        matrix[i][j]['p']=pieData
 classPieData=[]
 for i in range(0,classCount-1):
     append={}
@@ -111,6 +119,8 @@ for path in pathdir:
                 
                 classPieData[classId]['pieData'][dayIndex][hour]+=1
                 
+                matrix[row][col]['p'][dayIndex][hour]+=1
+                
 for i in classPieData:
     b=np.array(i['pieData']) 
     minFlux=np.min(b)
@@ -125,6 +135,41 @@ with open(rootPath.rootPath+'pieData.json','w',encoding='utf-8') as f:
 with open(rootPath.rootPath+'classPieData.json','w',encoding='utf-8') as f:
     writeStr=json.dumps(classPieData)
     f.write(writeStr)
-                
+
+
+
+eachMin=0;
+eachMax=0;
+for i in range(len(matrix)):
+    for j in range(len(matrix[i])):
+        thismin=2000
+        thismax=0
+        for s in range(len(matrix[i][j]['p'])):
+            for m in range(len(matrix[i][j]['p'][s])):
+                if matrix[i][j]['p'][s][m]>thismax:
+                    thismax=matrix[i][j]['p'][s][m]
+                if matrix[i][j]['p'][s][m]<thismin:
+                    thismin=matrix[i][j]['p'][s][m]
+                matrix[i][j]['min']=thismin
+                matrix[i][j]['max']=thismax
+
+for i in range(len(matrix)):
+    for j in range(len(matrix[i])):
+        thisClass =matrix[i][j]['category']
+        write={}
+        pieData=matrix[i][j]['p']
+        write['min']=classPieData[thisClass]['min']
+        write['max']=classPieData[thisClass]['max']
+        write['pieData']=pieData
+        matrix[i][j]['w']=write
+        
+for i in range(len(matrix)):
+    for j in range(len(matrix[i])):
+        with open(rootPath.rootPath+'eachPieData/'+str(matrix[i][j]['row'])+'_'+str(matrix[i][j]['col'])+'.json','w',encoding='utf-8') as f:
+            writeStr=json.dumps(matrix[i][j]['w'])
+            f.write(writeStr)
+        
+
+
                 
                 
