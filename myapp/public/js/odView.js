@@ -43,7 +43,7 @@ var odView = (function () {
         .call(axis); */
 
     function addLineInClassOnCanvas(classId, data) {
-        console.log('data: ', data);
+        
         //开始用画笔画点
         ScatterPlotGraphics.clear();
         if (classId === -1) {
@@ -64,7 +64,7 @@ var odView = (function () {
         data[classId].od = data[classId].od.sort((a, b) => {
             return (a[1] - a[0]) - (b[1] - b[0]);
         })
-        console.log('data[classId].od: ', data[classId].od);
+        
 
         var controlPointYScale = d3.scaleLinear()
             .domain([0, width - margin.left - margin.right])

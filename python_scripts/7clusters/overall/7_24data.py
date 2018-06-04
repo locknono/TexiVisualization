@@ -152,7 +152,7 @@ for i in range(len(matrix)):
                     thismin=matrix[i][j]['p'][s][m]
                 matrix[i][j]['min']=thismin
                 matrix[i][j]['max']=thismax
-
+"""
 for i in range(len(matrix)):
     for j in range(len(matrix[i])):
         thisClass =matrix[i][j]['category']
@@ -162,6 +162,19 @@ for i in range(len(matrix)):
         write['max']=classPieData[thisClass]['max']
         write['pieData']=pieData
         matrix[i][j]['w']=write
+"""
+
+  
+for i in range(len(matrix)):
+    for j in range(len(matrix[i])):
+        thisClass =matrix[i][j]['category']
+        write={}
+        pieData=matrix[i][j]['p']
+        write['min']=matrix[i][j]['min']
+        write['max']=matrix[i][j]['max']
+        write['pieData']=pieData
+        matrix[i][j]['w']=write
+        
         
 for i in range(len(matrix)):
     for j in range(len(matrix[i])):

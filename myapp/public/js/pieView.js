@@ -2,8 +2,8 @@ var pieView = (function () {
     var svg = d3.select("#pieSvg");
     var width = parseFloat(svg.style("width").split('px')[0]),
         height = parseFloat(svg.style("height").split('px')[0]);
-    console.log('width: ', width);
-    console.log('height: ', height);
+    
+    
 
     var minRadius = d3.min([width, height]) / 2 / 3;
     var maxRadius = d3.min([width, height]) / 2 * (9 / 10);
@@ -30,9 +30,8 @@ var pieView = (function () {
     var flInfoG = svg.append("g").attr("class", "arcInfoG");
 
     function pieViewInClass(classId, row, col) {
-        console.log('classId: ', classId);
-        flArcsG
-            .selectAll(".path").remove();
+
+        flArcsG.selectAll(".path").remove();
         flInfoG.selectAll(".valueText").remove();
         if (row === undefined && col === undefined) {
             var filePath = options.rootPath + 'classPieData.json';
@@ -110,7 +109,7 @@ var pieView = (function () {
                 .on("mouseover", function (d, i) {
                     valueText.text(d.value)
                     valueTextText.text("value:")
-                    //console.log('parseFloat(i / 24): ', parseFloat(i / 24));
+                    //
                     dayText.text(dayLabel[parseInt(i / 24)]);
                     hourText.text(convert_to_ampm(parseInt(i % 24)));
                 })
@@ -179,7 +178,7 @@ var pieView = (function () {
                 .on("mouseover", function (d, i) {
                     valueText.text(d.value)
                     valueTextText.text("value:")
-                    //console.log('parseFloat(i / 24): ', parseFloat(i / 24));
+                    //
                     dayText.text(dayLabel[parseInt(i / 24)]);
                     hourText.text(convert_to_ampm(parseInt(i % 24)));
                 })

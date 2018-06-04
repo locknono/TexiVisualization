@@ -4,6 +4,8 @@ var options = (function () {
     var rootPath = 'data/drawData/' + clusterNumber.toString() + '/' + status + '/';
     var areaScale = d3.scaleOrdinal().domain([])
         .range(['#999999', '#377eb8', 'D7EFA1', '#4daf4a', '#984ea3', '#ff7f00', '#ffff33', '#a65628', '#f781bf', '#8400E8', '#e41a1c'])
+
+    
     var svg = d3.select("#headingSvg");
     var width = parseFloat(svg.style("width").split('px')[0]),
         height = parseFloat(svg.style("height").split('px')[0]);
@@ -17,10 +19,10 @@ var options = (function () {
     var classScale = d3.scale.category20();
     $(function () {
         $("input").checkboxradio();
+        if (!($('#radio-1').is(':checked'))) {
+            $('#ratio-1').prop('checked',true);
+        }
     });
-    if ($('#ratio-1').is(':checked')) {
-        $('#ratio-1').prop('checked',true);
-    }
     return {
         rootPath: rootPath,
         clusterNumber: clusterNumber,
