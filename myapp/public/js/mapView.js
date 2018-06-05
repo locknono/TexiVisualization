@@ -481,6 +481,7 @@ var mapView = (function () {
                     .style("stroke", "black")
                     .style("stroke-width", 0.1)
                     .on("click", d => {
+                        console.log(d.row,d.col);
                         if (curClass === -1) {
                             curClass = d.category;
                             pieView.pieViewInClass(d.category);

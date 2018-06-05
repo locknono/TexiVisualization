@@ -1,15 +1,14 @@
 var odView = (function () {
-    /*  var svg = d3.select("#odSvg");
-     var width = parseFloat(svg.style("width").split('px')[0]),
-         height = parseFloat(svg.style("height").split('px')[0]); */
     var canvas = d3.select("#odCanvas");
     var width = parseFloat(canvas.style("width").split('px')[0]),
         height = parseFloat(canvas.style("height").split('px')[0]);
+        
     var margin = {
         left: 20,
         right: 20,
-        top: 140
+        top: height*0.5
     };
+    
     const SEC = 5;
     var timeScale = d3.scaleLinear()
         .domain([0, 1440])

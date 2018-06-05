@@ -2,6 +2,7 @@
     var svg = d3.select("#netSvg");
     var width = parseFloat(svg.style("width").split('px')[0]),
         height = parseFloat(svg.style("height").split('px')[0]);
+    var maxDis=250;
     var lineClicked = false;
     var force = d3.forceSimulation()
         .force("link", d3.forceLink().id(function (d) {
@@ -11,7 +12,7 @@
                 return 200 - Math.pow(1.32, d.value);
             })
         )
-        .force("charge", d3.forceManyBody().strength(-2000).distanceMin(0).distanceMax(250))
+        .force("charge", d3.forceManyBody().strength(-2000).distanceMin(0).distanceMax(maxDis))
         .alphaTarget(0.05)
         .force("center", d3.forceCenter(width / 2, height / 2))
         .force("y", d3.forceY(0.001))
@@ -87,14 +88,14 @@
 
                     })
                     .on("mouseout", d => {
-
+/* 
                         lineClicked = false;
                         svg.selectAll("circle").style("stroke", "none");
                         svg.selectAll("circle").style("stroke", "none");
 
                         d3.select("#map").selectAll("[id='" + d.source.class + "']").style("opacity", options.normal_opacity).style("stroke-width", 0.1)
                         d3.select("#map").selectAll("[id='" + d.target.class + "']").style("opacity", options.normal_opacity).style("stroke-width", 0.1)
-
+ */
                     })
 
                 var node = svg.selectAll(".node")

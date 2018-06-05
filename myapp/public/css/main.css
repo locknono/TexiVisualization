@@ -28,6 +28,12 @@ body {
   font-weight: bold;
   font-family: Helvetica Arial sans-serif;
 }
+.titleText {
+  font-family: Helvetica Arial sans-serif;
+  font-size: 15px;
+  margin-left: 7px;
+  font-weight: bold;
+}
 #chooseStatus {
   position: absolute;
   top: 5px;
@@ -106,6 +112,9 @@ body {
   border-top: none;
 }
 #fluxNet svg {
+  position: absolute;
+  top: 0px;
+  left: 0px;
   width: 100%;
   height: 100%;
 }

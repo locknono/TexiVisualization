@@ -199,7 +199,7 @@ var pieView = (function () {
             .attr("id", "day_path" + i)
             .attr(
                 "d",
-                "M" + (width / 2) + " " + (height / 2 + 33) + " m" +
+                "M" + (width / 2) + " " + (height / 2 + 40) + " m" +
                 label_rad * Math.cos(label_angle) +
                 " " +
                 label_rad * Math.sin(label_angle) +
