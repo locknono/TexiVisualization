@@ -2,13 +2,13 @@ var odView = (function () {
     var canvas = d3.select("#odCanvas");
     var width = parseFloat(canvas.style("width").split('px')[0]),
         height = parseFloat(canvas.style("height").split('px')[0]);
-        
+
     var margin = {
         left: 20,
         right: 20,
-        top: height*0.5
+        top: height * 0.5
     };
-    
+
     const SEC = 5;
     var timeScale = d3.scaleLinear()
         .domain([0, 1440])
@@ -21,6 +21,8 @@ var odView = (function () {
     var axisXSacleBottom = d3.scaleLinear()
         .domain([0, 1440])
         .range([(width - margin.right), margin.left + 0.5 * margin.left]);
+
+    var axisWidth = width - margin.right - margin.left-0.5*margin.left;
 
     var stage = new PIXI.Container(); //创建一个舞台
     var ScatterPlotGraphics = new PIXI.Graphics() //创建一直画笔
@@ -42,35 +44,46 @@ var odView = (function () {
         .call(axis); */
 
     function addLineInClassOnCanvas(classId, data) {
-        
+
         ScatterPlotGraphics.clear();
         if (classId === -1) {
             renderer.render(stage);
             return;
         }
-        ScatterPlotGraphics.lineStyle(1, 0x000000, options.odLineOpacity)
+
+        //add axisLine
+        ScatterPlotGraphics.lineStyle(1, 0x000000, 1)
 
         ScatterPlotGraphics.moveTo(margin.left + 0.5 * margin.left, margin.top);
         ScatterPlotGraphics.lineTo(width - margin.right, margin.top);
 
-        /*  var controlPointYScale = d3.scaleLinear()
-            .domain([0, width - margin.left - margin.right])
-            .range([margin.top - 15, -margin.top])
- */
+        for (var i = 0; i <= 24; i++) {
+            let x = (margin.left + 0.5 * margin.left) + (axisWidth / 24) * i;
+            let y = margin.top;
+
+            ScatterPlotGraphics.moveTo(x, margin.top);
+            ScatterPlotGraphics.lineTo(x, margin.top-3);
+        }
         ScatterPlotGraphics.lineStyle(1, options.odLineColor, options.odLineOpacity)
+
+        
         //ScatterPlotGraphics.lineStyle(1, options.areaScale(classId).replace("#","0x"), options.odLineOpacity)
         data[classId].od = data[classId].od.sort((a, b) => {
             return (a[1] - a[0]) - (b[1] - b[0]);
         })
-        
 
+
+        var sourceY = margin.top - SEC;
+        var targetY = margin.top + SEC;
+        var minHeight = 10;
         var controlPointYScale = d3.scaleLinear()
             .domain([0, width - margin.left - margin.right])
-            .range([margin.top - 15 - SEC, margin.top - 1.8 * margin.top])
+            .range([sourceY - minHeight, sourceY - 2 * margin.top])
 
         var controlPointYScaleBottom = d3.scaleLinear()
             .domain([0, width - margin.left - margin.right])
-            .range([margin.top + 15 + SEC, margin.top + 1.8 * margin.top])
+            .range([targetY + minHeight, sourceY + 2 * margin.top])
+
 
 
         for (var j = 0; j < data[classId].od.length / 2; j++) {
@@ -79,9 +92,8 @@ var odView = (function () {
             //此时的source,target代表轴上的坐标,坐标原点是左上角（0,0）
             let diffLength = target - source;
             let controlPointY = controlPointYScale(diffLength);
-
-            ScatterPlotGraphics.moveTo(source, margin.top);
-            ScatterPlotGraphics.quadraticCurveTo(((source + target) / 2), controlPointY, target, margin.top);
+            ScatterPlotGraphics.moveTo(source, sourceY);
+            ScatterPlotGraphics.quadraticCurveTo(((source + target) / 2), controlPointY, target, sourceY);
         }
         for (var j = parseInt(data[classId].od.length / 2); j < data[classId].od.length; j++) {
             let source = axisXSacle(data[classId].od[j][0]),
@@ -89,8 +101,8 @@ var odView = (function () {
             //此时的source,target代表轴上的坐标,坐标原点是左上角（0,0）
             let diffLength = target - source;
             let controlPointY = controlPointYScaleBottom(diffLength);
-            ScatterPlotGraphics.moveTo(source, margin.top + SEC);
-            ScatterPlotGraphics.quadraticCurveTo(((source + target) / 2), controlPointY, target, margin.top + SEC);
+            ScatterPlotGraphics.moveTo(source, targetY);
+            ScatterPlotGraphics.quadraticCurveTo(((source + target) / 2), controlPointY, target, targetY);
         }
         ScatterPlotGraphics.x = 0;
         ScatterPlotGraphics.y = 0;
