@@ -3,6 +3,11 @@ body {
   width: 100%;
   height: 100%;
 }
+.svgPosition {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+}
 #heading {
   position: relative;
   top: 0px;
@@ -56,8 +61,8 @@ body {
   border-right: none;
 }
 #odView svg {
-  float: top;
   position: absolute;
+  left: 0px;
   top: 0px;
   height: 100%;
   width: 100%;
@@ -65,6 +70,7 @@ body {
 #odView canvas {
   z-index: 2;
   position: absolute;
+  left: 0px;
   top: 0px;
   height: 100%;
   width: 100%;
@@ -113,8 +119,8 @@ body {
 }
 #fluxNet svg {
   position: absolute;
-  top: 0px;
   left: 0px;
+  top: 0px;
   width: 100%;
   height: 100%;
 }
@@ -131,8 +137,8 @@ body {
 }
 #pieDiv svg {
   position: absolute;
-  top: 0px;
   left: 0px;
+  top: 0px;
   width: 100%;
   height: 100%;
 }

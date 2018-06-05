@@ -20,7 +20,7 @@ var options = (function () {
             window.location.href = clusterNumber + '?status=1';
         })
     });
-    console.log('status: ', status);
+    
     if (status == -1) {
         $('#radio-1').prop("checked", true);
     } else if (status == 0) {
