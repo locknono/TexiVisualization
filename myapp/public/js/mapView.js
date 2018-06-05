@@ -485,6 +485,7 @@ var mapView = (function () {
                             //选中一个类的时候直接取消一个六边形的选中
                             d3.select(curHex[0]).style("opacity", options.normal_opacity).style("stroke-width", 0.1);
                             curHex.shift();
+                            hideDiv();
                             if (curClass === -1) {
                                 curClass = d.category;
                                 pieView.pieViewInClass(d.category, undefined, undefined);
@@ -495,7 +496,6 @@ var mapView = (function () {
                                 d3.select("#netSvg").select("[id='" + d.category + "']")
                                     .style("stroke", "black")
                                     .style("stroke-width", 2)
-                                suspedingViewForOneHexagon(d.row, d.col, d.category);
                             } else if (curClass === d.category) {
                                 curClass = -1;
                                 pieView.pieViewAll();
@@ -523,26 +523,33 @@ var mapView = (function () {
                                 d3.select("#netSvg").select("[id='" + d.category + "']")
                                     .style("stroke", "black")
                                     .style("stroke-width", 2)
-                                suspedingViewForOneHexagon(d.row, d.col, d.category);
                             }
                         } else {
-
                             //点击了当前选中的，也就是取消选中一个六边形的的情况
-                            if(curHex.length > 0 &&curHex[0]==this){
+                            if (curHex.length > 0 && curHex[0] == this) {
                                 //如果点击的和当前选中的是同一个:如果当前选中了这一类，就归为普通的类的样式，饼图展示这一类
                                 //如果当前没有选中这一类，变成普通的样式，饼图展示当前的类
                                 if (curHex[0].id == curClass) {
                                     d3.select(curHex[0]).style("opacity", options.mouseover_opacity).style("stroke-width", 1);
-                                    pieView.pieViewInClass(classId = curClass, undefined,undefined);
+                                    if (curClass != -1) {
+                                        pieView.pieViewInClass(classId = curClass, undefined, undefined);
+                                    } else {
+                                        pieView.pieViewAll();
+                                    }
                                 } else {
                                     d3.select(curHex[0]).style("opacity", options.normal_opacity).style("stroke-width", 0.1);
-                                    pieView.pieViewInClass(classId = curClass, undefined,undefined);
+                                    if (curClass != -1) {
+                                        pieView.pieViewInClass(classId = curClass, undefined, undefined);
+                                    } else {
+                                        pieView.pieViewAll();
+                                    }
                                 }
+                                hideDiv();
                                 curHex.shift();
-                                return 
+                                return
                             }
                             //选中另一个正六边形的情况
-                            if (curHex.length > 0 &&curHex[0]!==this) {
+                            if (curHex.length > 0 && curHex[0] !== this) {
                                 if (curHex[0].id == curClass) {
                                     d3.select(curHex[0]).style("opacity", options.mouseover_opacity).style("stroke-width", 1);
                                 } else {
