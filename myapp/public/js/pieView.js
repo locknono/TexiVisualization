@@ -7,9 +7,48 @@ var pieView = (function () {
     var maxRadius = d3.min([width, height]) / 2 * (9 / 10);
     var tierRadius = (maxRadius - minRadius) / 8;
 
+    var a = options.pieview_colorscale(0); //红色  
+    var b = options.pieview_colorscale(1); //绿色  
+    var compute = d3.interpolate(a, b);
+
+    var defs = svg.append("defs");
+
+    var linearGradient = defs.append("linearGradient")
+        .attr("id", "linearColor")
+        .attr("x1", "0%")
+        .attr("y1", "100%")
+        .attr("x2", "0%")
+        .attr("y2", "0%");
+
+    var stop1 = linearGradient.append("stop")
+        .attr("offset", "0%")
+        .style("stop-color", a.toString());
+
+    var stop2 = linearGradient.append("stop")
+        .attr("offset", "100%")
+        .style("stop-color", b.toString());
+
+    var colorRect = svg.append("rect")
+        .attr("x", 13)
+        .attr("y", 276)
+        .attr("width", 20)
+        .attr("height", 140)
+        .style("fill", "url(#" + linearGradient.attr("id") + ")");
+
+    svg.append("text")
+        .attr("x", 11.5)
+        .attr("y", 273)
+        .text("Max")
+
+    svg.append("text")
+        .attr("x", 11)
+        .attr("y", 430)
+        .text("Min")
+
     var curClass = undefined,
         curRow = undefined,
         curCol = undefined;
+
     var arc = d3
         .arc()
         .startAngle(function (d) {
