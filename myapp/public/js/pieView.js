@@ -36,9 +36,6 @@ var pieView = (function () {
             if (options.globalFlag === false) {
                 options.globalFlag = true;
                 pieViewInClass(curClass, curRow, curRow);
-                console.log('col: ', curRow);
-                console.log('row: ', curRow);
-                console.log('curClass: ', curClass);
             }
         })
         $("#localStatus").on("click", function (e) {

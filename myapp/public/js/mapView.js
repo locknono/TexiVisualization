@@ -389,7 +389,6 @@ var mapView = (function () {
                 return map.latLngToLayerPoint(d).y
             })
 
-
         getBorderLineData().then(function (borderData) {
             let classNumber = d3.max(borderData, function (d) {
                 return d.class
@@ -439,7 +438,6 @@ var mapView = (function () {
             }) */
         })
     }
-    var curClass = -1;
     var curHex = [];
 
     function addHexagon(selection, projection, clusterNumber) {
@@ -486,8 +484,8 @@ var mapView = (function () {
                             d3.select(curHex[0]).style("opacity", options.normal_opacity).style("stroke-width", 0.1);
                             curHex.shift();
                             hideDiv();
-                            if (curClass === -1) {
-                                curClass = d.category;
+                            if (options.curClass === -1) {
+                                options.curClass = d.category;
                                 pieView.pieViewInClass(d.category, undefined, undefined);
                                 odView.addLineInClass(d.category, odInData);
                                 selection.selectAll("[id='" + d.category + "']")
@@ -496,8 +494,8 @@ var mapView = (function () {
                                 d3.select("#netSvg").select("[id='" + d.category + "']")
                                     .style("stroke", "black")
                                     .style("stroke-width", 2)
-                            } else if (curClass === d.category) {
-                                curClass = -1;
+                            } else if (options.curClass === d.category) {
+                                options.curClass = -1;
                                 pieView.pieViewAll();
                                 selection.selectAll("[id='" + d.category + "']")
                                     .style("opacity", options.normal_opacity)
@@ -506,16 +504,16 @@ var mapView = (function () {
                                     .style("stroke", "none")
                                 odView.addLineInClass(-1, odInData);
                                 hideDiv();
-                            } else if (curClass != d.category && curClass != -1) {
+                            } else if (options.curClass != d.category && options.curClass != -1) {
 
-                                selection.selectAll("[id='" + curClass + "']")
+                                selection.selectAll("[id='" + options.curClass + "']")
                                     .style("opacity", options.normal_opacity)
                                     .style("stroke-width", 0.1)
-                                d3.select("#netSvg").select("[id='" + curClass + "']")
+                                d3.select("#netSvg").select("[id='" + options.curClass + "']")
                                     .style("stroke", "none")
                                 hideDiv();
-                                curClass = d.category;
-                                pieView.pieViewInClass(curClass, undefined, undefined);
+                                options.curClass = d.category;
+                                pieView.pieViewInClass(options.curClass, undefined, undefined);
                                 odView.addLineInClass(d.category, odInData);
                                 selection.selectAll("[id='" + d.category + "']")
                                     .style("opacity", options.mouseover_opacity)
@@ -529,17 +527,17 @@ var mapView = (function () {
                             if (curHex.length > 0 && curHex[0] == this) {
                                 //如果点击的和当前选中的是同一个:如果当前选中了这一类，就归为普通的类的样式，饼图展示这一类
                                 //如果当前没有选中这一类，变成普通的样式，饼图展示当前的类
-                                if (curHex[0].id == curClass) {
+                                if (curHex[0].id == options.curClass) {
                                     d3.select(curHex[0]).style("opacity", options.mouseover_opacity).style("stroke-width", 1);
-                                    if (curClass != -1) {
-                                        pieView.pieViewInClass(classId = curClass, undefined, undefined);
+                                    if (options.curClass != -1) {
+                                        pieView.pieViewInClass(classId = options.curClass, undefined, undefined);
                                     } else {
                                         pieView.pieViewAll();
                                     }
                                 } else {
                                     d3.select(curHex[0]).style("opacity", options.normal_opacity).style("stroke-width", 0.1);
-                                    if (curClass != -1) {
-                                        pieView.pieViewInClass(classId = curClass, undefined, undefined);
+                                    if (options.curClass != -1) {
+                                        pieView.pieViewInClass(classId = options.curClass, undefined, undefined);
                                     } else {
                                         pieView.pieViewAll();
                                     }
@@ -550,7 +548,7 @@ var mapView = (function () {
                             }
                             //选中另一个正六边形的情况
                             if (curHex.length > 0 && curHex[0] !== this) {
-                                if (curHex[0].id == curClass) {
+                                if (curHex[0].id == options.curClass) {
                                     d3.select(curHex[0]).style("opacity", options.mouseover_opacity).style("stroke-width", 1);
                                 } else {
                                     d3.select(curHex[0]).style("opacity", options.normal_opacity).style("stroke-width", 0.1);
@@ -568,11 +566,11 @@ var mapView = (function () {
                      suspedingViewForOneHexagon(d.row, d.col, d.category);
                  })
                  .on("mouseout", function (d) {
-                     if (curClass != d.category) {
+                     if (options.curClass != d.category) {
                          d3.select(this).style("opacity", options.normal_opacity).style("stroke-width", 0.1);
                      }
-                     if (curClass != -1) {
-                         pieView.pieViewInClass(curClass);
+                     if (options.curClass != -1) {
+                         pieView.pieViewInClass(options.curClass);
                      } else {
                          pieView.pieViewAll();
                      }

@@ -4,7 +4,8 @@ var options = (function () {
     var rootPath = 'data/drawData/' + clusterNumber.toString() + '/' + status + '/';
     var areaScale = d3.scaleOrdinal().domain([])
         .range(['#999999', '#377eb8', 'D7EFA1', '#4daf4a', '#984ea3', '#ff7f00', '#ffff33', '#a65628', '#f781bf', '#8400E8', '#e41a1c'])
-    var globalFlag=true;
+    var globalFlag = true;
+    var curClass = -1;
     $(function () {
         $("input").checkboxradio();
         $("#radio-1").on("click", e => {
@@ -20,7 +21,7 @@ var options = (function () {
             window.location.href = clusterNumber + '?status=1';
         })
     });
-    
+
     if (status == -1) {
         $('#radio-1').prop("checked", true);
     } else if (status == 0) {
@@ -54,6 +55,7 @@ var options = (function () {
         forceLineColor: '#D4D4D4',
         odLineOpacity: 0.5,
         odLineColor: '0x00D3FF',
-        globalFlag:globalFlag,
+        globalFlag: globalFlag,
+        curClass:curClass,
     }
 }())

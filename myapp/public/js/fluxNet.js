@@ -2,8 +2,9 @@
     var svg = d3.select("#netSvg");
     var width = parseFloat(svg.style("width").split('px')[0]),
         height = parseFloat(svg.style("height").split('px')[0]);
-    var maxDis=250;
+    var maxDis = 250;
     var lineClicked = false;
+    var curLine = undefined;
     var force = d3.forceSimulation()
         .force("link", d3.forceLink().id(function (d) {
                 return d.index
@@ -53,17 +54,49 @@
                 var link = svg.selectAll(".link")
                     .data(json.links)
                     .enter()
+
                     .append("line")
                     .style("stroke", options.forceLineColor)
                     .style("stroke-width", function (d) {
                         return strokeScale(d.value)
+                    })
+                    .attr("id", function (d) {
+                        return d.source.class + '-' + d.target.class;
                     })
                     .style("opacity", 0.5)
                     .style("cursor", "crosshair")
                     .style("stroke-linecap", "round")
                     .attr("class", "link")
                     .on("click", function (d) {
-                        if (lineClicked === false) {
+                        
+                        
+                        if (curLine !== undefined && this.id == curLine.id) {
+
+                            
+                            svg.selectAll("circle").style("stroke", "none");
+                            svg.selectAll("circle").style("stroke", "none");
+                            d3.select("#map").selectAll(".hex").style("opacity", options.normal_opacity).style("stroke-width", 0.1);
+                            odView.addLineInterClass(-1, -1, data);
+                            curLine = undefined;
+                        } else if (curLine !== this) {
+                            svg.selectAll("circle").style("stroke", "none");
+                            svg.selectAll("circle").style("stroke", "none");
+
+                            svg.selectAll("[id='" + d.source.class + "']").style("stroke", "black").style("stroke-width", 2)
+                            svg.selectAll("[id='" + d.target.class + "']").style("stroke", "black").style("stroke-width", 2)
+
+                            d3.select("#map").selectAll(".hex").style("opacity", options.normal_opacity).style("stroke-width", 0.1)
+
+                            d3.select("#map").selectAll("[id='" + d.source.class + "']").style("opacity", options.mouseover_opacity).style("stroke-width", 1)
+                            d3.select("#map").selectAll("[id='" + d.target.class + "']").style("opacity", options.mouseover_opacity).style("stroke-width", 1)
+
+                            let source = d.source.class;
+                            let target = d.target.class;
+                            odView.addLineInterClass(source, target, data);
+                            curLine = this;
+                        }
+
+                        /*       if (lineClicked === false) {
                             lineClicked = true;
                             svg.selectAll("circle").style("stroke", "none");
                             svg.selectAll("circle").style("stroke", "none");
@@ -85,17 +118,17 @@
                             d3.select("#map").selectAll("[id='" + d.source.class + "']").style("opacity", options.normal_opacity).style("stroke-width", 0.1)
                             d3.select("#map").selectAll("[id='" + d.target.class + "']").style("opacity", options.normal_opacity).style("stroke-width", 0.1)
                         }
-
+ */
                     })
                     .on("mouseout", d => {
-/* 
-                        lineClicked = false;
-                        svg.selectAll("circle").style("stroke", "none");
-                        svg.selectAll("circle").style("stroke", "none");
+                        /* 
+                                                lineClicked = false;
+                                                svg.selectAll("circle").style("stroke", "none");
+                                                svg.selectAll("circle").style("stroke", "none");
 
-                        d3.select("#map").selectAll("[id='" + d.source.class + "']").style("opacity", options.normal_opacity).style("stroke-width", 0.1)
-                        d3.select("#map").selectAll("[id='" + d.target.class + "']").style("opacity", options.normal_opacity).style("stroke-width", 0.1)
- */
+                                                d3.select("#map").selectAll("[id='" + d.source.class + "']").style("opacity", options.normal_opacity).style("stroke-width", 0.1)
+                                                d3.select("#map").selectAll("[id='" + d.target.class + "']").style("opacity", options.normal_opacity).style("stroke-width", 0.1)
+                         */
                     })
 
                 var node = svg.selectAll(".node")
@@ -128,13 +161,16 @@
                         d3.select(this).style("stroke", "black").style("stroke-width", 2)
                         odView.addLineInClass(d.class, odInData);
                         pieView.pieViewInClass(d.class);
-
                         d3.select("#map").selectAll("[id='" + d.class + "']").style("stroke-width", 1)
                             .style("opacity", options.mouseover_opacity);
                     })
                     .on("mouseout", function (d) {
+                        if (options.curClass === -1) {
+                            pieView.pieViewAll();
+                        } else {
+                            pieView.pieViewInClass(options.curClass);
+                        }
                         d3.select(this).style("stroke", "none")
-                        //d3.select("#map").selectAll("[id='" + d.class + "']").style("opacity", options.normal_opacity);
                         d3.select("#map").selectAll("[id='" + d.class + "']").style("stroke-width", 0.1)
                             .style("opacity", options.mouseover_opacity);
                         mapView.hideDiv();
