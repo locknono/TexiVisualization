@@ -61,8 +61,11 @@ var odView = (function () {
             let x = (margin.left + 0.5 * margin.left) + (axisWidth / 24) * i;
             let y = margin.top;
 
-            ScatterPlotGraphics.moveTo(x, margin.top);
-            ScatterPlotGraphics.lineTo(x, margin.top-3);
+            ScatterPlotGraphics.beginFill(0x000000);
+            ScatterPlotGraphics.drawCircle(x,margin.top,1.5)
+            ScatterPlotGraphics.endFill();
+           /*  ScatterPlotGraphics.moveTo(x, margin.top);
+            ScatterPlotGraphics.lineTo(x, margin.top-3); */
         }
         ScatterPlotGraphics.lineStyle(1, options.odLineColor, options.odLineOpacity)
 
@@ -121,25 +124,52 @@ var odView = (function () {
         //开始用画笔画点
         ScatterPlotGraphics.clear();
 
-
-
-
-
+        var sourceY = margin.top - SEC;
+        var targetY = margin.top + SEC;
+        var minHeight = 10;
         var controlPointYScale = d3.scaleLinear()
             .domain([0, width - margin.left - margin.right])
-            .range([margin.top - 15 - SEC, margin.top - 1.8 * margin.top])
+            .range([sourceY - minHeight, sourceY - 2 * margin.top])
 
         var controlPointYScaleBottom = d3.scaleLinear()
             .domain([0, width - margin.left - margin.right])
-            .range([margin.top + 15 + SEC, margin.top + 1.8 * margin.top])
+            .range([targetY + minHeight, sourceY + 2 * margin.top])
 
+            let extraLength=10;
         ScatterPlotGraphics.lineStyle(1, 0x000000, options.odLineOpacity)
 
-        ScatterPlotGraphics.moveTo(margin.left + 0.5 * margin.left, margin.top - SEC);
-        ScatterPlotGraphics.lineTo(width - margin.right, margin.top - SEC);
+        //axis and arrow for top
+        ScatterPlotGraphics.moveTo(margin.left + 0.5 * margin.left+extraLength, sourceY);
+        ScatterPlotGraphics.lineTo(width - margin.right+extraLength, sourceY);
 
-        ScatterPlotGraphics.moveTo(margin.left + 0.5 * margin.left, margin.top + SEC);
-        ScatterPlotGraphics.lineTo(width - margin.right, margin.top + SEC);
+        ScatterPlotGraphics.moveTo(width - margin.right+extraLength, sourceY);
+        ScatterPlotGraphics.lineTo(width - margin.right+extraLength-5, sourceY-5);
+
+
+        //axis and arrow for bottom
+        ScatterPlotGraphics.moveTo(margin.left + 0.5 * margin.left-extraLength, targetY);
+        ScatterPlotGraphics.lineTo(width - margin.right-extraLength, targetY);
+
+        ScatterPlotGraphics.moveTo(margin.left + 0.5 * margin.left-extraLength, targetY);
+        ScatterPlotGraphics.lineTo(margin.left + 0.5 * margin.left-extraLength+5, targetY+5);
+
+ 
+
+        ScatterPlotGraphics.lineStyle(1, 0x000000, 1)
+
+
+        //Add axis
+        ScatterPlotGraphics.moveTo(margin.left + 0.5 * margin.left, margin.top);
+        ScatterPlotGraphics.lineTo(width - margin.right, margin.top);
+        for (var i = 0; i <= 24; i++) {
+            let x = (margin.left + 0.5 * margin.left) + (axisWidth / 24) * i;
+            let y = margin.top;
+
+            ScatterPlotGraphics.beginFill(0x000000);
+            ScatterPlotGraphics.drawCircle(x,margin.top,1.5)
+            ScatterPlotGraphics.endFill();
+        }
+
 
         ScatterPlotGraphics.lineStyle(1, options.odLineColor, options.odLineOpacity)
 
