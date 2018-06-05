@@ -17,7 +17,10 @@ var options = (function () {
             "#a65628",
             "#f781bf",
             "#8400E8",
-            "#e41a1c"
+            "#e41a1c",
+            "#984ea3",
+            "#f4cae4",
+            "#e7298a"
         ]);
     if (clusterNumber > 15) {
         var areaScale = d3.scale.category20();
