@@ -95,7 +95,7 @@ var mapView = (function () {
                     var thisClassMaxOff = d3.max(classClickData[classId].off);
                 } else {
                     if (_globalMaxOn === undefined) {
-                        console.log("a");
+                        
                         //global
                         var thisClassMaxOn = d3.max(classClickData, function (d) {
                             return d3.max(d.con, function (e) {
@@ -114,7 +114,6 @@ var mapView = (function () {
                         var thisClassMaxOn = _globalMaxOn;
                         var thisClassMaxOff = _globalMaxOff;
                     }
-
                 }
 
 
@@ -139,7 +138,11 @@ var mapView = (function () {
                     thisArc.startAngle = 2 * Math.PI / 24 * i;
                     thisArc.endAngle = 2 * Math.PI / 24 * (i + 1);
                     thisArc.innerRadius = circleRadius;
-                    thisArc.outerRadius = circleRadius + onScale(Math.log2(suspedingData.con[i] + 1));
+                    if (options.globalFlag === true) {
+                        thisArc.outerRadius = circleRadius + onScale(Math.log2(suspedingData.con[i] + 1));
+                    } else {
+                        thisArc.outerRadius = circleRadius + onScale((suspedingData.con[i]));
+                    }
                     arcArray.push(thisArc);
                 }
 
@@ -165,7 +168,11 @@ var mapView = (function () {
                     thisArc.startAngle = 2 * Math.PI / 24 * i;
                     thisArc.endAngle = 2 * Math.PI / 24 * (i + 1);
                     thisArc.innerRadius = circleRadius;
-                    thisArc.outerRadius = circleRadius + offScale(Math.log2(suspedingData.off[i] + 1));
+                    if (options.globalFlag === true) {
+                        thisArc.outerRadius = circleRadius + offScale(Math.log2(suspedingData.off[i] + 1));
+                    } else {
+                        thisArc.outerRadius = circleRadius + offScale((suspedingData.off[i]));
+                    }
                     arcArray.push(thisArc);
                 }
 
@@ -217,10 +224,17 @@ var mapView = (function () {
                     function getCurveData(scale, data) {
                         var lineEndPoint = []
                         data.map((d, i) => {
-                            let lineEndPointX =
-                                (width / 2) + (circleRadius + scale(Math.log2(d + 1))) * Math.cos(a0 * (i + 1) * Math.PI / 180);
-                            let lineEndPointY =
-                                (height / 2) + (circleRadius + scale(Math.log2(d + 1))) * Math.sin(a0 * (i + 1) * Math.PI / 180);
+                            if (options.globalFlag === true) {
+                                var lineEndPointX =
+                                    (width / 2) + (circleRadius + scale(Math.log2(d + 1))) * Math.cos(a0 * (i + 1) * Math.PI / 180);
+                                var lineEndPointY =
+                                    (height / 2) + (circleRadius + scale(Math.log2(d + 1))) * Math.sin(a0 * (i + 1) * Math.PI / 180);
+                            } else {
+                                var lineEndPointX =
+                                    (width / 2) + (circleRadius + scale((d))) * Math.cos(a0 * (i + 1) * Math.PI / 180);
+                                var lineEndPointY =
+                                    (height / 2) + (circleRadius + scale((d))) * Math.sin(a0 * (i + 1) * Math.PI / 180);
+                            }
                             lineEndPoint.push([lineEndPointX, lineEndPointY]);
                         })
                         lineEndPoint.push(lineEndPoint[0]);

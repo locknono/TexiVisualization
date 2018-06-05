@@ -35,13 +35,13 @@ var pieView = (function () {
         $("#globalStatus").on("click", function (e) {
             if (options.globalFlag === false) {
                 options.globalFlag = true;
-                pieViewInClass(curClass, curRow, curRow);
+                pieViewInClass(options.curClass, curRow, curRow);
             }
         })
         $("#localStatus").on("click", function (e) {
             if (options.globalFlag === true) {
                 options.globalFlag = false;
-                pieViewInClass(curClass, curRow, curRow);
+                pieViewInClass(options.curClass, curRow, curRow);
             }
         })
     });
@@ -49,6 +49,9 @@ var pieView = (function () {
     function pieViewInClass(classId, row, col) {
         flArcsG.selectAll(".path").remove();
         flInfoG.selectAll(".valueText").remove();
+        if (row !== undefined && col !== undefined) {
+            classId = undefined;
+        }
         if (row === undefined && col === undefined) {
             curClass = classId;
             curRow = undefined;
