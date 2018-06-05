@@ -45,7 +45,7 @@
 
                 var strokeScale = d3.scaleLinear()
                     .domain([valueRange[0] + 3.5, valueRange[1]])
-                    .range([0, 20])
+                    .range([0, 15])
 
                 force
                     .nodes(json.nodes)
@@ -56,14 +56,14 @@
                     .enter()
 
                     .append("line")
-                    .style("stroke", options.forceLineColor)
+                    .style("stroke", options.odLineColor.replace("0x","#"))
                     .style("stroke-width", function (d) {
                         return strokeScale(d.value)
                     })
                     .attr("id", function (d) {
                         return d.source.class + '-' + d.target.class;
                     })
-                    .style("opacity", 0.5)
+                    .style("opacity", 0.3)
                     .style("cursor", "crosshair")
                     .style("stroke-linecap", "round")
                     .attr("class", "link")
