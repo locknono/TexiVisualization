@@ -440,6 +440,7 @@ var mapView = (function () {
         })
     }
     var curClass = -1;
+    var curHex = [];
 
     function addHexagon(selection, projection, clusterNumber) {
         d3.json(options.rootPath + 'matrixCluster.json', (error, hexagonData) => {
@@ -479,11 +480,14 @@ var mapView = (function () {
                     .style("opacity", options.normal_opacity)
                     .style("stroke", "black")
                     .style("stroke-width", 0.1)
-                    .on("click", d => {
+                    .on("click", function (d) {
                         if (window.event.ctrlKey) {
+                            //选中一个类的时候直接取消一个六边形的选中
+                            d3.select(curHex[0]).style("opacity", options.normal_opacity).style("stroke-width", 0.1);
+                            curHex.shift();
                             if (curClass === -1) {
                                 curClass = d.category;
-                                pieView.pieViewInClass(d.category,undefined,undefined);
+                                pieView.pieViewInClass(d.category, undefined, undefined);
                                 odView.addLineInClass(d.category, odInData);
                                 selection.selectAll("[id='" + d.category + "']")
                                     .style("opacity", options.mouseover_opacity)
@@ -507,13 +511,11 @@ var mapView = (function () {
                                 selection.selectAll("[id='" + curClass + "']")
                                     .style("opacity", options.normal_opacity)
                                     .style("stroke-width", 0.1)
-
                                 d3.select("#netSvg").select("[id='" + curClass + "']")
                                     .style("stroke", "none")
-
                                 hideDiv();
                                 curClass = d.category;
-                                pieView.pieViewInClass(curClass,undefined,undefined);
+                                pieView.pieViewInClass(curClass, undefined, undefined);
                                 odView.addLineInClass(d.category, odInData);
                                 selection.selectAll("[id='" + d.category + "']")
                                     .style("opacity", options.mouseover_opacity)
@@ -523,6 +525,34 @@ var mapView = (function () {
                                     .style("stroke-width", 2)
                                 suspedingViewForOneHexagon(d.row, d.col, d.category);
                             }
+                        } else {
+
+                            //点击了当前选中的，也就是取消选中一个六边形的的情况
+                            if(curHex.length > 0 &&curHex[0]==this){
+                                //如果点击的和当前选中的是同一个:如果当前选中了这一类，就归为普通的类的样式，饼图展示这一类
+                                //如果当前没有选中这一类，变成普通的样式，饼图展示当前的类
+                                if (curHex[0].id == curClass) {
+                                    d3.select(curHex[0]).style("opacity", options.mouseover_opacity).style("stroke-width", 1);
+                                    pieView.pieViewInClass(classId = curClass, undefined,undefined);
+                                } else {
+                                    d3.select(curHex[0]).style("opacity", options.normal_opacity).style("stroke-width", 0.1);
+                                    pieView.pieViewInClass(classId = curClass, undefined,undefined);
+                                }
+                                curHex.shift();
+                                return 
+                            }
+                            //选中另一个正六边形的情况
+                            if (curHex.length > 0 &&curHex[0]!==this) {
+                                if (curHex[0].id == curClass) {
+                                    d3.select(curHex[0]).style("opacity", options.mouseover_opacity).style("stroke-width", 1);
+                                } else {
+                                    d3.select(curHex[0]).style("opacity", options.normal_opacity).style("stroke-width", 0.1);
+                                }
+                            }
+                            curHex[0] = this;
+                            suspedingViewForOneHexagon(d.row, d.col, d.category);
+                            pieView.pieViewInClass(classId = undefined, row = d.row, col = d.col);
+                            d3.select(curHex[0]).style("opacity", options.mouseover_opacity + 0.1).style("stroke-width", 2);
                         }
                     })
                 /*  .on("mouseover", function (d) {
