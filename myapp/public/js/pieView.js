@@ -104,24 +104,26 @@ var pieView = (function () {
 
             var dayLabel = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
+            let xOff = 20;
+            let yOff = 45;
+            let hourOff = 20;
             var valueTextText = flInfoG.append("text").attr("class", "valueText")
-                .attr("class", "valueText")
-                .attr("x", width / 2 - 20)
-                .attr("y", height / 2 + 25)
+                .attr("x", width / 2 - xOff)
+                .attr("y", height / 2 + yOff)
                 .attr("text-anchor", "middle")
 
             var valueText = flInfoG.append("text").attr("class", "valueText")
                 .attr("x", width / 2 + 18)
-                .attr("y", height / 2 + 25)
+                .attr("y", height / 2 + yOff)
                 .attr("text-anchor", "middle")
 
             var dayText = flInfoG.append("text").attr("class", "valueText")
                 .attr("x", width / 2)
-                .attr("y", height / 2 - 20)
+                .attr("y", height / 2 + yOff - 40)
                 .attr("text-anchor", "middle")
             var hourText = flInfoG.append("text").attr("class", "valueText")
                 .attr("x", width / 2)
-                .attr("y", height / 2 - 5)
+                .attr("y", height / 2 + hourOff)
                 .attr("text-anchor", "middle")
 
             var fl = flArcsG
@@ -137,7 +139,7 @@ var pieView = (function () {
 
                 })
                 .on("mouseover", function (d, i) {
-                    valueText.text(d.value)
+                    valueText.text((d.value).toFixed(2))
                     valueTextText.text("value:")
                     //
                     dayText.text(dayLabel[parseInt(i / 24)]);
