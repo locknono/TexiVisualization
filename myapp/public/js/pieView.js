@@ -35,13 +35,16 @@ var pieView = (function () {
         $("#globalStatus").on("click", function (e) {
             if (options.globalFlag === false) {
                 options.globalFlag = true;
-                pieViewInClass(classId, row, col);
+                pieViewInClass(curClass, curRow, curRow);
+                console.log('col: ', curRow);
+                console.log('row: ', curRow);
+                console.log('curClass: ', curClass);
             }
         })
         $("#localStatus").on("click", function (e) {
             if (options.globalFlag === true) {
                 options.globalFlag = false;
-                pieViewInClass(classId, row, col);
+                pieViewInClass(curClass, curRow, curRow);
             }
         })
     });

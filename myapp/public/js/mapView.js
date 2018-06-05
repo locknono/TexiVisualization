@@ -480,67 +480,67 @@ var mapView = (function () {
                     .style("stroke", "black")
                     .style("stroke-width", 0.1)
                     .on("click", d => {
-                        if (curClass === -1) {
-                            curClass = d.category;
-                            pieView.pieViewInClass(d.category);
-                            odView.addLineInClass(d.category, odInData);
-                            selection.selectAll("[id='" + d.category + "']")
-                                .style("opacity", options.mouseover_opacity)
-                                .style("stroke-width", 1)
-                            d3.select("#netSvg").select("[id='" + d.category + "']")
-                                .style("stroke", "black")
-                                .style("stroke-width", 2)
-                            suspedingViewForOneHexagon(d.row, d.col, d.category);
-                        } else if (curClass === d.category) {
-                            curClass = -1;
-                            pieView.pieViewAll();
-                            selection.selectAll("[id='" + d.category + "']")
-                                .style("opacity", options.normal_opacity)
-                                .style("stroke-width", 0.1)
-                            d3.select("#netSvg").select("[id='" + d.category + "']")
-                                .style("stroke", "none")
-                            odView.addLineInClass(-1, odInData);
-                            hideDiv();
-                        } else if (curClass != d.category && curClass != -1) {
+                        if (window.event.ctrlKey) {
+                            if (curClass === -1) {
+                                curClass = d.category;
+                                pieView.pieViewInClass(d.category,undefined,undefined);
+                                odView.addLineInClass(d.category, odInData);
+                                selection.selectAll("[id='" + d.category + "']")
+                                    .style("opacity", options.mouseover_opacity)
+                                    .style("stroke-width", 1)
+                                d3.select("#netSvg").select("[id='" + d.category + "']")
+                                    .style("stroke", "black")
+                                    .style("stroke-width", 2)
+                                suspedingViewForOneHexagon(d.row, d.col, d.category);
+                            } else if (curClass === d.category) {
+                                curClass = -1;
+                                pieView.pieViewAll();
+                                selection.selectAll("[id='" + d.category + "']")
+                                    .style("opacity", options.normal_opacity)
+                                    .style("stroke-width", 0.1)
+                                d3.select("#netSvg").select("[id='" + d.category + "']")
+                                    .style("stroke", "none")
+                                odView.addLineInClass(-1, odInData);
+                                hideDiv();
+                            } else if (curClass != d.category && curClass != -1) {
 
-                            selection.selectAll("[id='" + curClass + "']")
-                                .style("opacity", options.normal_opacity)
-                                .style("stroke-width", 0.1)
+                                selection.selectAll("[id='" + curClass + "']")
+                                    .style("opacity", options.normal_opacity)
+                                    .style("stroke-width", 0.1)
 
-                            d3.select("#netSvg").select("[id='" + curClass + "']")
-                                .style("stroke", "none")
+                                d3.select("#netSvg").select("[id='" + curClass + "']")
+                                    .style("stroke", "none")
 
-                            hideDiv();
-
-                            curClass = d.category;
-                            pieView.pieViewInClass(curClass);
-                            odView.addLineInClass(d.category, odInData);
-                            selection.selectAll("[id='" + d.category + "']")
-                                .style("opacity", options.mouseover_opacity)
-                                .style("stroke-width", 1)
-                            d3.select("#netSvg").select("[id='" + d.category + "']")
-                                .style("stroke", "black")
-                                .style("stroke-width", 2)
-                            suspedingViewForOneHexagon(d.row, d.col, d.category);
+                                hideDiv();
+                                curClass = d.category;
+                                pieView.pieViewInClass(curClass,undefined,undefined);
+                                odView.addLineInClass(d.category, odInData);
+                                selection.selectAll("[id='" + d.category + "']")
+                                    .style("opacity", options.mouseover_opacity)
+                                    .style("stroke-width", 1)
+                                d3.select("#netSvg").select("[id='" + d.category + "']")
+                                    .style("stroke", "black")
+                                    .style("stroke-width", 2)
+                                suspedingViewForOneHexagon(d.row, d.col, d.category);
+                            }
                         }
-
                     })
-                    .on("mouseover", function (d) {
-                        pieView.pieViewInClass(classId = undefined, row = d.row, col = d.col);
-                        d3.select(this).style("opacity", options.mouseover_opacity).style("stroke-width", 1);
-                        suspedingViewForOneHexagon(d.row, d.col, d.category);
-                    })
-                    .on("mouseout", function (d) {
-                        if (curClass != d.category) {
-                            d3.select(this).style("opacity", options.normal_opacity).style("stroke-width", 0.1);
-                        }
-                        if (curClass != -1) {
-                            pieView.pieViewInClass(curClass);
-                        } else {
-                            pieView.pieViewAll();
-                        }
-                        hideDiv();
-                    })
+                /*  .on("mouseover", function (d) {
+                     pieView.pieViewInClass(classId = undefined, row = d.row, col = d.col);
+                     d3.select(this).style("opacity", options.mouseover_opacity).style("stroke-width", 1);
+                     suspedingViewForOneHexagon(d.row, d.col, d.category);
+                 })
+                 .on("mouseout", function (d) {
+                     if (curClass != d.category) {
+                         d3.select(this).style("opacity", options.normal_opacity).style("stroke-width", 0.1);
+                     }
+                     if (curClass != -1) {
+                         pieView.pieViewInClass(curClass);
+                     } else {
+                         pieView.pieViewAll();
+                     }
+                     hideDiv();
+                 }) */
                 /* if (d.category == 6) {
                         selection.selectAll("[id='" + d.category + "']")
                             .style("fill", "black")
