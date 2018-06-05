@@ -36,12 +36,12 @@ var pieView = (function () {
         .style("fill", "url(#" + linearGradient.attr("id") + ")");
 
     svg.append("text")
-        .attr("x", 11.5)
+        .attr("x", 10.5)
         .attr("y", 273)
         .text("Max")
 
     svg.append("text")
-        .attr("x", 11)
+        .attr("x", 10.5)
         .attr("y", 430)
         .text("Min")
 

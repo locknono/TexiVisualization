@@ -78,6 +78,10 @@ oneDayMinute = 24*60
 minuteSec=10
 
 
+for i in range(len(matrix)):
+    for j in range(len(matrix[i])):
+        matrix[i][j]['od']=[]
+        
 for path in pathdir:
     thisFile=[]
     newdir = os.path.join(fp,path)
@@ -156,14 +160,23 @@ for path in pathdir:
                     
                     targetClassId=matrix[targetRow][targetCol]['category']
                     
+                    
+                    #for each hex
+                    if sourceRow == targetRow and sourceCol == targetCol:
+                        if sourceMinuteInOneDay>=targetMinuteInOneDay:
+                            track=[]
+                            continue
+                        matrix[sourceRow][sourceCol]['od'].append([sourceMinuteInOneDay,targetMinuteInOneDay])
+                        
                     if sourceClassId == targetClassId:
                         if sourceMinuteInOneDay>=targetMinuteInOneDay:
                             track=[]
                             continue
-                        if sourceClassId==-1:
-                            print(track)
+                        
                         odData[sourceClassId]['od'].append([sourceMinuteInOneDay,targetMinuteInOneDay])
                     track=[]
+                    
+                    
 for i in odData:
     a=set()
     for od in i['od']:
@@ -175,25 +188,34 @@ for i in odData:
 
 for i in odData:
     print(len(i['od']))
-    if len(i['od'])>3000:
-        for j in range(len(i['od'])-1,-1,-1):
-            if j%2==1:
-                i['od'].pop(j)
-        for j in range(len(i['od'])-1,-1,-1):
-            if j%2==1:
-                i['od'].pop(j)
-        for j in range(len(i['od'])-1,-1,-1):
-            if j%2==1:
-                i['od'].pop(j)
-for i in odData:
-    print(len(i['od']))
         
-
+for s in odData:
+    a=set()
+    for od in s['od']:
+        a.add(tuple(od))
+    b=[]
+    for each in a:
+        b.append(list(each))
+    s['od']=b
+    
+    
 with open(rootPath.rootPath+'odIn.json','w',encoding='utf-8') as f:
     writeStr=json.dumps(odData)
     f.write(writeStr)
 
-
+for i in range(len(matrix)):
+    for j in range(len(matrix[i])):
+        a=set()
+        for od in matrix[i][j]['od']:
+            a.add(tuple(od))
+        b=[]
+        for each in a:
+            b.append(list(each))
+        matrix[i][j]['od']=b
+        with open(rootPath.rootPath+'eachOdData/'+str(i)+'_'+str(j)+'.json','w',encoding='utf-8') as f:
+            writeStr=json.dumps(matrix[i][j]['od'])
+            f.write(writeStr)
+        
 
 
 

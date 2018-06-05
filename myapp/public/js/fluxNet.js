@@ -56,7 +56,7 @@
                     .enter()
 
                     .append("line")
-                    .style("stroke", options.odLineColor.replace("0x","#"))
+                    .style("stroke", options.fluxLineColor)
                     .style("stroke-width", function (d) {
                         return strokeScale(d.value)
                     })
