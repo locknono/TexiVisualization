@@ -2,14 +2,14 @@ var pieView = (function () {
     var svg = d3.select("#pieSvg");
     var width = parseFloat(svg.style("width").split('px')[0]),
         height = parseFloat(svg.style("height").split('px')[0]);
-    
-    
 
     var minRadius = d3.min([width, height]) / 2 / 3;
     var maxRadius = d3.min([width, height]) / 2 * (9 / 10);
-    var tierRadius = (maxRadius - minRadius) / 7;
+    var tierRadius = (maxRadius - minRadius) / 8;
 
-
+    var curClass = undefined,
+        curRow = undefined,
+        curCol = undefined;
     var arc = d3
         .arc()
         .startAngle(function (d) {
@@ -25,25 +25,55 @@ var pieView = (function () {
             return d.outerRadius;
         });
     var flArcsG = svg.append("g").attr("class", "arcG");
-    flArcsG.attr("transform", "translate(" + (width / 2) + ',' + (height / 2) + ')');
+    flArcsG.attr("transform", "translate(" + (width / 2) + ',' + (height / 2 + 15) + ')');
 
     var flInfoG = svg.append("g").attr("class", "arcInfoG");
+    $(function () {
+        $(".controlgroup-vertical").controlgroup({
+            "direction": "vertical"
+        });
+        $("#globalStatus").on("click", function (e) {
+            if (options.globalFlag === false) {
+                options.globalFlag = true;
+                pieViewInClass(classId, row, col);
+            }
+        })
+        $("#localStatus").on("click", function (e) {
+            if (options.globalFlag === true) {
+                options.globalFlag = false;
+                pieViewInClass(classId, row, col);
+            }
+        })
+    });
 
     function pieViewInClass(classId, row, col) {
-
         flArcsG.selectAll(".path").remove();
         flInfoG.selectAll(".valueText").remove();
         if (row === undefined && col === undefined) {
-            var filePath = options.rootPath + 'classPieData.json';
+            curClass = classId;
+            curRow = undefined;
+            curCol = undefined;
+            if (options.globalFlag === true) {
+                var filePath = options.rootPath + 'classPieDataGlobal.json';
+            } else {
+                var filePath = options.rootPath + 'classPieDataLocal.json';
+            }
         } else if (classId === undefined) {
-            var filePath = options.rootPath + 'eachPieData/' + row + '_' + col + '.json';
+            curClass = undefined;
+            curRow = row;
+            curCol = col;
+            if (options.globalFlag === true) {
+                var filePath = options.rootPath + 'eachPieDataGlobal/' + row + '_' + col + '.json';
+            } else {
+                var filePath = options.rootPath + 'eachPieDataLocal/' + row + '_' + col + '.json';
+            }
         }
         d3.json(filePath, function (classPieData) {
             if (classId !== undefined) {
                 var volumeData = classPieData[classId].pieData;
                 var minFlux = classPieData[classId].min;
                 var maxFlux = classPieData[classId].max;
-            } else if(classId===undefined){
+            } else if (classId === undefined) {
                 var volumeData = classPieData.pieData;
                 var minFlux = 0;
                 var maxFlux = classPieData.max;
@@ -115,7 +145,8 @@ var pieView = (function () {
                 })
         })
     }
-    function pieViewAll(){
+
+    function pieViewAll() {
         d3.json(options.rootPath + 'pieData.json', function (volumeData) {
             var minFlux = d3.min(volumeData, function (d) {
                 return d3.min(d);
@@ -124,11 +155,11 @@ var pieView = (function () {
                 return d3.max(d);
             })
             var fluxExtent = ([minFlux, maxFlux]);
-    
+
             var fluxScale = d3.scaleLinear()
                 .domain(fluxExtent)
                 .range([0, 1]);
-    
+
             var arcArray = [];
             for (var i = 0; i < volumeData.length; i++) {
                 for (var j = 0; j < volumeData[i].length; j++) {
@@ -141,28 +172,31 @@ var pieView = (function () {
                     arcArray.push(thisArc);
                 }
             }
-    
+
+            let xOff = 20;
+            let yOff = 45;
+            let hourOff = 20;
             var valueTextText = flInfoG.append("text").attr("class", "valueText")
-                .attr("x", width / 2 - 20)
-                .attr("y", height / 2 + 25)
+                .attr("x", width / 2 - xOff)
+                .attr("y", height / 2 + yOff)
                 .attr("text-anchor", "middle")
-    
+
             var valueText = flInfoG.append("text").attr("class", "valueText")
                 .attr("x", width / 2 + 18)
-                .attr("y", height / 2 + 25)
+                .attr("y", height / 2 + yOff)
                 .attr("text-anchor", "middle")
-    
+
             var dayText = flInfoG.append("text").attr("class", "valueText")
                 .attr("x", width / 2)
-                .attr("y", height / 2 - 20)
+                .attr("y", height / 2 + yOff - 40)
                 .attr("text-anchor", "middle")
             var hourText = flInfoG.append("text").attr("class", "valueText")
                 .attr("x", width / 2)
-                .attr("y", height / 2 - 5)
+                .attr("y", height / 2 + hourOff)
                 .attr("text-anchor", "middle")
-    
+
             var dayLabel = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-    
+
             var fl = flArcsG
                 .selectAll(".path")
                 .data(arcArray)
@@ -173,7 +207,7 @@ var pieView = (function () {
                 .style("stroke-width", "0.2px")
                 .style("fill", function (d) {
                     return options.pieview_colorscale(fluxScale(d.value));
-    
+
                 })
                 .on("mouseover", function (d, i) {
                     valueText.text(d.value)
@@ -182,9 +216,9 @@ var pieView = (function () {
                     dayText.text(dayLabel[parseInt(i / 24)]);
                     hourText.text(convert_to_ampm(parseInt(i % 24)));
                 })
-        })    
+        })
     }
-    
+
     pieViewAll();
 
     var day_labels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
@@ -193,13 +227,14 @@ var pieView = (function () {
     for (var i = 0; i < 7; i++) {
         label = day_labels[i];
         label_angle = 4.73;
+        //position
         flInfoG
             .append("def")
             .append("path")
             .attr("id", "day_path" + i)
             .attr(
                 "d",
-                "M" + (width / 2) + " " + (height / 2 + 40) + " m" +
+                "M" + (width / 2) + " " + (height / 2 + 58) + " m" +
                 label_rad * Math.cos(label_angle) +
                 " " +
                 label_rad * Math.sin(label_angle) +
@@ -216,13 +251,15 @@ var pieView = (function () {
 
     label_rad = minRadius + tierRadius * 7 + 5;
 
+
+    //position
     flInfoG
         .append("def")
         .append("path")
         .attr("id", "time_path")
         .attr(
             "d",
-            "M" + (width / 2) + " " + 17 + " a" + label_rad + " " + label_rad + " 0 1 1 -1 0"
+            "M" + (width / 2) + " " + 41 + " a" + label_rad + " " + label_rad + " 0 1 1 -1 0"
         );
 
     for (var i = 0; i < 24; i++) {
@@ -250,6 +287,6 @@ var pieView = (function () {
 
     return {
         pieViewInClass: pieViewInClass,
-        pieViewAll:pieViewAll,
+        pieViewAll: pieViewAll,
     }
 })();

@@ -51,7 +51,15 @@ for j in range(maxRow+1):
             i['kClass']=-1
             rowList.append(i)
     matrix.append(rowList)
-    
+
+for i in range(len(matrix)):
+    for j in range(len(matrix[i])):
+        pieData=[]
+        for s in range(0,7):
+            pieData.append([])
+            for m in range(0,24):
+                pieData[s].append(0)
+        matrix[i][j]['p']=pieData
 classPieData=[]
 for i in range(0,classCount-1):
     append={}
@@ -86,6 +94,9 @@ for path in pathdir:
                 #2011.4.18 Mondy
                 #2011.4.24 Sunday
                 status=float(line[3])
+                
+                if status != 1:
+                    continue
                 time=line[0]
                 day = int(time.split('-')[0])
                 hour = int(time.split('-')[1])
@@ -103,8 +114,6 @@ for path in pathdir:
                 if(col<0 or col>colCount):
                     continue
                 
-                if status !=1 :
-                    continue
                 #day:from 18 to 24
                 dayIndex=day-18
                 pieData[dayIndex][hour]+=1
@@ -112,6 +121,8 @@ for path in pathdir:
                 classId=matrix[row][col]['category']
                 
                 classPieData[classId]['pieData'][dayIndex][hour]+=1
+                
+                matrix[row][col]['p'][dayIndex][hour]+=1
                 
 for i in classPieData:
     b=np.array(i['pieData']) 
@@ -127,6 +138,39 @@ with open(rootPath.rootPath+'pieData.json','w',encoding='utf-8') as f:
 with open(rootPath.rootPath+'classPieData.json','w',encoding='utf-8') as f:
     writeStr=json.dumps(classPieData)
     f.write(writeStr)
-                
+
+
+for i in range(len(matrix)):
+    for j in range(len(matrix[i])):
+        thismin=2000
+        thismax=0
+        for s in range(len(matrix[i][j]['p'])):
+            for m in range(len(matrix[i][j]['p'][s])):
+                if matrix[i][j]['p'][s][m]>thismax:
+                    thismax=matrix[i][j]['p'][s][m]
+                if matrix[i][j]['p'][s][m]<thismin:
+                    thismin=matrix[i][j]['p'][s][m]
+                matrix[i][j]['min']=thismin
+                matrix[i][j]['max']=thismax
+
+for i in range(len(matrix)):
+    for j in range(len(matrix[i])):
+        thisClass =matrix[i][j]['category']
+        write={}
+        pieData=matrix[i][j]['p']
+        write['min']=matrix[i][j]['min']
+        write['max']=matrix[i][j]['max']
+        write['pieData']=pieData
+        matrix[i][j]['w']=write
+        
+        
+for i in range(len(matrix)):
+    for j in range(len(matrix[i])):
+        with open(rootPath.rootPath+'eachPieData/'+str(matrix[i][j]['row'])+'_'+str(matrix[i][j]['col'])+'.json','w',encoding='utf-8') as f:
+            writeStr=json.dumps(matrix[i][j]['w'])
+            f.write(writeStr)
+        
+
+
                 
                 

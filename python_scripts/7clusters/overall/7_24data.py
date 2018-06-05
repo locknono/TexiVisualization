@@ -128,18 +128,35 @@ for i in classPieData:
     i['min']=int(minFlux)
     i['max']=int(maxFlux)
 
+
+with open(rootPath.rootPath+'classPieDataLocal.json','w',encoding='utf-8') as f:
+    writeStr=json.dumps(classPieData)
+    f.write(writeStr)
+    
+    
+classAllMin=10000
+classAllMax=0
+for i in classPieData:
+    if i['min']<classAllMin:
+        classAllMin=i['min']
+    if i['max']>classAllMax:
+        classAllMax=i['max']
+classAllMax=math.log2(classAllMax)
+for i in classPieData:
+    i['min']=classAllMin
+    i['max']=classAllMax
+    for s in range(len(i['pieData'])):
+        for m in range(len(i['pieData'][s])):
+            i['pieData'][s][m]=math.log2(i['pieData'][s][m]+1)
                 
 with open(rootPath.rootPath+'pieData.json','w',encoding='utf-8') as f:
     writeStr=json.dumps(pieData)
     f.write(writeStr)
-with open(rootPath.rootPath+'classPieData.json','w',encoding='utf-8') as f:
+    
+with open(rootPath.rootPath+'classPieDataGlobal.json','w',encoding='utf-8') as f:
     writeStr=json.dumps(classPieData)
     f.write(writeStr)
-
-
-
-eachMin=0;
-eachMax=0;
+    
 for i in range(len(matrix)):
     for j in range(len(matrix[i])):
         thismin=2000
@@ -152,19 +169,7 @@ for i in range(len(matrix)):
                     thismin=matrix[i][j]['p'][s][m]
                 matrix[i][j]['min']=thismin
                 matrix[i][j]['max']=thismax
-"""
-for i in range(len(matrix)):
-    for j in range(len(matrix[i])):
-        thisClass =matrix[i][j]['category']
-        write={}
-        pieData=matrix[i][j]['p']
-        write['min']=classPieData[thisClass]['min']
-        write['max']=classPieData[thisClass]['max']
-        write['pieData']=pieData
-        matrix[i][j]['w']=write
-"""
 
-  
 for i in range(len(matrix)):
     for j in range(len(matrix[i])):
         thisClass =matrix[i][j]['category']
@@ -174,11 +179,37 @@ for i in range(len(matrix)):
         write['max']=matrix[i][j]['max']
         write['pieData']=pieData
         matrix[i][j]['w']=write
-        
+
+for i in range(len(matrix)):
+    for j in range(len(matrix[i])):
+        with open(rootPath.rootPath+'eachPieDataLocal/'+str(matrix[i][j]['row'])+'_'+str(matrix[i][j]['col'])+'.json','w',encoding='utf-8') as f:
+            writeStr=json.dumps(matrix[i][j]['w'])
+            f.write(writeStr)
+
+allMax=0;
+for i in range(len(matrix)):
+    for j in range(len(matrix[i])):
+        for s in range(len(matrix[i][j]['p'])):
+            for m in range(len(matrix[i][j]['p'][s])):
+                if matrix[i][j]['p'][s][m]>allMax:
+                    allMax=matrix[i][j]['p'][s][m]
+allMax=math.log2(allMax)
+for i in range(len(matrix)):
+    for j in range(len(matrix[i])):
+        thisClass =matrix[i][j]['category']
+        write={}
+        pieData=matrix[i][j]['p']
+        for s in range(len(pieData)):
+            for m in range(len(pieData[s])):
+                pieData[s][m]=math.log2(pieData[s][m]+1)
+        write['min']=0
+        write['max']=allMax
+        write['pieData']=pieData
+        matrix[i][j]['w']=write
         
 for i in range(len(matrix)):
     for j in range(len(matrix[i])):
-        with open(rootPath.rootPath+'eachPieData/'+str(matrix[i][j]['row'])+'_'+str(matrix[i][j]['col'])+'.json','w',encoding='utf-8') as f:
+        with open(rootPath.rootPath+'eachPieDataGlobal/'+str(matrix[i][j]['row'])+'_'+str(matrix[i][j]['col'])+'.json','w',encoding='utf-8') as f:
             writeStr=json.dumps(matrix[i][j]['w'])
             f.write(writeStr)
         

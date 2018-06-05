@@ -4,7 +4,7 @@ var options = (function () {
     var rootPath = 'data/drawData/' + clusterNumber.toString() + '/' + status + '/';
     var areaScale = d3.scaleOrdinal().domain([])
         .range(['#999999', '#377eb8', 'D7EFA1', '#4daf4a', '#984ea3', '#ff7f00', '#ffff33', '#a65628', '#f781bf', '#8400E8', '#e41a1c'])
-
+    var globalFlag=false;
     $(function () {
         $("input").checkboxradio();
         $("#radio-1").on("click", e => {
@@ -54,5 +54,6 @@ var options = (function () {
         forceLineColor: '#D4D4D4',
         odLineOpacity: 0.5,
         odLineColor: '0x00D3FF',
+        globalFlag:globalFlag,
     }
 }())

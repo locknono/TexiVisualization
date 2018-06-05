@@ -463,7 +463,6 @@ var mapView = (function () {
                     .attr("class", "hex")
                     .style("pointer-events", "auto")
                     .style("fill", function (d) {
-
                         if (d.category == -1) {
                             d3.select(this).remove()
                         } else {
@@ -481,7 +480,6 @@ var mapView = (function () {
                     .style("stroke", "black")
                     .style("stroke-width", 0.1)
                     .on("click", d => {
-                        
                         if (curClass === -1) {
                             curClass = d.category;
                             pieView.pieViewInClass(d.category);
@@ -541,8 +539,6 @@ var mapView = (function () {
                         } else {
                             pieView.pieViewAll();
                         }
-
-
                         hideDiv();
                     })
                 /* if (d.category == 6) {
@@ -553,7 +549,6 @@ var mapView = (function () {
                     }
                     selection.selectAll("[id='" + d.category + "']")
                         .style("fill", "black")
-                    
                 })
                 */
                 /* .on("mouseout", d => {

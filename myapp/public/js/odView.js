@@ -43,7 +43,6 @@ var odView = (function () {
 
     function addLineInClassOnCanvas(classId, data) {
         
-        //开始用画笔画点
         ScatterPlotGraphics.clear();
         if (classId === -1) {
             renderer.render(stage);

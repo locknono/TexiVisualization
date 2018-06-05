@@ -85,7 +85,9 @@ for path in pathdir:
             for line in islice(reader,1, None): 
                 #2011.4.18 Mondy
                 #2011.4.24 Sunday
-                status=int(line[3])
+                status=float(line[3])
+                if status!=0:
+                    continue
                 time=line[0]
                 day = int(time.split('-')[0])
                 hour = int(time.split('-')[1])
@@ -103,8 +105,6 @@ for path in pathdir:
                 if(col<0 or col>colCount):
                     continue
                 
-                if status !=0 :
-                    continue
                 #day:from 18 to 24
                 dayIndex=day-18
                 pieData[dayIndex][hour]+=1
