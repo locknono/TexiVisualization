@@ -72,7 +72,7 @@
                         
                         if (curLine !== undefined && this.id == curLine.id) {
 
-                            
+                        
                             svg.selectAll("circle").style("stroke", "none");
                             svg.selectAll("circle").style("stroke", "none");
                             d3.select("#map").selectAll(".hex").style("opacity", options.normal_opacity).style("stroke-width", 0.1);

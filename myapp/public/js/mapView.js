@@ -88,15 +88,25 @@ var mapView = (function () {
                 svg.selectAll("path").remove();
                 svg.selectAll("circle").remove();
 
+
+
                 var thisClassMaxOn = d3.max(classClickData[classId].con);
 
-
-
                 var thisClassMaxOff = d3.max(classClickData[classId].off);
-                /* 
-                                var thisClassMaxOn = d3.max(suspedingData.con);
-                                var thisClassMaxOff = d3.max(suspedingData.off);
-                 */
+
+
+                //global
+                var thisClassMaxOn = d3.max(classClickData, function (d) {
+                    return d3.max(d.con, function (e) {
+                        return Math.log2(e + 1);
+                    })
+                })
+                var thisClassMaxOff = d3.max(classClickData, function (d) {
+                    return d3.max(d.off, function (e) {
+                        return Math.log2(e + 1);
+                    })
+                })
+
                 var circleRadius = 50;
 
                 var onScale = d3.scaleLinear()
@@ -114,7 +124,7 @@ var mapView = (function () {
                     thisArc.startAngle = 2 * Math.PI / 24 * i;
                     thisArc.endAngle = 2 * Math.PI / 24 * (i + 1);
                     thisArc.innerRadius = circleRadius;
-                    thisArc.outerRadius = circleRadius + onScale(suspedingData.con[i]);
+                    thisArc.outerRadius = circleRadius + onScale(Math.log2(suspedingData.con[i] + 1));
                     arcArray.push(thisArc);
                 }
 
@@ -140,7 +150,7 @@ var mapView = (function () {
                     thisArc.startAngle = 2 * Math.PI / 24 * i;
                     thisArc.endAngle = 2 * Math.PI / 24 * (i + 1);
                     thisArc.innerRadius = circleRadius;
-                    thisArc.outerRadius = circleRadius + offScale(suspedingData.off[i]);
+                    thisArc.outerRadius = circleRadius + offScale(Math.log2(suspedingData.off[i] + 1));
                     arcArray.push(thisArc);
                 }
 
@@ -160,6 +170,9 @@ var mapView = (function () {
                     })
 
 
+
+
+                //add BaseLine
                 var line = d3.line()
                     .x(function (d) {
                         return d[0];
@@ -190,9 +203,9 @@ var mapView = (function () {
                         var lineEndPoint = []
                         data.map((d, i) => {
                             let lineEndPointX =
-                                (width / 2) + (circleRadius + scale(d)) * Math.cos(a0 * (i + 1) * Math.PI / 180);
+                                (width / 2) + (circleRadius + scale(Math.log2(d + 1))) * Math.cos(a0 * (i + 1) * Math.PI / 180);
                             let lineEndPointY =
-                                (height / 2) + (circleRadius + scale(d)) * Math.sin(a0 * (i + 1) * Math.PI / 180);
+                                (height / 2) + (circleRadius + scale(Math.log2(d + 1))) * Math.sin(a0 * (i + 1) * Math.PI / 180);
                             lineEndPoint.push([lineEndPointX, lineEndPointY]);
                         })
                         lineEndPoint.push(lineEndPoint[0]);

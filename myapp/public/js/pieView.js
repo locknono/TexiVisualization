@@ -236,7 +236,7 @@ var pieView = (function () {
             .attr("id", "day_path" + i)
             .attr(
                 "d",
-                "M" + (width / 2) + " " + (height / 2 + 58) + " m" +
+                "M" + (width / 2) + " " + (height / 2 + 47) + " m" +
                 label_rad * Math.cos(label_angle) +
                 " " +
                 label_rad * Math.sin(label_angle) +
@@ -254,14 +254,14 @@ var pieView = (function () {
     label_rad = minRadius + tierRadius * 7 + 5;
 
 
-    //position
+    //circular 24 hour position
     flInfoG
         .append("def")
         .append("path")
         .attr("id", "time_path")
         .attr(
             "d",
-            "M" + (width / 2) + " " + 41 + " a" + label_rad + " " + label_rad + " 0 1 1 -1 0"
+            "M" + (width / 2) + " " + 50 + " a" + label_rad + " " + label_rad + " 0 1 1 -1 0"
         );
 
     for (var i = 0; i < 24; i++) {
