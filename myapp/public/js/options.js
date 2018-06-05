@@ -3,7 +3,10 @@ var options = (function () {
     var status = d3.select("#container-main").attr("status");
     var rootPath = 'data/drawData/' + clusterNumber.toString() + '/' + status + '/';
     var areaScale = d3.scaleOrdinal().domain([])
-        .range(['#999999', '#377eb8', 'D7EFA1', '#4daf4a', '#984ea3', '#ff7f00', '#ffff33', '#a65628', '#f781bf', '#8400E8', '#e41a1c'])
+        .range(['#999999', '#A4FF68', '#D7EFA1', '#4daf4a', '#984ea3', '#ff7f00', '#FF0000', '#a65628', '#f781bf', '#8400E8', '#e41a1c'])
+    if (clusterNumber > 15) {
+        var areaScale = d3.scale.category20();
+    }
     var globalFlag = true;
     var curClass = -1;
     $(function () {
@@ -45,7 +48,7 @@ var options = (function () {
         rootPath: rootPath,
         clusterNumber: clusterNumber,
         status: status,
-        normal_opacity: 0.5,
+        normal_opacity: 0.6,
         mouseover_opacity: 0.75,
         suspending_outer_color: "#D6BD3E",
         suspending_inner_color: "#CEDDE8",
@@ -56,6 +59,6 @@ var options = (function () {
         odLineOpacity: 0.5,
         odLineColor: '0x00D3FF',
         globalFlag: globalFlag,
-        curClass:curClass,
+        curClass: curClass,
     }
 }())

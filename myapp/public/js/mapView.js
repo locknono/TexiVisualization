@@ -590,6 +590,11 @@ var mapView = (function () {
                             }
                             //选中另一个正六边形的情况
                             if (curHex.length > 0 && curHex[0] !== this) {
+                                let filePath=options.rootPath+'eachOdData/'+d.row+'_'+d.col+'.json';
+                                
+                                d3.json(filePath,function(data){
+                                    odView.addLineInClass(undefined, data);
+                                })
                                 if (curHex[0].id == options.curClass) {
                                     d3.select(curHex[0]).style("opacity", options.mouseover_opacity).style("stroke-width", 1);
                                 } else {
@@ -597,6 +602,11 @@ var mapView = (function () {
                                 }
                             }
                             curHex[0] = this;
+                            let filePath=options.rootPath+'eachOdData/'+d.row+'_'+d.col+'.json';
+                            
+                            d3.json(filePath,function(data){
+                                odView.addLineInClass(undefined, data);
+                            })
                             suspedingViewForOneHexagon(d.row, d.col, d.category);
                             pieView.pieViewInClass(classId = undefined, row = d.row, col = d.col);
                             d3.select(curHex[0]).style("opacity", options.mouseover_opacity + 0.1).style("stroke-width", 2);
