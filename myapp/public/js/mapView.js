@@ -17,6 +17,8 @@ var mapView = (function () {
     }).addTo(map);
     map.zoomControl.remove();
 
+    var _globalMaxOn = undefined;
+    var _globalMaxOff = undefined;
     map.on('click', function (e) {
 
         var top = 22.80550
@@ -88,24 +90,37 @@ var mapView = (function () {
                 svg.selectAll("path").remove();
                 svg.selectAll("circle").remove();
 
+                if (options.globalFlag === false) {
+                    var thisClassMaxOn = d3.max(classClickData[classId].con);
+                    var thisClassMaxOff = d3.max(classClickData[classId].off);
+                } else {
+                    if (_globalMaxOn === undefined) {
+                        console.log("a");
+                        //global
+                        var thisClassMaxOn = d3.max(classClickData, function (d) {
+                            return d3.max(d.con, function (e) {
+                                return Math.log2(e + 1);
+                            })
+                        })
+                        _globalMaxOn = thisClassMaxOn;
+
+                        var thisClassMaxOff = d3.max(classClickData, function (d) {
+                            return d3.max(d.off, function (e) {
+                                return Math.log2(e + 1);
+                            })
+                        })
+                        _globalMaxOff = thisClassMaxOff
+                    } else {
+                        var thisClassMaxOn = _globalMaxOn;
+                        var thisClassMaxOff = _globalMaxOff;
+                    }
+
+                }
 
 
-                var thisClassMaxOn = d3.max(classClickData[classId].con);
-
-                var thisClassMaxOff = d3.max(classClickData[classId].off);
 
 
-                //global
-                var thisClassMaxOn = d3.max(classClickData, function (d) {
-                    return d3.max(d.con, function (e) {
-                        return Math.log2(e + 1);
-                    })
-                })
-                var thisClassMaxOff = d3.max(classClickData, function (d) {
-                    return d3.max(d.off, function (e) {
-                        return Math.log2(e + 1);
-                    })
-                })
+
 
                 var circleRadius = 50;
 
