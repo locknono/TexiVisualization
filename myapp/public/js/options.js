@@ -3,7 +3,7 @@ var options = (function () {
     var status = d3.select("#container-main").attr("status");
     var rootPath = 'data/drawData/' + clusterNumber.toString() + '/' + status + '/';
     var areaScale = d3.scaleOrdinal().domain([])
-        .range(['#999999', '#A4FF68', '#D7EFA1', '#4daf4a', '#984ea3', '#ff7f00', '#FF0000', '#a65628', '#f781bf', '#8400E8', '#e41a1c'])
+        .range(['#999999', '#D7EFA1', '#DAFF00', '#4daf4a', '#984ea3', '#ff7f00', '#FF0000', '#a65628', '#f781bf', '#8400E8', '#e41a1c'])
     if (clusterNumber > 15) {
         var areaScale = d3.scale.category20();
     }

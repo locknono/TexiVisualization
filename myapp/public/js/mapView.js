@@ -95,7 +95,7 @@ var mapView = (function () {
                     var thisClassMaxOff = d3.max(classClickData[classId].off);
                 } else {
                     if (_globalMaxOn === undefined) {
-                        
+
                         //global
                         var thisClassMaxOn = d3.max(classClickData, function (d) {
                             return d3.max(d.con, function (e) {
@@ -158,7 +158,7 @@ var mapView = (function () {
                     .style("stroke", "black")
                     .style("stroke-width", "0.2px")
                     .style("fill", function (d) {
-                        return options.suspending_outer_color;
+                        return options.pieview_colorscale(0.7);
                     })
 
                 arcArray = [];
@@ -188,11 +188,8 @@ var mapView = (function () {
                     .style("stroke", "black")
                     .style("stroke-width", "0.2px")
                     .style("fill", function (d) {
-                        return options.suspending_inner_color;
+                        return options.pieview_colorscale(0.2);
                     })
-
-
-
 
                 //add BaseLine
                 var line = d3.line()
@@ -590,9 +587,9 @@ var mapView = (function () {
                             }
                             //选中另一个正六边形的情况
                             if (curHex.length > 0 && curHex[0] !== this) {
-                                let filePath=options.rootPath+'eachOdData/'+d.row+'_'+d.col+'.json';
-                                
-                                d3.json(filePath,function(data){
+                                let filePath = options.rootPath + 'eachOdData/' + d.row + '_' + d.col + '.json';
+
+                                d3.json(filePath, function (data) {
                                     odView.addLineInClass(undefined, data);
                                 })
                                 if (curHex[0].id == options.curClass) {
@@ -602,9 +599,9 @@ var mapView = (function () {
                                 }
                             }
                             curHex[0] = this;
-                            let filePath=options.rootPath+'eachOdData/'+d.row+'_'+d.col+'.json';
-                            
-                            d3.json(filePath,function(data){
+                            let filePath = options.rootPath + 'eachOdData/' + d.row + '_' + d.col + '.json';
+
+                            d3.json(filePath, function (data) {
                                 odView.addLineInClass(undefined, data);
                             })
                             suspedingViewForOneHexagon(d.row, d.col, d.category);
