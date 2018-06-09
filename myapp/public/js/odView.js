@@ -43,32 +43,67 @@ var odView = (function () {
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
         .call(axis); */
 
+    stage.removeChildren(1, 53);
+
+    //add axisLine
+    ScatterPlotGraphics.lineStyle(1, 0x000000, 1)
+
+    var axisPadding = 3;
+    ScatterPlotGraphics.moveTo(margin.left + 0.5 * margin.left, margin.top - (SEC - axisPadding));
+    ScatterPlotGraphics.lineTo(width - margin.right, margin.top - (SEC - axisPadding));
+
+    ScatterPlotGraphics.moveTo(margin.left + 0.5 * margin.left, margin.top + (SEC - axisPadding));
+    ScatterPlotGraphics.lineTo(width - margin.right, margin.top + (SEC - axisPadding));
+
+    for (var i = 0; i <= 24; i++) {
+        let x = (margin.left + 0.5 * margin.left) + (axisWidth / 24) * i;
+        let y = margin.top - (SEC - axisPadding);
+        ScatterPlotGraphics.beginFill(0x000000);
+        ScatterPlotGraphics.drawCircle(x, y, 1)
+        ScatterPlotGraphics.endFill();
+        var text = new PIXI.Text(i, {
+            fontFamily: 'Arial',
+            fontSize: 10,
+            fill: 0x000000,
+            align: 'start',
+            fontWeight: 'bold'
+        });
+        text.x = x - 4;
+        text.y = margin.top - 8;
+        stage.addChild(text); //将显示精灵添加进显示容器  
+    }
+    for (var i = 0; i <= 24; i++) {
+        let x = (margin.left + 0.5 * margin.left) + (axisWidth / 24) * i;
+        let y = margin.top + (SEC - axisPadding);
+        ScatterPlotGraphics.beginFill(0x000000);
+        ScatterPlotGraphics.drawCircle(x, y, 1)
+        ScatterPlotGraphics.endFill();
+    }
+    renderer.render(stage);
+
     function addLineInClassOnCanvas(classId, data) {
 
         ScatterPlotGraphics.clear();
-        if (classId === -1) {
-            renderer.render(stage);
-            return;
-        }
+
         //add text
 
-       stage.removeChildren(1,53);
+        stage.removeChildren(1, 53);
 
         //add axisLine
         ScatterPlotGraphics.lineStyle(1, 0x000000, 1)
 
-        var axisPadding=3;
-        ScatterPlotGraphics.moveTo(margin.left + 0.5 * margin.left, margin.top-(SEC-axisPadding));
-        ScatterPlotGraphics.lineTo(width - margin.right, margin.top-(SEC-axisPadding));
+        var axisPadding = 3;
+        ScatterPlotGraphics.moveTo(margin.left + 0.5 * margin.left, margin.top - (SEC - axisPadding));
+        ScatterPlotGraphics.lineTo(width - margin.right, margin.top - (SEC - axisPadding));
 
-        ScatterPlotGraphics.moveTo(margin.left + 0.5 * margin.left, margin.top+(SEC-axisPadding));
-        ScatterPlotGraphics.lineTo(width - margin.right, margin.top+(SEC-axisPadding));
+        ScatterPlotGraphics.moveTo(margin.left + 0.5 * margin.left, margin.top + (SEC - axisPadding));
+        ScatterPlotGraphics.lineTo(width - margin.right, margin.top + (SEC - axisPadding));
 
         for (var i = 0; i <= 24; i++) {
             let x = (margin.left + 0.5 * margin.left) + (axisWidth / 24) * i;
-            let y = margin.top-(SEC-axisPadding);
+            let y = margin.top - (SEC - axisPadding);
             ScatterPlotGraphics.beginFill(0x000000);
-            ScatterPlotGraphics.drawCircle(x,y, 1)
+            ScatterPlotGraphics.drawCircle(x, y, 1)
             ScatterPlotGraphics.endFill();
             var text = new PIXI.Text(i, {
                 fontFamily: 'Arial',
@@ -77,18 +112,22 @@ var odView = (function () {
                 align: 'start',
                 fontWeight: 'bold'
             });
-            text.x=x-4;
-            text.y=margin.top-8;
+            text.x = x - 4;
+            text.y = margin.top - 8;
             stage.addChild(text); //将显示精灵添加进显示容器  
         }
         for (var i = 0; i <= 24; i++) {
             let x = (margin.left + 0.5 * margin.left) + (axisWidth / 24) * i;
-            let y = margin.top+(SEC-axisPadding);
+            let y = margin.top + (SEC - axisPadding);
             ScatterPlotGraphics.beginFill(0x000000);
-            ScatterPlotGraphics.drawCircle(x,y, 1)
+            ScatterPlotGraphics.drawCircle(x, y, 1)
             ScatterPlotGraphics.endFill();
         }
-
+        
+        if (classId === -1) {
+            renderer.render(stage);
+            return;
+        }
 
         ScatterPlotGraphics.lineStyle(1, options.odLineColor, options.odLineOpacity)
 
@@ -148,14 +187,14 @@ var odView = (function () {
             }
         }
         //add text
-        stage.removeChildren(1,53);
+        stage.removeChildren(1, 53);
 
-        const SEC=25;
+        const SEC = 25;
         ScatterPlotGraphics.clear();
 
         var sourceY = margin.top - SEC;
         var targetY = margin.top + SEC;
-        var axisPadding=3;
+        var axisPadding = 3;
         var minHeight = 10;
         var controlPointYScale = d3.scaleLinear()
             .domain([0, width - margin.left - margin.right])
@@ -169,15 +208,15 @@ var odView = (function () {
         ScatterPlotGraphics.lineStyle(1, 0x000000, options.odLineOpacity)
 
         //axis and arrow for top
-        ScatterPlotGraphics.moveTo(margin.left + 0.5 * margin.left, sourceY+axisPadding);
-        ScatterPlotGraphics.lineTo(width - margin.right +extraLength, sourceY+axisPadding);
+        ScatterPlotGraphics.moveTo(margin.left + 0.5 * margin.left, sourceY + axisPadding);
+        ScatterPlotGraphics.lineTo(width - margin.right + extraLength, sourceY + axisPadding);
 
-        ScatterPlotGraphics.moveTo(width - margin.right + extraLength, sourceY+axisPadding);
-        ScatterPlotGraphics.lineTo(width - margin.right + extraLength - 5, sourceY - 5+axisPadding);
+        ScatterPlotGraphics.moveTo(width - margin.right + extraLength, sourceY + axisPadding);
+        ScatterPlotGraphics.lineTo(width - margin.right + extraLength - 5, sourceY - 5 + axisPadding);
 
         for (var i = 0; i <= 24; i++) {
             let x = (margin.left + 0.5 * margin.left) + (axisWidth / 24) * i;
-            let y = sourceY+axisPadding;
+            let y = sourceY + axisPadding;
             ScatterPlotGraphics.beginFill(0x000000);
             ScatterPlotGraphics.drawCircle(x, y, 1)
             ScatterPlotGraphics.endFill();
@@ -189,19 +228,19 @@ var odView = (function () {
                 align: 'start',
                 fontWeight: 'bold'
             });
-            text.x=x-4;
-            text.y=margin.top-19;
+            text.x = x - 4;
+            text.y = margin.top - 19;
             stage.addChild(text); //将显示精灵添加进显示容器  
 
-            var text = new PIXI.Text(24-i, {
+            var text = new PIXI.Text(24 - i, {
                 fontFamily: 'Arial',
                 fontSize: 10,
                 fill: 0x000000,
                 align: 'start',
                 fontWeight: 'bold'
             });
-            text.x=x-4;
-            text.y=margin.top+6;
+            text.x = x - 4;
+            text.y = margin.top + 6;
             stage.addChild(text); //将显示精灵添加进显示容器  
 
 
@@ -209,15 +248,15 @@ var odView = (function () {
 
 
         //axis and arrow for bottom
-        ScatterPlotGraphics.moveTo(margin.left + 0.5 * margin.left-extraLength, targetY-axisPadding);
-        ScatterPlotGraphics.lineTo(width - margin.right, targetY-axisPadding);
+        ScatterPlotGraphics.moveTo(margin.left + 0.5 * margin.left - extraLength, targetY - axisPadding);
+        ScatterPlotGraphics.lineTo(width - margin.right, targetY - axisPadding);
 
-        ScatterPlotGraphics.moveTo(margin.left + 0.5 * margin.left - extraLength, targetY-axisPadding);
-        ScatterPlotGraphics.lineTo(margin.left + 0.5 * margin.left - extraLength + 5, targetY + 5-axisPadding);
+        ScatterPlotGraphics.moveTo(margin.left + 0.5 * margin.left - extraLength, targetY - axisPadding);
+        ScatterPlotGraphics.lineTo(margin.left + 0.5 * margin.left - extraLength + 5, targetY + 5 - axisPadding);
 
         for (var i = 0; i <= 24; i++) {
             let x = (margin.left + 0.5 * margin.left) + (axisWidth / 24) * i;
-            let y = targetY-axisPadding;
+            let y = targetY - axisPadding;
             ScatterPlotGraphics.beginFill(0x000000);
             ScatterPlotGraphics.drawCircle(x, y, 1)
             ScatterPlotGraphics.endFill();
@@ -227,17 +266,17 @@ var odView = (function () {
         ScatterPlotGraphics.lineStyle(1, 0x000000, 1)
 
 
-     /*    //Add axis
-        ScatterPlotGraphics.moveTo(margin.left + 0.5 * margin.left, margin.top);
-        ScatterPlotGraphics.lineTo(width - margin.right, margin.top);
-        for (var i = 0; i <= 24; i++) {
-            let x = (margin.left + 0.5 * margin.left) + (axisWidth / 24) * i;
-            let y = margin.top;
+        /*    //Add axis
+           ScatterPlotGraphics.moveTo(margin.left + 0.5 * margin.left, margin.top);
+           ScatterPlotGraphics.lineTo(width - margin.right, margin.top);
+           for (var i = 0; i <= 24; i++) {
+               let x = (margin.left + 0.5 * margin.left) + (axisWidth / 24) * i;
+               let y = margin.top;
 
-            ScatterPlotGraphics.beginFill(0x000000);
-            ScatterPlotGraphics.drawCircle(x, margin.top, 1.5)
-            ScatterPlotGraphics.endFill();
-        } */
+               ScatterPlotGraphics.beginFill(0x000000);
+               ScatterPlotGraphics.drawCircle(x, margin.top, 1.5)
+               ScatterPlotGraphics.endFill();
+           } */
 
 
         ScatterPlotGraphics.lineStyle(1, options.odLineColor, options.odLineOpacity)
