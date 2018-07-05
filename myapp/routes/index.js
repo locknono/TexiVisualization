@@ -6,6 +6,11 @@ const hexClickDataModel = require('../models/hexClickDataModel')
 const hexClickDataModel0 = require('../models/hexClickDataModel0')
 const hexClickDataModel1 = require('../models/hexClickDataModel1')
 /* GET home page. */
+
+router.get('/', function (req, res, next) {
+  res.render('info')
+});
+
 router.get('/(:clusterNumber)?', function (req, res, next) {
   let clusterNumber = req.params.clusterNumber;
   let status = req.query.status;

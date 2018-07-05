@@ -1,6 +1,7 @@
 var options = (function () {
     var clusterNumber = d3.select("#container-main").attr("clusterNumber");
     var status = d3.select("#container-main").attr("status");
+    console.log('status: ', status);
     var rootPath =
         "data/drawData/" + clusterNumber.toString() + "/" + status + "/";
     var areaScale = d3

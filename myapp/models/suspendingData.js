@@ -10,10 +10,6 @@ const suspendingDataSchema = new Schema({
     endOff:[Number]
 },{ collection: 'clickData'});
 
-
-
 var suspendingDataModel = mongoose.model('suspendingData', suspendingDataSchema);
-
-
 
 module.exports = suspendingDataModel;

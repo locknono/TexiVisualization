@@ -31,7 +31,6 @@ rowCount=int(((top-bottom)/(3*sideLength))*2)
 fp = 'D:/Texi/myapp/public/data/sevenDayData'
 os.chdir(fp)
 
-
 with open(rootPath.rootPath+'matrixCluster.json','r',encoding='utf-8') as f:
     classList=json.loads(f.read())
 
