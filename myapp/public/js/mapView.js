@@ -212,7 +212,6 @@ var mapView = (function () {
                         .style("fill", "white")
                         .style("stroke", "black")
                         .attr("class", "baseLine")
-                    // addCurveCircle();
 
                     function getCurveData(scale, data) {
                         var lineEndPoint = []
@@ -247,153 +246,7 @@ var mapView = (function () {
                 }
             });
         })
-
-
-        /*    d3.json('data/drawData/clickData.json', function (clickData) {
-
-               svg.selectAll("path").remove();
-               svg.selectAll("circle").remove();
-               var thisClassClickData = clickData[thisClass];
-               var thisClassMaxOn = d3.max(thisClassClickData.on);
-               var thisClassMaxOff = d3.max(thisClassClickData.off);
-               var circleRadius = 50;
-               var onScale = d3.scaleLinear()
-                   .domain([0, thisClassMaxOn])
-                   .range([0, tierRadius]);
-               var offScale = d3.scaleLinear()
-                   .domain([0, thisClassMaxOff])
-                   .range([0, -tierRadius]);
-
-               var arcArray = [];
-               for (var i = 0; i < thisClassClickData.on.length; i++) {
-                   var thisArc = new Object();
-                   thisArc.value = thisClassClickData.on[i];
-                   thisArc.startAngle = 2 * Math.PI / 24 * i;
-                   thisArc.endAngle = 2 * Math.PI / 24 * (i + 1);
-                   thisArc.innerRadius = circleRadius;
-                   thisArc.outerRadius = circleRadius + onScale(thisClassClickData.on[i]);
-                   arcArray.push(thisArc);
-               }
-
-
-               var flArcsG = svg.append("g").attr("class", "arcG")
-                   .attr("transform", "translate(" + (width / 2) + ',' + (height / 2) + ')');
-
-               var fl = flArcsG
-                   .selectAll(".path")
-                   .data(arcArray)
-                   .enter()
-                   .append("path")
-                   .attr("d", arc)
-                   .style("stroke", "black")
-                   .style("stroke-width", "0.2px")
-                   .style("fill", function (d) {
-                       return options.suspending_outer_color;
-                   })
-
-               var arcArray = [];
-               for (var i = 0; i < thisClassClickData.off.length; i++) {
-                   var thisArc = new Object();
-                   thisArc.value = thisClassClickData.off[i];
-                   thisArc.startAngle = 2 * Math.PI / 24 * i;
-                   thisArc.endAngle = 2 * Math.PI / 24 * (i + 1);
-                   thisArc.innerRadius = circleRadius;
-                   thisArc.outerRadius = circleRadius + offScale(thisClassClickData.off[i]);
-                   arcArray.push(thisArc);
-               }
-
-               var flArcsG = svg.append("g").attr("class", "arcG")
-                   .attr("transform", "translate(" + (width / 2) + ',' + (height / 2) + ')');
-
-               var fl = flArcsG
-                   .selectAll(".path")
-                   .data(arcArray)
-                   .enter()
-                   .append("path")
-                   .attr("d", arc)
-                   .style("stroke", "black")
-                   .style("stroke-width", "0.2px")
-                   .style("fill", function (d) {
-                       return options.suspending_inner_color;
-                   })
-
-
-               var line = d3.line()
-                   .x(function (d) {
-                       return d[0];
-                   })
-                   .y(function (d) {
-                       return d[1];
-                   })
-                   .curve(d3.curveCardinal);
-
-
-               addCircle();
-               // addLine();
-
-               function addCircle() {
-                   svg.append("circle")
-                       .attr("cx", (width / 2))
-                       .attr("cy", (height / 2))
-                       .attr("r", circleRadius)
-                       .attr("stroke", "black")
-                       .attr("fill", "none")
-               }
-
-               function addLine() {
-                   var data = thisClassClickData.on;
-
-                   let a0 = 360 / data.length;
-                   var lineEndPoint = [];
-
-                   getCurveData(onScale);
-                   svg.append("path")
-                       .attr("d", line(lineEndPoint))
-                       .style("stroke", "black")
-                       .style("fill", "#7972FF")
-
-                   svg.append("circle")
-                       .attr("cx", (width / 2))
-                       .attr("cy", (height / 2))
-                       .attr("r", circleRadius)
-                       .style("stroke", "black")
-                       .style("fill", options.suspending_outer_color)
-
-
-                   var data = thisClassClickData.off;
-                   lineEndPoint = [];
-                   getCurveData(offScale);
-                   svg.append("path")
-                       .attr("d", line(lineEndPoint))
-                       .style("fill", "white")
-                       .style("stroke", "black")
-                   // addCurveCircle();
-
-                   function getCurveData(scale) {
-                       data.map((d, i) => {
-                           let lineEndPointX =
-                               (width / 2) + (circleRadius + scale(d)) * Math.cos(a0 * (i + 1) * Math.PI / 180);
-                           let lineEndPointY =
-                               (height / 2) + (circleRadius + scale(d)) * Math.sin(a0 * (i + 1) * Math.PI / 180);
-                           lineEndPoint.push([lineEndPointX, lineEndPointY]);
-                       })
-                       lineEndPoint.push(lineEndPoint[0]);
-                   }
-
-                   function addCurveCircle() {
-                       lineEndPoint.map(d => {
-                           svg.append("circle")
-                               .attr("cx", d[0])
-                               .attr("cy", d[1])
-                               .attr("r", 1.5)
-                               .attr("stroke", options.suspending_inner_color)
-                               .attr("fill", "black")
-                       })
-                   }
-               }
-           }) */
     }
-
 
     function addPrismBorder(selection) {
         var borderLine = d3.line()
@@ -463,14 +316,6 @@ var mapView = (function () {
                         .style("stroke", "none")
                     hideDiv();
                 })
-            /* .on("click", function (d) {
-                d3.select(this).style("opacity", 1);
-                d3.select("#netSvg").select("[id='" + d.class + "']")
-                    .style("stroke", "black")
-                    .style("stroke-width", 2)
-
-                pieViewForOneClass(d.class);
-            }) */
         })
     }
     var curHex = [];
@@ -605,40 +450,6 @@ var mapView = (function () {
                             d3.select(curHex[0]).style("opacity", options.mouseover_opacity + 0.1).style("stroke-width", 2);
                         }
                     })
-                /*  .on("mouseover", function (d) {
-                     pieView.pieViewInClass(classId = undefined, row = d.row, col = d.col);
-                     d3.select(this).style("opacity", options.mouseover_opacity).style("stroke-width", 1);
-                     suspedingViewForOneHexagon(d.row, d.col, d.category);
-                 })
-                 .on("mouseout", function (d) {
-                     if (options.curClass != d.category) {
-                         d3.select(this).style("opacity", options.normal_opacity).style("stroke-width", 0.1);
-                     }
-                     if (options.curClass != -1) {
-                         pieView.pieViewInClass(options.curClass);
-                     } else {
-                         pieView.pieViewAll();
-                     }
-                     hideDiv();
-                 }) */
-                /* if (d.category == 6) {
-                        selection.selectAll("[id='" + d.category + "']")
-                            .style("fill", "black")
-                        selection.selectAll("[id='" + 16 + "']")
-                            .style("fill", "yellow")
-                    }
-                    selection.selectAll("[id='" + d.category + "']")
-                        .style("fill", "black")
-                })
-                */
-                /* .on("mouseout", d => {
-                    selection.selectAll("[id='" + d.category + "']")
-                        .style("opacity", options.normal_opacity)
-                        .style("stroke-width", 0.1)
-                    d3.select("#netSvg").select("[id='" + d.category + "']")
-                        .style("stroke", "none")
-                    hideDiv();
-                }) */
             })
         })
     }
@@ -650,19 +461,6 @@ var mapView = (function () {
                 resolve(d);
             })
         });
-
-        /*  return new Promise(function (resolve, reject) {
-             $.ajax({
-                 method: "get",
-                 url: "/showBorderLine",
-                 success: function (data) {
-                     resolve(data);
-                 },
-                 error: function () {
-
-                 }
-             });
-         }); */
     }
 
     function getSuspendingData(row, col) {
@@ -675,7 +473,6 @@ var mapView = (function () {
                     col: col,
                     clusterNumber: options.clusterNumber,
                     status: options.status,
-
                 },
                 success: function (data) {
                     resolve(data[0]);

@@ -38,7 +38,6 @@ router.get('/(:clusterNumber)?/showSuspending', function (req, res) {
   let col = req.query.col;
   let clusterNumber = req.query.clusterNumber;
   let status = req.query.status;
-  console.log('status: ', status);
   if (status == -1) {
     hexClickDataModel.find({
       row: row,

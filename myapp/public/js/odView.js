@@ -24,10 +24,10 @@ var odView = (function () {
 
     var axisWidth = width - margin.right - margin.left - 0.5 * margin.left;
 
-    var stage = new PIXI.Container(); //创建一个舞台
-    var ScatterPlotGraphics = new PIXI.Graphics() //创建一直画笔
-    stage.addChild(ScatterPlotGraphics); //将画笔添加到舞台上
-    var lineCanvas = document.getElementById("odCanvas"); //设置canvas变量
+    var stage = new PIXI.Container(); 
+    var ScatterPlotGraphics = new PIXI.Graphics() 
+    stage.addChild(ScatterPlotGraphics); 
+    var lineCanvas = document.getElementById("odCanvas"); 
     //定义渲染器渲染在canvas上
     var renderer = PIXI.autoDetectRenderer(width, height, {
         view: lineCanvas,
@@ -264,20 +264,6 @@ var odView = (function () {
 
 
         ScatterPlotGraphics.lineStyle(1, 0x000000, 1)
-
-
-        /*    //Add axis
-           ScatterPlotGraphics.moveTo(margin.left + 0.5 * margin.left, margin.top);
-           ScatterPlotGraphics.lineTo(width - margin.right, margin.top);
-           for (var i = 0; i <= 24; i++) {
-               let x = (margin.left + 0.5 * margin.left) + (axisWidth / 24) * i;
-               let y = margin.top;
-
-               ScatterPlotGraphics.beginFill(0x000000);
-               ScatterPlotGraphics.drawCircle(x, margin.top, 1.5)
-               ScatterPlotGraphics.endFill();
-           } */
-
 
         ScatterPlotGraphics.lineStyle(1, options.odLineColor, options.odLineOpacity)
 

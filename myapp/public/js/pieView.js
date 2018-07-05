@@ -136,10 +136,6 @@ var pieView = (function () {
                     thisArc.endAngle = 2 * Math.PI / 24 * (j + 1);
                     thisArc.innerRadius = minRadius + i * tierRadius;
                     thisArc.outerRadius = minRadius + (i + 1) * tierRadius;
-                    /* thisArc.count = volumeData.value[i][j];
-                    thisArc.weekday = i;
-                    thisArc.hour = j;
-                    thisArc.total = volumeData.value[i][24]; */
                     arcArray.push(thisArc);
                 }
             }
