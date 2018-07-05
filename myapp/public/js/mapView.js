@@ -117,10 +117,6 @@ var mapView = (function () {
                 }
 
 
-
-
-
-
                 var circleRadius = 50;
 
                 var onScale = d3.scaleLinear()
