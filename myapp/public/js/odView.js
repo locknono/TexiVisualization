@@ -24,10 +24,10 @@ var odView = (function () {
 
     var axisWidth = width - margin.right - margin.left - 0.5 * margin.left;
 
-    var stage = new PIXI.Container(); 
-    var ScatterPlotGraphics = new PIXI.Graphics() 
-    stage.addChild(ScatterPlotGraphics); 
-    var lineCanvas = document.getElementById("odCanvas"); 
+    var stage = new PIXI.Container();
+    var ScatterPlotGraphics = new PIXI.Graphics()
+    stage.addChild(ScatterPlotGraphics);
+    var lineCanvas = document.getElementById("odCanvas");
     //定义渲染器渲染在canvas上
     var renderer = PIXI.autoDetectRenderer(width, height, {
         view: lineCanvas,
@@ -38,10 +38,6 @@ var odView = (function () {
     });
     //将渲染器添加到dom节点上
     document.getElementById("odView").appendChild(renderer.view);
-    //range X:transform + margin
-    /* svg.append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-        .call(axis); */
 
     stage.removeChildren(1, 53);
 
@@ -123,14 +119,13 @@ var odView = (function () {
             ScatterPlotGraphics.drawCircle(x, y, 1)
             ScatterPlotGraphics.endFill();
         }
-        
+
         if (classId === -1) {
             renderer.render(stage);
             return;
         }
 
         ScatterPlotGraphics.lineStyle(1, options.odLineColor, options.odLineOpacity)
-
 
         //ScatterPlotGraphics.lineStyle(1, options.areaScale(classId).replace("#","0x"), options.odLineOpacity)
         if (classId !== undefined) {
@@ -139,10 +134,16 @@ var odView = (function () {
             var odDrawData = data;
         }
         odDrawData = odDrawData.sort((a, b) => {
+            
             return (a[1] - a[0]) - (b[1] - b[0]);
         })
-
-
+        console.log('odDrawData: ', odDrawData);
+        var temp=odDrawData.filter(v=>{ 
+            return Math.abs(v[1]-v[0])<=240
+        })
+        console.log('temp: ', temp);
+        odDrawData=temp;
+        console.log('odDrawData: ', odDrawData);
         var sourceY = margin.top - SEC;
         var targetY = margin.top + SEC;
         var minHeight = 10;
