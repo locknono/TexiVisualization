@@ -121,10 +121,12 @@ var mapView = (function () {
 
                 var onScale = d3.scaleLinear()
                     .domain([0, thisClassMaxOn])
-                    .range([0, tierRadius]);
+                    .range([0, tierRadius])
+                    .clamp(true);
                 var offScale = d3.scaleLinear()
                     .domain([0, thisClassMaxOff])
-                    .range([0, -tierRadius]);
+                    .range([0, -tierRadius])
+                    .clamp(true);
 
                 var arcArray = [];
 
