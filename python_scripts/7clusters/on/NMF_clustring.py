@@ -126,6 +126,14 @@ H = model.components_
 
 maxIndexList=np.argmax(W,axis=1)
 
+maxIndexList=np.argmax(W,axis=1)
+for i in range(len(maxIndexList)):
+    if hexagonList[i]['value']==0:
+        hexagonList[i]['category']=-1
+    else:
+        hexagonList[i]['category']=int(maxIndexList[i])
+        
+"""
 maxValueList=[]
 for i in range(len(maxIndexList)):
     value=math.log2(W[i][maxIndexList[i]]+1)
@@ -135,21 +143,8 @@ for i in range(len(maxIndexList)):
     maxValue['value']=value
     
     maxValueList.append(maxValue)
-"""
-maxValueList3=[]
-for i in range(len(maxIndexList)):
-    value=math.log2(W[i][maxIndexList[i]]+1)
-    maxValueList3.append(value)
-maxValueList3.sort()
-    
-maxValueList2=copy.deepcopy(maxValueList)
-kList=[]
-for i in range(len(maxValueList2)-1):
-    value=maxValueList2[i]['value']
-    nextValue=maxValueList2[i+1]['value']
-    k=nextValue-value
-    kList.append(k)
-"""
+
+
 maxValueList=sorted(maxValueList, key=lambda m: m['value'])
          
 for i in range(len(maxValueList)-1):
@@ -158,15 +153,6 @@ for i in range(len(maxValueList)-1):
     maxValueList[i]['k']=nextValue-value
 
 minValue=maxValueList[0]['value']
-
-"""
-firstSecMaxValue=0
-for i in range(len(maxValueList)-1):
-    if(maxValueList[i]['k']>0.5):
-        firstSecMaxValue=maxValueList[i+1]['value']
-        print(i,(maxValueList[i]['k']))
-        break
-"""
 
 secondSecMaxValue=maxValueList[-1]['value']
 
@@ -192,11 +178,6 @@ for i in range(len(maxValueList)):
     
     value=maxValueList[i]['value']
     index=maxValueList[i]['index']
-    """
-    if(i!=len(maxValueList)-1):
-        k=maxValueList[i]['k']
-    """
-    
     if value<=firstSecMaxValue:
         normalValue=(value-minValue)/firstSecDiff
         normalCommunity=int((normalValue)/firstSecLength-1)
@@ -218,7 +199,7 @@ for i in range(len(maxValueList)):
         if(normalCommunity>=nCom):
             print(normalCommunity)
         hexagonList[index]['category']=normalCommunity
-        
+"""
 with open(rootPath.rootPath+'matrixCluster.json','w',encoding='utf-8') as f:
     writeStr=json.dumps(hexagonList)
     f.write(writeStr)

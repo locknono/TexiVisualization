@@ -7,22 +7,9 @@ var options = (function () {
     var areaScale = d3
         .scaleOrdinal()
         .domain([])
-        .range([
-            "#8C8B8B",
-            "#D7EFA1",
-            "#DAFF00",
-            "#4daf4a",
-            "#80428A",
-            "#ff7f00",
-            "#FF0000",
-            "#a65628",
-            "#f781bf",
-            "#8400E8",
-            "#e41a1c",
-            "#984ea3",
-            "#f4cae4",
-            "#e7298a"
-        ]);
+        .range(
+            ['#984ea3','#ff7f00','#ffff33','#a65628','#377eb8','#e41a1c','#4daf4a',]
+        );
     if (clusterNumber > 15) {
         var areaScale = d3.scale.category20();
     }
@@ -68,8 +55,8 @@ var options = (function () {
         rootPath: rootPath,
         clusterNumber: clusterNumber,
         status: status,
-        normal_opacity: 0.6,
-        mouseover_opacity: 0.75,
+        normal_opacity: 0.7,
+        mouseover_opacity: 0.85,
         suspending_outer_color: "#D6BD3E",
         suspending_inner_color: "#CEDDE8",
         pieview_colorscale: d3.interpolateYlGnBu,

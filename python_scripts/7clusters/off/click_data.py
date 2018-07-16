@@ -12,6 +12,7 @@ Created on Mon May 21 20:42:48 2018
 @author: 44219
 """
 import os
+
 import csv
 from itertools import islice  
 import json

@@ -137,13 +137,13 @@ var odView = (function () {
             
             return (a[1] - a[0]) - (b[1] - b[0]);
         })
-        console.log('odDrawData: ', odDrawData);
+        
         var temp=odDrawData.filter(v=>{ 
             return Math.abs(v[1]-v[0])<=240
         })
-        console.log('temp: ', temp);
+        
         odDrawData=temp;
-        console.log('odDrawData: ', odDrawData);
+        
         var sourceY = margin.top - SEC;
         var targetY = margin.top + SEC;
         var minHeight = 10;
@@ -185,8 +185,14 @@ var odView = (function () {
         for (var i = 0; i < data.length; i++) {
             if (data[i].direc.indexOf(sourceClassId) != -1 && data[i].direc.indexOf(targetClassId) != -1) {
                 drawData.push(data[i])
+                
             }
         }
+         drawData.map(e=>{
+            console.log('e: ', e);
+            e.od=e.od.filter(d=>Math.abs(d[1]-d[0])<240)
+        })
+        
         //add text
         stage.removeChildren(1, 53);
 
