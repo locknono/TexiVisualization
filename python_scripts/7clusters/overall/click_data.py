@@ -92,6 +92,8 @@ for i in range(len(categoryList)):
     thisClass['class']=categoryList[i]
     thisClass['con']=[]
     thisClass['off']=[]
+    thisClass['cmax']=0
+    thisClass['coff']=0
     for j in range(24):
         thisClass['con'].append(0)
     for j in range(24):
@@ -139,11 +141,17 @@ for path in pathdir:
                 if status ==1:
                     clickData[thisClass]['con'][hour]+=1
                     hexagonClickData[row][col]['con'][hour]+=1
+                    hexagonClickData[row][col]['class']=thisClass
                 elif status==0:
                     clickData[thisClass]['off'][hour]+=1
                     hexagonClickData[row][col]['off'][hour]+=1
-                    
-            
+                    hexagonClickData[row][col]['class']=thisClass
+
+for i in range(len(hexagonClickData)):
+    for j in range(len(hexagonClickData[i])):
+        if 'class' not in hexagonClickData[i][j]:
+            hexagonClickData[i][j]['class']=-1
+    
 for i in range(len(clickData)):
     for j in range(len(clickData[i]['con'])):
         clickData[i]['con'][j]/=7
@@ -166,8 +174,30 @@ for i in hexagonClickData:
                 s['off'][j]=int(s['off'][j])
                 s['con'][j]=round(s['con'][j],6)
             
+totalMaxOn=0
+totalMaxOff=0
+for i in range(len(hexagonClickData)):
+    for j in range(len(hexagonClickData[i])):
+        for s in hexagonClickData[i][j]['con']:
+            if s>totalMaxOn:
+                totalMaxOn=s
+        for m in hexagonClickData[i][j]['off']:
+            if m>totalMaxOff:
+                totalMaxOff=m
+                
 
-        
+for i in range(len(hexagonClickData)):
+    for j in range(len(hexagonClickData[i])):
+        for s in clickData:
+            if s['class'] == hexagonClickData[i][j]['class']:
+                for m in hexagonClickData[i][j]['con']:
+                    if m>s['cmax']:
+                        s['cmax']=m
+        for s in clickData:
+            if s['class'] == hexagonClickData[i][j]['class']:
+                for m in hexagonClickData[i][j]['off']:
+                    if m>s['coff']:
+                        s['coff']=m
         
 with open(rootPath.rootPath+'classClickData.json','w',encoding='utf-8') as f:
     writeStr=json.dumps(clickData)

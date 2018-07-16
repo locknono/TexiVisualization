@@ -189,7 +189,6 @@ var odView = (function () {
             }
         }
          drawData.map(e=>{
-            console.log('e: ', e);
             e.od=e.od.filter(d=>Math.abs(d[1]-d[0])<240)
         })
         

@@ -169,9 +169,18 @@ for i in hexagonClickData:
             if s['off'][j]==0:
                 s['off'][j]=int(s['off'][j])
                 s['con'][j]=round(s['con'][j],6)
-            
-
-        
+"""
+totalMax=0
+for i in range(len(hexagonClickData)):
+    for j in range(len(hexagonClickData[i])):
+        for s in hexagonClickData[i][j]['con']:
+            if s>totalMax:
+                totalMax=s
+        for m in hexagonClickData[i][j]['con']:
+            if m>totalMax:
+                totalMax=m
+"""
+    
         
 with open(rootPath.rootPath+'classClickData.json','w',encoding='utf-8') as f:
     writeStr=json.dumps(clickData)

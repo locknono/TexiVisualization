@@ -86,30 +86,36 @@ var mapView = (function () {
                 return d.outerRadius;
             });
         d3.json(options.rootPath + 'classClickData.json', function (classClickData) {
+            console.log('classClickData: ', classClickData);
             getSuspendingData(row, col).then(function (suspedingData) {
                 svg.selectAll("path").remove();
                 svg.selectAll("circle").remove();
 
                 if (options.globalFlag === false) {
-                    var thisClassMaxOn = d3.max(classClickData[classId].con);
-                    var thisClassMaxOff = d3.max(classClickData[classId].off);
+                    //var thisClassMaxOn = d3.max(classClickData[classId].con);
+                    var thisClassMaxOn=Math.log2(classClickData[classId].cmax);
+                    var thisClassMaxOff=Math.log2(classClickData[classId].coff);
+                   // var thisClassMaxOff = d3.max(classClickData[classId].off);
                 } else {
                     if (_globalMaxOn === undefined) {
-
+                        console.log("a");
                         //global
-                        var thisClassMaxOn = d3.max(classClickData, function (d) {
+                        /* var thisClassMaxOn = d3.max(classClickData, function (d) {
                             return d3.max(d.con, function (e) {
                                 return Math.log2(e + 1);
                             })
-                        })
-                        _globalMaxOn = thisClassMaxOn;
-
-                        var thisClassMaxOff = d3.max(classClickData, function (d) {
+                        }) */
+                        //_globalMaxOn = thisClassMaxOn;
+                        var thisClassMaxOn=10.027708570144931;
+                        _globalMaxOn = 10.027708570144931
+                        /* var thisClassMaxOff = d3.max(classClickData, function (d) {
                             return d3.max(d.off, function (e) {
                                 return Math.log2(e + 1);
                             })
-                        })
-                        _globalMaxOff = thisClassMaxOff
+                        }) */
+                        //_globalMaxOff = thisClassMaxOff
+                        var thisClassMaxOff=9.361003805166282;
+                        _globalMaxOff = 9.361003805166282
                     } else {
                         var thisClassMaxOn = _globalMaxOn;
                         var thisClassMaxOff = _globalMaxOff;
@@ -122,11 +128,9 @@ var mapView = (function () {
                 var onScale = d3.scaleLinear()
                     .domain([0, thisClassMaxOn])
                     .range([0, tierRadius])
-                    .clamp(true);
                 var offScale = d3.scaleLinear()
                     .domain([0, thisClassMaxOff])
                     .range([0, -tierRadius])
-                    .clamp(true);
 
                 var arcArray = [];
 
@@ -139,7 +143,7 @@ var mapView = (function () {
                     if (options.globalFlag === true) {
                         thisArc.outerRadius = circleRadius + onScale(Math.log2(suspedingData.con[i] + 1));
                     } else {
-                        thisArc.outerRadius = circleRadius + onScale((suspedingData.con[i]));
+                        thisArc.outerRadius = circleRadius + onScale(Math.log2(suspedingData.con[i] + 1));
                     }
                     arcArray.push(thisArc);
                 }
@@ -169,7 +173,7 @@ var mapView = (function () {
                     if (options.globalFlag === true) {
                         thisArc.outerRadius = circleRadius + offScale(Math.log2(suspedingData.off[i] + 1));
                     } else {
-                        thisArc.outerRadius = circleRadius + offScale((suspedingData.off[i]));
+                        thisArc.outerRadius = circleRadius +  offScale(Math.log2(suspedingData.off[i] + 1));
                     }
                     arcArray.push(thisArc);
                 }
@@ -445,7 +449,7 @@ var mapView = (function () {
                             let filePath = options.rootPath + 'eachOdData/' + d.row + '_' + d.col + '.json';
 
                             d3.json(filePath, function (data) {
-                                odView.addLineInClass(undefined, data);
+                                //odView.addLineInClass(undefined, data);
                             })
                             suspedingViewForOneHexagon(d.row, d.col, d.category);
                             pieView.pieViewInClass(classId = undefined, row = d.row, col = d.col);
