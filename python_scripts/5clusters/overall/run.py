@@ -1,0 +1,9 @@
+import os
+os.system("python ./rootPath.py")
+os.system("python ./divide_hexagon.py")
+os.system("python ./NMF_clustring.py")
+os.system("python ./7_24data.py")
+os.system("python ./click_data.py")
+os.system("python ./od_in_class.py")
+os.system("python ./od_inter_class.py")
+os.system("python ./force_data.py")
